@@ -1,0 +1,10 @@
+//fill a struct with the stuff
+//do split and send to a function with ifs its one of the 3 params it stores there otherwise it stores in object
+
+//error handling
+
+//freeing //also before exiting by failure
+
+// convert objects to equations and when you need to check if light hits there check if pixels on screen hit any equation
+
+//you can split each arg of those with ',' and atoi it to get the stuff you need
