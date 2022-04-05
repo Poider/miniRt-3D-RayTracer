@@ -6,12 +6,43 @@
 /*   By: mel-amma <mel-amma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/03 17:34:33 by mel-amma          #+#    #+#             */
-/*   Updated: 2022/04/03 22:42:35 by mel-amma         ###   ########.fr       */
+/*   Updated: 2022/04/04 17:37:00 by mel-amma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRt.h"
 #include "get_next_line.h"
+t_parameters *param;
+
+t_point	makepoint(int x, int y, int z)
+{
+	t_point	newpoint;
+
+	newpoint.x = x;
+	newpoint.y = y;
+	newpoint.z = z;
+	return (newpoint);
+}
+
+void	image_pixel_put(t_parameters *param, t_point point, int color)
+{
+	char	*pixel;
+	int		x;
+	int		y;
+	int		z;
+
+	x = point.x;
+	y = point.y;
+	z = point.z;
+	printf("x:%d y %d z%d\n",x,y,z);
+	if (x > 0 && y > 0 && x < WINDOW_WIDTH && y < WINDOW_HEIGHT)
+	{
+		// printf("check\n");
+		pixel = param->address + (y * (param->linesize)
+				+ x * (param->bitsperpixel) / 8);
+		*(int *)pixel = COLOR;
+	}
+}
 
 int exitit(int button, void *unused)
 {
@@ -50,9 +81,12 @@ void initializemlx(t_parameters *param)
 	param->mlx_ptre = mlx_init();
 	param->win_ptre = mlx_new_window(param->mlx_ptre,
 									 WINDOW_WIDTH, WINDOW_HEIGHT, "mi ferst windew");
+
 	param->img_ptre = mlx_new_image(param->mlx_ptre, WINDOW_WIDTH, WINDOW_HEIGHT);
+
 	param->address = mlx_get_data_addr(param->img_ptre,
 									   &param->bitsperpixel, &param->linesize, &param->endian);
+
 }
 
 int esc_hook(int button, void *param)
@@ -89,6 +123,7 @@ int fill_struct(char **line)
 {
 	// store the array in the correct place in "data"
 	// if its an object get last object then malloc a new object and initialize its next then fill it
+	return 1;
 }
 
 int parse_file(t_parameters *param, char *filename)
@@ -109,19 +144,68 @@ int parse_file(t_parameters *param, char *filename)
 		free(line);
 	}
 	close(fd);
+	return 1;
+}
+
+void plot(int x,int y,int z)
+{
+	image_pixel_put(param,makepoint(x+700,y+700,z),0);
+}
+
+void DrawSphere(double r, int lats, int longs)
+{
+	int i, j;
+	for (i = 0; i <= lats; i++)
+	{
+		double lat0 = 3.14 * (-0.5 + (double)(i - 1) / lats);
+		double z0 = sin(lat0) * r;
+		double zr0 = cos(lat0) * r;
+
+		double lat1 = 3.14 * (-0.5 + (double)i / lats);
+		double z1 = sin(lat1) * r;
+		double zr1 = cos(lat1) * r;
+
+		for (j = 0; j <= longs; j++)
+		{
+			double lng = 2 * 3.14 * (double)(j - 1) / longs;
+			double x = cos(lng);
+			double y = sin(lng);
+
+			plot(x * zr0, y * zr0, z0);
+			plot(x * zr1, y * zr1, z1);
+		}
+	}
 }
 
 int main(int argc, char **argv)
 {
-	t_parameters *param;
+	
 
 	// error handling
 
-	// read the file
+	// read the file and parse it
+
+
 
 	// init
 	param = malloc(sizeof(t_parameters));
 	initializemlx(param);
+
+	//first draw
+	// printf("%s %d %d %d \n",param->address,param->endian,param->bitsperpixel,param->linesize);
+	// for( int i = 0; i<500; i++) {
+	// 	for (int j = 0; j< 500;j++)
+	// 		image_pixel_put(param,makepoint(j,i,0),0);
+	// }
+
+	DrawSphere(300, 400, 500);
+
+
+
+	mlx_put_image_to_window(param->mlx_ptre,param->win_ptre,param->img_ptre,0,0);
+
+
+	//make a hook each time you rotate you re render that and do the light and all recalculation
 
 	// for all keys
 	mlx_hook(param->win_ptre, 02, 0L, esc_hook, param /*(the parameter)*/);

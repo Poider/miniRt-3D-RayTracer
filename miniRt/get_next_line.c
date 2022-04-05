@@ -6,7 +6,7 @@
 /*   By: mel-amma <mel-amma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 20:00:03 by mel-amma          #+#    #+#             */
-/*   Updated: 2022/03/13 15:55:08 by mel-amma         ###   ########.fr       */
+/*   Updated: 2022/04/04 16:41:41 by mel-amma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,3 @@ char	*get_next_line(int fd)
 	buffer = splittext(line);
 	return (line);
 }
-
-
-
-hbhhuhu
