@@ -10,3 +10,5 @@
 //you can split each arg of those with ',' and atoi it to get the stuff you need
 
 //since if you rotate the light source and everything wouldnt change, you can leave the rotation till the end and just rotate points before rendering them
+
+//check if all that needs to be float is float

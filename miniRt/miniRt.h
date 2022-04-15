@@ -13,6 +13,10 @@
 #ifndef miniRt_H
 #define miniRt_H
 
+#include "matrices.h"
+#include "tuples.h"
+#include "math_utils.h"
+
 #include "mlx.h"
 #include <unistd.h>
 #include <stdlib.h>
@@ -21,13 +25,14 @@
 #define WINDOW_WIDTH 1920
 #define WINDOW_HEIGHT 1080
 #define COLOR 111111222
+#define EPSILON 0.001
 
 typedef struct s_point
 {
-	int	x;
-	int	y;
-	int	z;
-	int	color;
+	float	x;
+	float	y;
+	float	z;
+	float	color;
 }				t_point;
 
 typedef struct	s_object // convert objects to equations and when you need to check if light hits there check if pixels on screen hit any equation
