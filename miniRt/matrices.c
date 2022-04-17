@@ -155,7 +155,7 @@ t_matrices *get_submatrix(t_matrices *matrix, int current_row, int current_col)
     i = 0;
     subdimension = matrix->rows - 1;
     if(subdimension <= 1)
-        return NULL;
+        return matrix;
     submatrix = create_matrix(subdimension,subdimension)
     while(i < subdimension)
     {
@@ -174,38 +174,69 @@ t_matrices *get_submatrix(t_matrices *matrix, int current_row, int current_col)
     return submatrix;
 }
 
-float get_minor(t_matrices *matrix, int current_row, int current_col)
+float get_minor(t_matrices *matrix)
 {//determinant of submatrices
-   
-    
+   //free submatrices before returning the determinant
+    int dimension = matrix->rows_num;
+    int i;
+    float minor;
+    float **m;
+
+    m = matrix->matrix;
+    if (matrix->rows_num == 2 && matrix->cols_num == 2)
+        return m2_determinant(matrix);
+    i = 0;
+    while(i < matrix->cols_num)
+    {
+        minor+= m[0][i] * cofactor(get_minor(get_submatrix(matrix,0,i)),0,i);
+        i++;
+    }
+    if(matrix->rows_num != 4)
+        free_matrix(matrix);
+    return minor;
 }
 
 float get_cofactor(float determinant, int current_row, int current_col)
 {
-
+    float cofactor;
+    
+    cofactor = determinant * pow(-1,current_col + current_row);
+    return cofactor;
 }
 
 
-static float m3_determinant(t_matrices *matrix)
+float determinant(t_matrices *matrix)
 {
+    // float det;
+    // float **m;
+    // int i;
 
+    // i = 0;
+    // det = 0;
+    // m = matrix->matrix;
+    // while(i < matrix->cols_num)
+    // {
+    //     det += m[0][i] * cofactor(get_minor(matrix, i, 0, i),0,i);
+    //     i++;
+    // }
+    return(get_minor(matrix));
 }
 
 
 
-float   matrix_determinant()
-{
-    if(matrix->rows_num == 2 && matrix->cols_num == 2)
-        return m2_determinant(matrix);
-    else if (matrix->rows_num = 3)
-    {
+// float   matrix_determinant()
+// {
+//     if(matrix->rows_num == 2 && matrix->cols_num == 2)
+//         return m2_determinant(matrix);
+//     else if (matrix->rows_num = 3)
+//     {
 
-    }
-    else if (matrix->rows_num = 4)
-    {
+//     }
+//     else if (matrix->rows_num = 4)
+//     {
 
-    }
-}
+//     }
+// }
 
 t_matrices *transpose_matrix(t_matrices *matrix)
 {
