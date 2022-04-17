@@ -12,3 +12,5 @@
 //since if you rotate the light source and everything wouldnt change, you can leave the rotation till the end and just rotate points before rendering them
 
 //check if all that needs to be float is float
+
+check if multiplying some random matrice with a tuple would change tuple w into some weird value

@@ -1,5 +1,16 @@
 #include "miniRt.h"
 
+t_tuple make_tuple(float x,float y,float z,float w)
+{
+    t_tuple tuple;
+
+    tuple.x = x;
+    tuple.y = y;
+    tuple.z = z;
+    tuple.w = w;
+    return tuple;
+}
+
 t_tuple add_tuple(t_tuple tuple1, t_tuple tuple2)
 {//change to handle pointers if Im to work on them as ptrs
     t_tuple added_tuples;
