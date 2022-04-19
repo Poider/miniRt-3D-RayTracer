@@ -107,7 +107,7 @@ t_matrices *multiply_matrices(t_matrices *matrix1, t_matrices *matrix2)
         current_col = matrix1->cols0;
         while(current_col < matrix2->cols)
         {
-            final_matrix[current_row][current_col] = element_multiplication(matrix1,matrix2,current_row,current_col);
+            final_matrix->matrix[current_row][current_col] = element_multiplication(matrix1,matrix2,current_row,current_col);
             current_col++;
         }
         current_row++;
@@ -162,7 +162,7 @@ t_matrices *get_submatrix(t_matrices *matrix, int current_row, int current_col)
         j = 0;
         while(j < subdimension)
         {
-            submatrix[i][j] = matrix[i][j];
+            submatrix->matrix[i][j] = matrix->matrix[i][j];
             j++;
             if(j == current_col)
                 j++;
@@ -251,7 +251,7 @@ t_matrices *transpose_matrix(t_matrices *matrix)
         j = 0;
         while(j < matrix->cols_num)
         {
-            transposed_matrix [j][i] = matrix[i][j];
+            transposed_matrix->matrix[j][i] = matrix->matrix[i][j];
             j++;
         }
         i++;
@@ -259,9 +259,72 @@ t_matrices *transpose_matrix(t_matrices *matrix)
     return transposed_matrix;
 }
 
-t_matrices *invert_matrix()
+int is_invertible_matrix(t_matrices *matrix)
 {
+    float determinant;
 
+    determinant = determinant(matrix);
+    if(is_equal(determinant,0))
+        return FALSE;
+    return TRUE;
+}
+
+
+//change matrix to matrix->matrix!!!!!!!!!
+t_matrices *cofactor_matrix(t_matrices *matrix)
+{
+    //determinant of sub matrix at that point * cofactor <- store it in the new matrix
+    int i;
+    int j;
+    t_matrices final_matrix;
+
+    final_matrix = create_matrix(matrix->rows_num,matrix->cols_num);
+    i = 0;
+    while(i < matrix->rows_num)
+    {
+        j = 0;
+        while(j < matrix->cols_num)
+        {
+            final_matrix->matrix[i][j] = get_cofactor(determinant(get_submatrix(matrix,i,j)),i,j);
+            j++;
+        }
+        i++;
+    }
+    return final_matrix;
+}
+
+void matrix_element_divide(t_matrices *matrix, float num)
+{
+    int i;
+    int j;
+
+    i = 0;
+    while(i < matrix->rows_num)
+    {
+        j = 0;
+        while(j < matrix->cols_num)
+        {
+            matrix->matrix[i][j] /= num;
+            j++;
+        }
+        i++;
+    }
+}
+
+t_matrices *invert_matrix(t_matrices *matrix)
+{
+    t_matrices *transposed;
+    t_matrices *inverted;
+    float determinant;
+
+    if(!is_invertible_matrix(matrix))
+        return NULL;
+    determinant = determinant(matrix);
+    inverted = cofactor_matrix(matrix);
+    transposed = transposed_matrix(inverted);
+    free_matrix(inverted);
+    transposed = matrix_element_divide(matrix,determinant);
+    return transposed;
 }
 
 //matrix transformations
