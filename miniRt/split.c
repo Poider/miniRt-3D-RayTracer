@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "miniRt.h"
+#include "./includes/miniRt.h"
 
 static size_t	skip_left(char const *s1, char c)
 {

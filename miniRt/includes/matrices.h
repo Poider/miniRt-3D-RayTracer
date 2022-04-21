@@ -6,3 +6,5 @@ typedef struct  s_matrices{
     int cols_num;
     float **matrix;
 }               t_matrices;
+
+t_matrices *identity_matrix(int dimension);

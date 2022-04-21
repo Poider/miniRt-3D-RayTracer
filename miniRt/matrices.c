@@ -1,4 +1,4 @@
-#include "miniRt.h"
+#include "./includes/miniRt.h"
 
 void matrix_destroyer(t_matrices *matrix)
 {

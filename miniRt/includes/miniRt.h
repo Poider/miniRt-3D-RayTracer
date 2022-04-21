@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   miniRt.h                                           :+:      :+:    :+:   */
+/*   ./includes/miniRt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mel-amma <mel-amma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -16,7 +16,8 @@
 #include "matrices.h"
 #include "tuples.h"
 #include "math_utils.h"
-
+#include "sphere.h"
+#include "ray.h"
 #include "mlx.h"
 #include <unistd.h>
 #include <stdlib.h>
@@ -64,6 +65,8 @@ typedef struct	s_parameters // has map + image infos
 	int bitsperpixel;
 	int linesize;
 
+
+	int object_id;//first object will be 1 on id
 	t_data *data;
 }				t_parameters;
 

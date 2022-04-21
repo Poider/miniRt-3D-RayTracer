@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "miniRt.h"
+#include "./includes/miniRt.h"
 
 // char	*ft_substr(char const *s, unsigned int start, size_t len)
 // {

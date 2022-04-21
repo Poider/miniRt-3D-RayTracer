@@ -1,4 +1,4 @@
-#include "miniRt.h"
+#include "./includes/miniRt.h"
 
 float abs(float x)
 {   

@@ -1,4 +1,4 @@
-#include "miniRt.h"
+#include "./includes/miniRt.h"
 
 t_tuple make_tuple(float x,float y,float z,float w)
 {

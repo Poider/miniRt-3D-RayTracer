@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "miniRt.h"
+#include "./includes/miniRt.h"
 #include "get_next_line.h"
 t_parameters *param;
 
@@ -86,7 +86,8 @@ void initializemlx(t_parameters *param)
 
 	param->address = mlx_get_data_addr(param->img_ptre,
 									   &param->bitsperpixel, &param->linesize, &param->endian);
-
+	// TODO: make it initiaze data func
+	param->object_id = 0;
 }
 
 int esc_hook(int button, void *param)
