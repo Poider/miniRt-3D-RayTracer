@@ -323,9 +323,21 @@ t_matrices *invert_matrix(t_matrices *matrix)
     inverted = cofactor_matrix(matrix);
     transposed = transposed_matrix(inverted);
     free_matrix(inverted);
-    transposed = matrix_element_divide(matrix,determinant);
-    return transposed;
+    inverted = matrix_element_divide(matrix,determinant);
+    return inverted;
 }
 
 //matrix transformations
 
+//transformation*vector//transformation * identity
+t_matrices *transform(void (*func)(void),t_matrices *sphere_matrix)
+{//multiply tuples to transform them
+    t_matrices *transformed;
+    t_matrices *transformation;
+
+    transformation = func();
+    transformed = multiply_matrix_tuple(transformation,sphere_matrix);// check the order of the multiplication
+    free_matrix(sphere_matrix);
+    free_matrix(transformation);
+    return transformed;
+}// works like : sphere.matrix = transform(transformation,sphere.matrix)
