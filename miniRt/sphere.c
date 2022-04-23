@@ -12,21 +12,3 @@ t_sphere *create_sphere(float radius, t_tuple origin, t_parameters *param)
     sphere->transformation = identity_matrix(4);
     return sphere;
 }
-
-t_intersections *ray_sphere_intersect(t_ray ray, t_sphere *sphere)
-{
-    t_equations_vars vars;
-
-    vars.a = dot_product(ray.direction, ray.direction);
-    vars.b = 2 * dot_product(ray.direction, substract_tuple(ray.origin, sphere->origin));
-    vars.c = dot_product(substract_tuple(ray.origin, sphere->origin), substract_tuple(ray.origin, sphere->origin)) - pow(sphere->radius,2);
-   
-    vars.determinant = (b * b) - (4.0 * a * c);
-    if (vars.determinant < 0)
-		return NULL; //means no solutions
-	else
-	{
-		vars.sol1 = ((-1.0 * b) - sqrt(vars.determinant)) / (2.0 * a);
-		vars.sol2 = ((-1.0 * b) + sqrt(vars.determinant)) / (2.0 * a);
-	}
-}

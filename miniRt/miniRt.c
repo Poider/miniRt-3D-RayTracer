@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "./includes/miniRt.h"
-#include "get_next_line.h"
+
 t_parameters *param;
 
 t_point	makepoint(int x, int y, int z)

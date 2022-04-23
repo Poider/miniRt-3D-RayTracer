@@ -7,6 +7,7 @@ typedef struct  s_tuple{
     float w;
 }               t_tuple;
 
+t_tuple make_tuple(float x,float y,float z,float w);
 t_tuple add_tuple(t_tuple tuple1, t_tuple tuple2);
 t_tuple substract_tuple(t_tuple tuple1, t_tuple tuple2);
 t_tuple negate_tuple(t_tuple tuple1);//to find opposite vector

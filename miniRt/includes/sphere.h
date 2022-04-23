@@ -8,7 +8,4 @@ typedef struct  s_sphere{
     t_matrices *transformation;
 }               t_sphere;
 
-typedef struct  s_intersections{
-
- 
-}               t_intersections;
+t_sphere *create_sphere(float radius, t_tuple origin, t_parameters *param);

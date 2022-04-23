@@ -16,3 +16,5 @@
 check if multiplying some random matrice with a tuple would change tuple w into some weird value
 
 //what did we even use multiplying matrices on?
+
+//!!! change rays to pointers//then when creating the new ray that is transformed should it share the same intersections?

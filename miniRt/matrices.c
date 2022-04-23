@@ -97,15 +97,15 @@ t_matrices *multiply_matrices(t_matrices *matrix1, t_matrices *matrix2)
     int current_row;
     int current_col;
 
-    if(matrix1->rows != matrix2->cols)
+    if(matrix1->rows_num != matrix2->cols_num)
         return NULL;
-    final_matrix = create_matrix(matrix1->rows,matrix2->cols);
+    final_matrix = create_matrix(matrix1->rows_num,matrix2->cols_num);
     //first matrix rows and second matrix cols are the dimension of the multiplied matrix
     current_row = 0;
-    while(current_row < matrix1->rows)
+    while(current_row < matrix1->rows_num)
     {
         current_col = matrix1->cols0;
-        while(current_col < matrix2->cols)
+        while(current_col < matrix2->cols_num)
         {
             final_matrix->matrix[current_row][current_col] = element_multiplication(matrix1,matrix2,current_row,current_col);
             current_col++;

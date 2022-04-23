@@ -13,16 +13,20 @@
 #ifndef miniRt_H
 #define miniRt_H
 
+
+#include "get_next_line.h"
 #include "matrices.h"
 #include "tuples.h"
 #include "math_utils.h"
 #include "sphere.h"
 #include "ray.h"
 #include "mlx.h"
+
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+
 #define WINDOW_WIDTH 1920
 #define WINDOW_HEIGHT 1080
 #define COLOR 111111222
