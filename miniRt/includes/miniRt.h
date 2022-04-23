@@ -14,6 +14,9 @@
 #define miniRt_H
 
 
+#define TRUE 1
+#define FALSE 0
+
 #include "get_next_line.h"
 #include "matrices.h"
 #include "tuples.h"

@@ -103,7 +103,7 @@ float dot_product(t_tuple tuple1,t_tuple tuple2)
     float product;
 
     product = tuple1.x * tuple2.x + tuple1.y * tuple2.y+ \
-                tuple1.z*tuple.z + tuple1.w *tuple2.w;
+                tuple1.z*tuple2.z + tuple1.w *tuple2.w;
     return product;
 }
 
@@ -114,7 +114,7 @@ t_tuple cross_product(t_tuple tuple1,t_tuple tuple2)
     product.x = tuple1.y*tuple2.z - tuple1.z * tuple2.y;
     product.y = tuple1.z*tuple2.x - tuple1.x * tuple2.z;
     product.z = tuple1.x*tuple2.y - tuple1.y * tuple2.x;
-    product.w = tuple.w;
+    product.w = tuple1.w;
     return product;
     //returns whatever vector thats 90degrees with both
 }

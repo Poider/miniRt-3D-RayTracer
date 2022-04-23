@@ -123,7 +123,7 @@ t_tuple multiply_matrix_tuple(t_matrices *matrix, t_tuple tuple)
     
     m = matrix->matrix;
     if(matrix->rows_num != 4)
-        return NULL;
+        return (t_tuple)NULL;
     multiplied_tuple.x = tuple.x * m[0][0] + tuple.y * m[0][1] + tuple.z * m[0][2] + tuple.w * m[0][3];
     multiplied_tuple.y = tuple.x * m[1][0] + tuple.y * m[1][1] + tuple.z * m[1][2] + tuple.w * m[1][3];
     multiplied_tuple.z = tuple.x * m[2][0] + tuple.y * m[2][1] + tuple.z * m[2][2] + tuple.w * m[2][3];
@@ -156,7 +156,7 @@ t_matrices *get_submatrix(t_matrices *matrix, int current_row, int current_col)
     subdimension = matrix->rows - 1;
     if(subdimension <= 1)
         return matrix;
-    submatrix = create_matrix(subdimension,subdimension)
+    submatrix = create_matrix(subdimension,subdimension);
     while(i < subdimension)
     {
         j = 0;
@@ -276,7 +276,7 @@ t_matrices *cofactor_matrix(t_matrices *matrix)
     //determinant of sub matrix at that point * cofactor <- store it in the new matrix
     int i;
     int j;
-    t_matrices final_matrix;
+    t_matrices *final_matrix;
 
     final_matrix = create_matrix(matrix->rows_num,matrix->cols_num);
     i = 0;
@@ -315,15 +315,15 @@ t_matrices *invert_matrix(t_matrices *matrix)
 {
     t_matrices *transposed;
     t_matrices *inverted;
-    float determinant;
+    float det;
 
     if(!is_invertible_matrix(matrix))
         return NULL;
-    determinant = determinant(matrix);
+    det = determinant(matrix);
     inverted = cofactor_matrix(matrix);
     transposed = transposed_matrix(inverted);
     free_matrix(inverted);
-    inverted = matrix_element_divide(matrix,determinant);
+    inverted = matrix_element_divide(matrix,det);
     return inverted;
 }
 
