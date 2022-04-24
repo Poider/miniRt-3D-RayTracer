@@ -14,6 +14,7 @@ t_tuple make_tuple(float x,float y,float z,float w)
 t_tuple add_tuple(t_tuple tuple1, t_tuple tuple2)
 {//change to handle pointers if Im to work on them as ptrs
     t_tuple added_tuples;
+
     added_tuples.x = tuple1.x+tuple2.x;
     added_tuples.y = tuple1.y+tuple2.y;
     added_tuples.z = tuple1.z+tuple2.z;
@@ -24,6 +25,7 @@ t_tuple add_tuple(t_tuple tuple1, t_tuple tuple2)
 t_tuple substract_tuple(t_tuple tuple1, t_tuple tuple2)
 {//change to handle pointers if Im to work on them as ptrs
     t_tuple added_tuples;
+
     added_tuples.x = tuple1.x-tuple2.x;
     added_tuples.y = tuple1.y-tuple2.y;
     added_tuples.z = tuple1.z-tuple2.z;
@@ -33,11 +35,13 @@ t_tuple substract_tuple(t_tuple tuple1, t_tuple tuple2)
 
 t_tuple negate_tuple(t_tuple tuple1)//to find opposite vector
 {   
-    tuple1.x = -tuple1.x;
-    tuple1.y = -tuple1.y;
-    tuple1.z = -tuple1.z;
-    tuple1.w = -tuple1.w;
-    return tuple1;
+    t_tuple tuple;
+
+    tuple.x = -tuple1.x;
+    tuple.y = -tuple1.y;
+    tuple.z = -tuple1.z;
+    tuple.w = -tuple1.w;
+    return tuple;
 }
 
 t_tuple tuple_scalar_multiplication(t_tuple tuple1, float scalar)//to make vector big by number of times
@@ -65,7 +69,8 @@ t_tuple tuple_scalar_division(t_tuple tuple1, float scalar)//to make vector big 
 }
 
 float tuple_magnitude(t_tuple tuple)//to make vector big by number of times
-{//tuple distance// a vector as usual
+{
+    //tuple distance// a vector as usual
     float magnitude;
 
     magnitude = sqrt(tuple.x * tuple.x + tuple.y * tuple.y + tuple.z * tuple.z + tuple.w * tuple.w);

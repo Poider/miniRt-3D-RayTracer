@@ -13,27 +13,22 @@
 #ifndef miniRt_H
 #define miniRt_H
 
-
-#define TRUE 1
-#define FALSE 0
-
-#include "get_next_line.h"
-#include "matrices.h"
 #include "tuples.h"
+#include "matrices.h"
 #include "math_utils.h"
 #include "sphere.h"
 #include "ray.h"
-#include "mlx.h"
-
+//#include "mlx.h"
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
-
 #define WINDOW_WIDTH 1920
 #define WINDOW_HEIGHT 1080
 #define COLOR 111111222
 #define EPSILON 0.001
+#define TRUE 1
+#define FALSE 0
 
 typedef struct s_point
 {
@@ -85,5 +80,9 @@ int		whitespaces(char c);
 size_t	ft_strlcpy(char *dest, const char *src, size_t size);
 char	**ft_split(char const *s, char c);
 char	*get_next_line(int fd);
+t_intersections	*ft_lstlast(t_intersections *lst);
+void	ft_lstadd_back(t_intersections **lst, t_intersections *new);
+t_intersections	*ft_lstnew(float t, void *object);
+int	ft_lstsize(t_intersections *lst);
 
 #endif

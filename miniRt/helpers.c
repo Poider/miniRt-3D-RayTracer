@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   helpers.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-amma <mel-amma@student.42.fr>          +#+  +:+       +#+        */
+/*   By: klaarous <klaarous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/03 21:49:50 by mel-amma          #+#    #+#             */
-/*   Updated: 2022/04/04 16:42:18 by mel-amma         ###   ########.fr       */
+/*   Updated: 2022/04/22 14:19:05 by klaarous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,30 +71,30 @@
 // 	return (i);
 // }
 
-int whitespaces(char c)
-{
-		return (c == '\n' || c == '\t' || c == ' ' || c == '\r' || c == '\v' || c == '\f');
-}
+// int whitespaces(char c)
+// {
+// 		return (c == '\n' || c == '\t' || c == ' ' || c == '\r' || c == '\v' || c == '\f');
+// }
 
-size_t	ft_strlcpy(char *dest, const char *src, size_t size)
-{
-	size_t	count;
-	size_t	i;
+// size_t	ft_strlcpy(char *dest, const char *src, size_t size)
+// {
+// 	size_t	count;
+// 	size_t	i;
 
-	i = 0;
-	count = ft_strlen(src);
-	if (!dest || !src)
-		return (0);
-	if (size == 0)
-		return (count);
-	if (size > 0)
-	{
-		while (i + 1 < size && *src)
-		{
-			*dest++ = *src++;
-			i++;
-		}
-	}
-	*dest = '\0';
-	return (count);
-}
+// 	i = 0;
+// 	count = ft_strlen(src);
+// 	if (!dest || !src)
+// 		return (0);
+// 	if (size == 0)
+// 		return (count);
+// 	if (size > 0)
+// 	{
+// 		while (i + 1 < size && *src)
+// 		{
+// 			*dest++ = *src++;
+// 			i++;
+// 		}
+// 	}
+// 	*dest = '\0';
+// 	return (count);
+// }
