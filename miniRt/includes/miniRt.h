@@ -17,13 +17,14 @@
 #define TRUE 1
 #define FALSE 0
 
-#include "get_next_line.h"
-#include "matrices.h"
+#include "../gnl/get_next_line.h"
 #include "tuples.h"
+#include "matrices.h"
 #include "math_utils.h"
 #include "sphere.h"
 #include "ray.h"
-#include "mlx.h"
+#include "intersections.h"
+//#include "mlx.h"
 
 #include <unistd.h>
 #include <stdlib.h>
@@ -85,5 +86,9 @@ int		whitespaces(char c);
 size_t	ft_strlcpy(char *dest, const char *src, size_t size);
 char	**ft_split(char const *s, char c);
 char	*get_next_line(int fd);
+t_intersections	*ft_lstlast(t_intersections *lst);
+void	ft_lstadd_back(t_intersections **lst, t_intersections *new);
+t_intersections	*ft_lstnew(float t, void *object);
+int	ft_lstsize(t_intersections *lst);
 
 #endif

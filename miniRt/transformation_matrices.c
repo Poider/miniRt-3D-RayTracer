@@ -6,7 +6,7 @@ t_matrices *rotation_x(float angle)
 	t_matrices *matrix;
 	float **m;
 
-	matrix = identity_matrix(4);
+	matrix = identity_matrix(DEFAULT_DIMENSION);
 	m = matrix->matrix;
 	m[1][1] = cos(angle) ;
 	m[1][2] = -sin(angle);
@@ -20,7 +20,7 @@ t_matrices *rotation_y(float angle)
 	t_matrices *matrix;
 	float **m;
 
-	matrix = identity_matrix(4);
+	matrix = identity_matrix(DEFAULT_DIMENSION);
 	m = matrix->matrix;
 	m[0][0] = cos(angle);
 	m[0][2] = sin(angle);
@@ -34,7 +34,7 @@ t_matrices *rotation_z(float angle)
 	t_matrices *matrix;
 	float **m;
 
-	matrix = identity_matrix(4);
+	matrix = identity_matrix(DEFAULT_DIMENSION);
 	m = matrix->matrix;
 	m[0][0] = cos(angle);
 	m[0][1] = -sin(angle);
@@ -48,7 +48,7 @@ t_matrices *translation(t_tuple vector)
 	t_matrices *matrix;
 	float **m;
 
-	matrix = identity_matrix(4);
+	matrix = identity_matrix(DEFAULT_DIMENSION);
 	m = matrix->matrix;
 	m[3][0] = vector.x;
 	m[3][1] = vector.y;
@@ -61,7 +61,7 @@ t_matrices *scaling(t_tuple vector)
 	t_matrices *matrix;
 	float **m;
 
-	matrix = identity_matrix(4);
+	matrix = identity_matrix(DEFAULT_DIMENSION);
 	m = matrix->matrix;
 	m[0][0] = vector.x;
 	m[1][1] = vector.y;
@@ -74,7 +74,7 @@ t_matrices *shearing(t_shear shear)
 	t_matrices *matrix;
 	float **m;
 
-	matrix = identity_matrix(4);
+	matrix = identity_matrix(DEFAULT_DIMENSION);
 	m = matrix->matrix;
 	m[0][1] = shear.Hxy;
 	m[0][2] = shear.Hxz;
@@ -84,4 +84,3 @@ t_matrices *shearing(t_shear shear)
 	m[2][1] = shear.Hzy;
 	return matrix;
 }
-
