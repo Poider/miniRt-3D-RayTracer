@@ -46,10 +46,10 @@ t_matrices *create_matrix(int rows, int cols)
     matrix = malloc(sizeof(t_matrices));
     matrix->rows_num = rows;
     matrix->cols_num = cols;
-    matrix->matrix = malloc(sizeof(float *) * rows)
+    matrix->matrix = malloc(sizeof(float *) * rows);
     i = 0;
     while(i < rows)
-        matrix->matrix[i] = malloc(sizeof(float) * cols);
+        matrix->matrix[i++] = malloc(sizeof(float) * cols);
     null_matrix(matrix);
     return matrix;
     //means matrix[rows][columns]
@@ -60,10 +60,13 @@ int fill_diagonal(t_matrices *matrix, float number)
     int i;
 
     if(!matrix)
-        return NULL;
+        return 0;
     i = 0;
     while(i < matrix->rows_num)
+    {
         matrix->matrix[i][i] = number;
+        i++;
+    }
     return 1;    
 }
 
@@ -72,7 +75,7 @@ t_matrices *identity_matrix(int dimension)
     t_matrices *matrix;
 
     matrix = create_matrix(dimension,dimension);
-    fill_diagonal(matrix);
+    fill_diagonal(matrix,1);
     return matrix;
 }
 
@@ -83,9 +86,9 @@ static float element_multiplication(t_matrices *matrix1, t_matrices *matrix2, in
 
     sum = 0.0;
     i = 0;
-    while (i < matrix2->rows)
+    while (i < matrix2->rows_num)
     {
-        sum += matrix1->matrix[row][i] * matrix2->matrix[i][col]
+        sum += matrix1->matrix[row][i] * matrix2->matrix[i][col];
         i++;
     }
     return sum;
@@ -104,7 +107,7 @@ t_matrices *multiply_matrices(t_matrices *matrix1, t_matrices *matrix2)
     current_row = 0;
     while(current_row < matrix1->rows_num)
     {
-        current_col = matrix1->cols0;
+        current_col = matrix1->cols_num;
         while(current_col < matrix2->cols_num)
         {
             final_matrix->matrix[current_row][current_col] = element_multiplication(matrix1,matrix2,current_row,current_col);
@@ -116,14 +119,14 @@ t_matrices *multiply_matrices(t_matrices *matrix1, t_matrices *matrix2)
     return final_matrix;
 }
 
-t_tuple multiply_matrix_tuple(t_matrices *matrix, t_tuple tuple)
+t_tuple multiply_matrix_tuple(t_matrices matrix, t_tuple tuple)
 {//only works on 4x4 matrices as its supposed to be
     t_tuple multiplied_tuple;
     float **m;
     
-    m = matrix->matrix;
-    if(matrix->rows_num != 4)
-        return (t_tuple)NULL;
+    m = matrix.matrix;
+    if(matrix.rows_num != 4)
+        return (multiplied_tuple);
     multiplied_tuple.x = tuple.x * m[0][0] + tuple.y * m[0][1] + tuple.z * m[0][2] + tuple.w * m[0][3];
     multiplied_tuple.y = tuple.x * m[1][0] + tuple.y * m[1][1] + tuple.z * m[1][2] + tuple.w * m[1][3];
     multiplied_tuple.z = tuple.x * m[2][0] + tuple.y * m[2][1] + tuple.z * m[2][2] + tuple.w * m[2][3];
@@ -153,7 +156,7 @@ t_matrices *get_submatrix(t_matrices *matrix, int current_row, int current_col)
     int j;
 
     i = 0;
-    subdimension = matrix->rows - 1;
+    subdimension = matrix->rows_num - 1;
     if(subdimension <= 1)
         return matrix;
     submatrix = create_matrix(subdimension,subdimension);
@@ -188,7 +191,7 @@ float get_minor(t_matrices *matrix)
     i = 0;
     while(i < matrix->cols_num)
     {
-        minor+= m[0][i] * cofactor(get_minor(get_submatrix(matrix,0,i)),0,i);
+        minor+= m[0][i] * get_cofactor(get_minor(get_submatrix(matrix,0,i)),0,i);
         i++;
     }
     if(matrix->rows_num != 4)
@@ -261,10 +264,10 @@ t_matrices *transpose_matrix(t_matrices *matrix)
 
 int is_invertible_matrix(t_matrices *matrix)
 {
-    float determinant;
+    float det;
 
-    determinant = determinant(matrix);
-    if(is_equal(determinant,0))
+    det = determinant(matrix);
+    if(is_equal(det,0))
         return FALSE;
     return TRUE;
 }
@@ -293,7 +296,7 @@ t_matrices *cofactor_matrix(t_matrices *matrix)
     return final_matrix;
 }
 
-void matrix_element_divide(t_matrices *matrix, float num)
+t_matrices  *matrix_element_divide(t_matrices *matrix, float num)
 {
     int i;
     int j;
@@ -309,6 +312,7 @@ void matrix_element_divide(t_matrices *matrix, float num)
         }
         i++;
     }
+    return (matrix);
 }
 
 t_matrices *invert_matrix(t_matrices *matrix)
@@ -321,7 +325,7 @@ t_matrices *invert_matrix(t_matrices *matrix)
         return NULL;
     det = determinant(matrix);
     inverted = cofactor_matrix(matrix);
-    transposed = transposed_matrix(inverted);
+    transposed = transpose_matrix(inverted);
     free_matrix(inverted);
     inverted = matrix_element_divide(matrix,det);
     return inverted;
@@ -330,14 +334,67 @@ t_matrices *invert_matrix(t_matrices *matrix)
 //matrix transformations
 
 //transformation*vector//transformation * identity
-t_matrices *transform(void (*func)(void),t_matrices *sphere_matrix)
-{//multiply tuples to transform them
-    t_matrices *transformed;
-    t_matrices *transformation;
+// t_matrices *transform(void (*func)(void),t_matrices *sphere_matrix)
+// {//multiply tuples to transform them
+//     t_matrices *transformed;
+//     t_matrices *transformation;
 
-    transformation = func();
-    transformed = multiply_matrix_tuple(transformation,sphere_matrix);// check the order of the multiplication
-    free_matrix(sphere_matrix);
-    free_matrix(transformation);
-    return transformed;
-}// works like : sphere.matrix = transform(transformation,sphere.matrix)
+//     transformation = func();
+//     transformed = multiply_matrix_tuple(transformation,sphere_matrix);// check the order of the multiplication
+//     free_matrix(sphere_matrix);
+//     free_matrix(transformation);
+//     return transformed;
+// }// works like : sphere.matrix = transform(transformation,sphere.matrix)
+
+void print_matrix(t_matrices matrix)
+{
+    int i;
+    int j;
+
+    i = 0;
+    while (i < matrix.rows_num)
+    {
+        j = 0;
+        while (j < matrix.cols_num)
+        {
+            printf("%.2f  ",matrix.matrix[i][j]);
+            j++;
+        }
+        printf("\n");
+        i++;
+    }
+}
+
+int main()
+{
+    // t_tuple point = make_tuple(2,3,4,1);
+    // t_tuple vector = make_tuple(1,0,0,0);
+    // // t_tuple translated_tuple = make_tuple(2,3,4,1);
+    // t_ray ray = make_ray(point,vector);
+    // // t_matrices *m = scaling(translated_tuple);
+    // //t_ray r2 = transform_ray(ray,*m);
+    // t_tuple t1 = position(ray,2.5);
+    // printf("%.2f %.2f %.2f w = %.2f\n",t1.x,t1.y,t1.z,t1.w);
+
+    // printf("origin = %.2f %.2f %.2f w = %.2f\n",r2.origin.x,r2.origin.y,r2.origin.z,r2.origin.w);
+    // printf("direction = %.2f %.2f %.2f w = %.2f\n",r2.direction.x,r2.direction.y,r2.direction.z,r2.direction.w);
+    
+    t_matrices *m;
+    m = create_matrix(4,4);
+    m ->matrix[0][0] = -5;m ->matrix[0][1] = 2;m ->matrix[0][2] = 6;m ->matrix[0][3] = -8;
+    m ->matrix[1][0] = 1;m ->matrix[1][1] = -5;m ->matrix[1][2] = 1;m ->matrix[1][3] = 8;
+    m ->matrix[2][0] = 7;m ->matrix[2][1] = 7;m ->matrix[2][2] = -6;m ->matrix[2][3] = -7;
+    m ->matrix[3][0] = 1;m ->matrix[3][1] = -3;m ->matrix[3][2] = 7;m ->matrix[3][3] = 4;
+
+    float matrix[4][4] = {
+        {-5,2,6,-8},
+        {1,-5,1,8},
+        {7,7,-6,-7},
+        {1,-3,7,4}
+    };
+    print_matrix(*m);
+    printf("\nafter : \n");
+    t_matrices *invers = invert_matrix(m);
+    print_matrix(*invers);
+    return (0);
+}
