@@ -24,17 +24,18 @@
 #include "sphere.h"
 #include "ray.h"
 #include "intersections.h"
-//#include "mlx.h"
+#include "mlx.h"
 
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
 
-#define WINDOW_WIDTH 1920
-#define WINDOW_HEIGHT 1080
+#define WINDOW_WIDTH 500
+#define WINDOW_HEIGHT 500
 #define COLOR 111111222
 #define EPSILON 0.001
+#define MARGIN 1
 
 typedef struct s_point
 {
@@ -91,4 +92,9 @@ void	ft_lstadd_back(t_intersections **lst, t_intersections *new);
 t_intersections	*ft_lstnew(float t, void *object);
 int	ft_lstsize(t_intersections *lst);
 
+
+//drawing functions
+
+void plot(int x,int y,int z);
+void	image_pixel_put(t_parameters *param, t_point point, int color);
 #endif

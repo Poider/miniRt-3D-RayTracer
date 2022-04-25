@@ -7,6 +7,12 @@
 // 	int		id;
 // }               t_intersections;
 
+typedef struct  s_intersections{
+    float t;
+    void *object;
+    struct s_intersections *next;
+}               t_intersections;
+
 t_intersections *ray_sphere_intersect(t_ray ray, t_sphere *sphere);
 float get_hit(t_ray *ray);
 t_intersections *intersection(float t, void *obj);
