@@ -365,36 +365,36 @@ void print_matrix(t_matrices matrix)
     }
 }
 
-int main()
-{
-    // t_tuple point = make_tuple(2,3,4,1);
-    // t_tuple vector = make_tuple(1,0,0,0);
-    // // t_tuple translated_tuple = make_tuple(2,3,4,1);
-    // t_ray ray = make_ray(point,vector);
-    // // t_matrices *m = scaling(translated_tuple);
-    // //t_ray r2 = transform_ray(ray,*m);
-    // t_tuple t1 = position(ray,2.5);
-    // printf("%.2f %.2f %.2f w = %.2f\n",t1.x,t1.y,t1.z,t1.w);
+// int main()
+// {
+//     // t_tuple point = make_tuple(2,3,4,1);
+//     // t_tuple vector = make_tuple(1,0,0,0);
+//     // // t_tuple translated_tuple = make_tuple(2,3,4,1);
+//     // t_ray ray = make_ray(point,vector);
+//     // // t_matrices *m = scaling(translated_tuple);
+//     // //t_ray r2 = transform_ray(ray,*m);
+//     // t_tuple t1 = position(ray,2.5);
+//     // printf("%.2f %.2f %.2f w = %.2f\n",t1.x,t1.y,t1.z,t1.w);
 
-    // printf("origin = %.2f %.2f %.2f w = %.2f\n",r2.origin.x,r2.origin.y,r2.origin.z,r2.origin.w);
-    // printf("direction = %.2f %.2f %.2f w = %.2f\n",r2.direction.x,r2.direction.y,r2.direction.z,r2.direction.w);
+//     // printf("origin = %.2f %.2f %.2f w = %.2f\n",r2.origin.x,r2.origin.y,r2.origin.z,r2.origin.w);
+//     // printf("direction = %.2f %.2f %.2f w = %.2f\n",r2.direction.x,r2.direction.y,r2.direction.z,r2.direction.w);
     
-    t_matrices *m;
-    m = create_matrix(4,4);
-    m ->matrix[0][0] = -5;m ->matrix[0][1] = 2;m ->matrix[0][2] = 6;m ->matrix[0][3] = -8;
-    m ->matrix[1][0] = 1;m ->matrix[1][1] = -5;m ->matrix[1][2] = 1;m ->matrix[1][3] = 8;
-    m ->matrix[2][0] = 7;m ->matrix[2][1] = 7;m ->matrix[2][2] = -6;m ->matrix[2][3] = -7;
-    m ->matrix[3][0] = 1;m ->matrix[3][1] = -3;m ->matrix[3][2] = 7;m ->matrix[3][3] = 4;
+//     t_matrices *m;
+//     m = create_matrix(4,4);
+//     m ->matrix[0][0] = -5;m ->matrix[0][1] = 2;m ->matrix[0][2] = 6;m ->matrix[0][3] = -8;
+//     m ->matrix[1][0] = 1;m ->matrix[1][1] = -5;m ->matrix[1][2] = 1;m ->matrix[1][3] = 8;
+//     m ->matrix[2][0] = 7;m ->matrix[2][1] = 7;m ->matrix[2][2] = -6;m ->matrix[2][3] = -7;
+//     m ->matrix[3][0] = 1;m ->matrix[3][1] = -3;m ->matrix[3][2] = 7;m ->matrix[3][3] = 4;
 
-    float matrix[4][4] = {
-        {-5,2,6,-8},
-        {1,-5,1,8},
-        {7,7,-6,-7},
-        {1,-3,7,4}
-    };
-    print_matrix(*m);
-    printf("\nafter : \n");
-    t_matrices *invers = invert_matrix(m);
-    print_matrix(*invers);
-    return (0);
-}
+//     float matrix[4][4] = {
+//         {-5,2,6,-8},
+//         {1,-5,1,8},
+//         {7,7,-6,-7},
+//         {1,-3,7,4}
+//     };
+//     print_matrix(*m);
+//     printf("\nafter : \n");
+//     t_matrices *invers = invert_matrix(m);
+//     print_matrix(*invers);
+//     return (0);
+// }

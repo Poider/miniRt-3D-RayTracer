@@ -3,15 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mel-amma <mel-amma@student.42.fr>          +#+  +:+       +#+         #
+#    By: klaarous <klaarous@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/03 18:14:03 by mel-amma          #+#    #+#              #
-#    Updated: 2022/04/04 16:41:17 by mel-amma         ###   ########.fr        #
+#    Updated: 2022/04/24 14:38:26 by klaarous         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRC = miniRt.c helpers.c split.c get_next_line.c get_next_line_utils.c
 NAME = miniRt
+LIBRARIES = ../libmlx_Linux.a -lX11 -lXext
 RM = rm -f
 CFLAGS =  -g -I /usr/local/include -L /usr/local/lib -lmlx -framework OpenGl -framework AppKit -fsanitize=address
 
