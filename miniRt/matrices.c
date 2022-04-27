@@ -1,5 +1,6 @@
 #include "./includes/miniRt.h"
 
+void print_matrix(t_matrices matrix);
 void matrix_destroyer(t_matrices *matrix)
 {
     int i;
@@ -107,7 +108,7 @@ t_matrices *multiply_matrices(t_matrices *matrix1, t_matrices *matrix2)
     current_row = 0;
     while(current_row < matrix1->rows_num)
     {
-        current_col = matrix1->cols_num;
+        current_col = 0;
         while(current_col < matrix2->cols_num)
         {
             final_matrix->matrix[current_row][current_col] = element_multiplication(matrix1,matrix2,current_row,current_col);
@@ -149,13 +150,16 @@ static float m2_determinant(t_matrices *matrix)
 }
 
 t_matrices *get_submatrix(t_matrices *matrix, int current_row, int current_col)
-{
+{// you can split it by making a function that brings next element
     int subdimension;
     t_matrices *submatrix;
     int i;
     int j;
+    int i1;
+    int j1;
 
     i = 0;
+    i1 = 0;
     subdimension = matrix->rows_num - 1;
     if(subdimension <= 1)
         return matrix;
@@ -163,16 +167,27 @@ t_matrices *get_submatrix(t_matrices *matrix, int current_row, int current_col)
     while(i < subdimension)
     {
         j = 0;
+        j1 = 0;
+         if(i1 == current_row)
+            {
+                i1++;
+                continue;
+            }
         while(j < subdimension)
         {
-            submatrix->matrix[i][j] = matrix->matrix[i][j];
+            if(j1 == current_col)
+                {
+                    j1++;
+                    continue;
+                }
+            submatrix->matrix[i][j] = matrix->matrix[i1][j1];
             j++;
-            if(j == current_col)
-                j++;
+            j1++;
+            
         }
         i++;
-        if(i == current_row)
-            i++;
+        i1++;
+       
     }
     return submatrix;
 }
@@ -185,6 +200,7 @@ float get_minor(t_matrices *matrix)
     float minor;
     float **m;
 
+    minor = 0;
     m = matrix->matrix;
     if (matrix->rows_num == 2 && matrix->cols_num == 2)
         return m2_determinant(matrix);
@@ -323,11 +339,13 @@ t_matrices *invert_matrix(t_matrices *matrix)
 
     if(!is_invertible_matrix(matrix))
         return NULL;
+         
     det = determinant(matrix);
+   
     inverted = cofactor_matrix(matrix);
     transposed = transpose_matrix(inverted);
     free_matrix(inverted);
-    inverted = matrix_element_divide(matrix,det);
+    inverted = matrix_element_divide(transposed, det);
     return inverted;
 }
 
@@ -357,7 +375,7 @@ void print_matrix(t_matrices matrix)
         j = 0;
         while (j < matrix.cols_num)
         {
-            printf("%.2f  ",matrix.matrix[i][j]);
+            printf("%.3f  ",matrix.matrix[i][j]);
             j++;
         }
         printf("\n");
@@ -395,6 +413,22 @@ void print_matrix(t_matrices matrix)
 //     print_matrix(*m);
 //     printf("\nafter : \n");
 //     t_matrices *invers = invert_matrix(m);
-//     print_matrix(*invers);
+//     t_matrices *ss = multiply_matrices(invers, m);
+//     print_matrix(*ss);
 //     return (0);
 // }
+
+int main()
+{
+    t_matrices *m;
+    m = create_matrix(3,3);
+    m ->matrix[0][0] = 1;m ->matrix[0][1] = 2;m ->matrix[0][2] = 3;
+    m ->matrix[1][0] = 4;m ->matrix[1][1] = 5;m ->matrix[1][2] = 6;
+    m ->matrix[2][0] = 7;m ->matrix[2][1] = 8;m ->matrix[2][2] = 9;
+    print_matrix(*m);
+    t_matrices *c = invert_matrix(m);
+    printf("after:\n");
+    // print_matrix(*c);
+    // printf("%d",c->cols_num);
+    
+}
