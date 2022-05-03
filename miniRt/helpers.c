@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   helpers.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-amma <mel-amma@student.42.fr>          +#+  +:+       +#+        */
+/*   By: klaarous <klaarous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/03 21:49:50 by mel-amma          #+#    #+#             */
-/*   Updated: 2022/04/04 16:42:18 by mel-amma         ###   ########.fr       */
+/*   Updated: 2022/04/24 05:20:32 by klaarous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,18 +58,18 @@
 // }
 
 
-// size_t	ft_strlen(const char *str)
-// {
-// 	size_t	i;
+size_t	ft_strlen(const char *str)
+{
+	size_t	i;
 
-// 	i = 0;
-// 	while (*str)
-// 	{
-// 		str++;
-// 		i++;
-// 	}
-// 	return (i);
-// }
+	i = 0;
+	while (*str)
+	{
+		str++;
+		i++;
+	}
+	return (i);
+}
 
 int whitespaces(char c)
 {

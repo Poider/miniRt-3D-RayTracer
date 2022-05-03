@@ -1,14 +1,14 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   miniRt.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mel-amma <mel-amma@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/03 17:34:33 by mel-amma          #+#    #+#             */
-/*   Updated: 2022/04/04 17:37:00 by mel-amma         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+// /* ************************************************************************** */
+// /*                                                                            */
+// /*                                                        :::      ::::::::   */
+// /*   miniRt.c                                           :+:      :+:    :+:   */
+// /*                                                    +:+ +:+         +:+     */
+// /*   By: mel-amma <mel-amma@student.42.fr>          +#+  +:+       +#+        */
+// /*                                                +#+#+#+#+#+   +#+           */
+// /*   Created: 2022/04/03 17:34:33 by mel-amma          #+#    #+#             */
+// /*   Updated: 2022/04/04 17:37:00 by mel-amma         ###   ########.fr       */
+// /*                                                                            */
+// /* ************************************************************************** */
 
 #include "./includes/miniRt.h"
 
@@ -34,13 +34,13 @@ void	image_pixel_put(t_parameters *param, t_point point, int color)
 	x = point.x;
 	y = point.y;
 	z = point.z;
-	printf("x:%d y %d z%d\n",x,y,z);
+	//printf("x:%d y %d z%d\n",x,y,z);
 	if (x > 0 && y > 0 && x < WINDOW_WIDTH && y < WINDOW_HEIGHT)
 	{
 		// printf("check\n");
 		pixel = param->address + (y * (param->linesize)
 				+ x * (param->bitsperpixel) / 8);
-		*(int *)pixel = COLOR;
+		*(int *)pixel = color;
 	}
 }
 
@@ -78,14 +78,14 @@ void put_menu(t_parameters *param)
 
 void initializemlx(t_parameters *param)
 {
-	param->mlx_ptre = mlx_init();
-	param->win_ptre = mlx_new_window(param->mlx_ptre,
-									 WINDOW_WIDTH, WINDOW_HEIGHT, "mi ferst windew");
+	// param->mlx_ptre = mlx_init();
+	// param->win_ptre = mlx_new_window(param->mlx_ptre,
+	// 								 WINDOW_WIDTH, WINDOW_HEIGHT, "mi ferst windew");
 
-	param->img_ptre = mlx_new_image(param->mlx_ptre, WINDOW_WIDTH, WINDOW_HEIGHT);
+	// param->img_ptre = mlx_new_image(param->mlx_ptre, WINDOW_WIDTH, WINDOW_HEIGHT);
 
-	param->address = mlx_get_data_addr(param->img_ptre,
-									   &param->bitsperpixel, &param->linesize, &param->endian);
+	// param->address = mlx_get_data_addr(param->img_ptre,
+	// 								   &param->bitsperpixel, &param->linesize, &param->endian);
 	// TODO: make it initiaze data func
 	param->object_id = 0;
 }
@@ -127,30 +127,30 @@ int fill_struct(char **line)
 	return 1;
 }
 
-int parse_file(t_parameters *param, char *filename)
-{
-	int fd;
-	char *line;
+// int parse_file(t_parameters *param, char *filename)
+// {
+// 	int fd;
+// 	char *line;
 
-	line = "get in";
-	fd = open(filename, O_RDONLY);
-	if (fd < 0)
-		exit(0);
-	//malloc the struct of data and initialize stuff with null
-	while (line)
-	{
-		line = get_next_line(fd);
-		// fill a struct with the stuff
-		// do split and send to a function with ifs its one of the 3 params it stores there otherwise it stores in object
-		free(line);
-	}
-	close(fd);
-	return 1;
-}
+// 	line = "get in";
+// 	fd = open(filename, O_RDONLY);
+// 	if (fd < 0)
+// 		exit(0);
+// 	//malloc the struct of data and initialize stuff with null
+// 	while (line)
+// 	{
+// 		line = get_next_line(fd);
+// 		// fill a struct with the stuff
+// 		// do split and send to a function with ifs its one of the 3 params it stores there otherwise it stores in object
+// 		free(line);
+// 	}
+// 	close(fd);
+// 	return 1;
+//}
 
-void plot(int x,int y,int z)
+void plot(int x,int y,t_tuple color)
 {
-	image_pixel_put(param,makepoint(x+700,y+700,z),0);
+	image_pixel_put(param,makepoint(x,y,0),get_color(color));
 }
 
 void DrawSphere(double r, int lats, int longs)
@@ -172,8 +172,8 @@ void DrawSphere(double r, int lats, int longs)
 			double x = cos(lng);
 			double y = sin(lng);
 
-			plot(x * zr0, y * zr0, z0);
-			plot(x * zr1, y * zr1, z1);
+			//plot(x * zr0, y * zr0, z0);
+			//plot(x * zr1, y * zr1, z1);
 		}
 	}
 }
@@ -199,9 +199,12 @@ int main(int argc, char **argv)
 	// 		image_pixel_put(param,makepoint(j,i,0),0);
 	// }
 
-	DrawSphere(300, 400, 500);
+	//DrawSphere(300, 400, 500);
 
+    t_tuple camera;
 
+    camera = make_tuple(0,0,-5,1);
+    draw_sphere(camera,10);
 
 	mlx_put_image_to_window(param->mlx_ptre,param->win_ptre,param->img_ptre,0,0);
 
@@ -219,3 +222,18 @@ int main(int argc, char **argv)
 
 	return (0);
 }
+
+
+
+// int main()
+// {
+// 	t_sphere *s = sphere();
+// 	t_material m = make_material();
+//     t_tuple position = make_tuple (0, 0, 0,POINT);
+// 	t_tuple eyev = make_tuple(0, 0,-1,VECTOR);
+//     t_tuple normalv = make_tuple(0, 0, -1,VECTOR);
+//     t_light light = make_light(make_tuple(0, 0, 10,POINT), make_color(1, 1, 1));
+//     t_tuple r = lighting(m, light, position, eyev, normalv);
+// 	printf("%.2f %.2f %.2f\n",r.x,r.y,r.z);
+// 	return (0);
+// }

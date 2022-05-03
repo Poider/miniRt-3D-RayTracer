@@ -16,13 +16,20 @@
 
 #define TRUE 1
 #define FALSE 0
+#define VECTOR 0
+#define POINT 1
 
-#include "get_next_line.h"
-#include "matrices.h"
+#include "../gnl/get_next_line.h"
 #include "tuples.h"
+#include "matrices.h"
 #include "math_utils.h"
+#include "color.h"
+#include "light.h"
+#include "material.h"
 #include "sphere.h"
 #include "ray.h"
+#include "shading.h"
+#include "intersections.h"
 #include "mlx.h"
 
 #include <unistd.h>
@@ -30,10 +37,11 @@
 #include <stdio.h>
 #include <math.h>
 
-#define WINDOW_WIDTH 1920
-#define WINDOW_HEIGHT 1080
+#define WINDOW_WIDTH 500
+#define WINDOW_HEIGHT 500
 #define COLOR 111111222
 #define EPSILON 0.001
+#define MARGIN 1
 
 typedef struct s_point
 {
@@ -85,5 +93,14 @@ int		whitespaces(char c);
 size_t	ft_strlcpy(char *dest, const char *src, size_t size);
 char	**ft_split(char const *s, char c);
 char	*get_next_line(int fd);
+t_intersections	*ft_lstlast(t_intersections *lst);
+void	ft_lstadd_back(t_intersections **lst, t_intersections *new);
+t_intersections	*ft_lstnew(float t, void *object);
+int	ft_lstsize(t_intersections *lst);
 
+
+//drawing functions
+
+void plot(int x,int y,t_tuple color);
+void	image_pixel_put(t_parameters *param, t_point point, int color);
 #endif

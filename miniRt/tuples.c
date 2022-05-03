@@ -24,19 +24,22 @@ t_tuple add_tuple(t_tuple tuple1, t_tuple tuple2)
 t_tuple substract_tuple(t_tuple tuple1, t_tuple tuple2)
 {//change to handle pointers if Im to work on them as ptrs
     t_tuple added_tuples;
-    added_tuples.x = tuple1.x-tuple2.x;
-    added_tuples.y = tuple1.y-tuple2.y;
-    added_tuples.z = tuple1.z-tuple2.z;
-    added_tuples.w = tuple1.w-tuple2.w;
+    added_tuples.x = tuple1.x - tuple2.x;
+    added_tuples.y = tuple1.y - tuple2.y;
+    added_tuples.z = tuple1.z - tuple2.z;
+    added_tuples.w = tuple1.w - tuple2.w;
     return added_tuples;
 }
 
 t_tuple negate_tuple(t_tuple tuple1)//to find opposite vector
-{   
-    tuple1.x = -tuple1.x;
-    tuple1.y = -tuple1.y;
-    tuple1.z = -tuple1.z;
-    tuple1.w = -tuple1.w;
+{
+    if (!is_equal(tuple1.x,0))
+        tuple1.x = -tuple1.x;
+    if (!is_equal(tuple1.y,0))
+        tuple1.y = -tuple1.y;
+    if (!is_equal(tuple1.z,0))
+        tuple1.z = -tuple1.z;
+    tuple1.w = tuple1.w;
     return tuple1;
 }
 
@@ -102,8 +105,8 @@ float dot_product(t_tuple tuple1,t_tuple tuple2)
 {
     float product;
 
-    product = tuple1.x * tuple2.x + tuple1.y * tuple2.y+ \
-                tuple1.z*tuple2.z + tuple1.w *tuple2.w;
+    product = tuple1.x * tuple2.x + tuple1.y * tuple2.y + \
+                tuple1.z * tuple2.z + tuple1.w * tuple2.w;
     return product;
 }
 
