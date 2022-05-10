@@ -367,7 +367,8 @@ t_matrices *invert_matrix(t_matrices *matrix)
 //     free_matrix(transformation);
 //     return transformed;
 // }// works like : sphere.matrix = transform(transformation,sphere.matrix)
-
+// sphere.matrix = transform(rotation_x,,sphere.matrix)
+// sphere.matrix = transform(scaling,sphere.matrix)
 void print_matrix(t_matrices matrix)
 {
     int i;

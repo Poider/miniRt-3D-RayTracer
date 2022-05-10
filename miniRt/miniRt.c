@@ -29,11 +29,9 @@ void	image_pixel_put(t_parameters *param, t_point point, int color)
 	char	*pixel;
 	int		x;
 	int		y;
-	int		z;
 
 	x = point.x;
 	y = point.y;
-	z = point.z;
 	//printf("x:%d y %d z%d\n",x,y,z);
 	if (x > 0 && y > 0 && x < WINDOW_WIDTH && y < WINDOW_HEIGHT)
 	{
@@ -78,14 +76,14 @@ void put_menu(t_parameters *param)
 
 void initializemlx(t_parameters *param)
 {
-	// param->mlx_ptre = mlx_init();
-	// param->win_ptre = mlx_new_window(param->mlx_ptre,
-	// 								 WINDOW_WIDTH, WINDOW_HEIGHT, "mi ferst windew");
+	param->mlx_ptre = mlx_init();
+	param->win_ptre = mlx_new_window(param->mlx_ptre,
+									 WINDOW_WIDTH, WINDOW_HEIGHT, "mi ferst windew");
 
-	// param->img_ptre = mlx_new_image(param->mlx_ptre, WINDOW_WIDTH, WINDOW_HEIGHT);
+	param->img_ptre = mlx_new_image(param->mlx_ptre, WINDOW_WIDTH, WINDOW_HEIGHT);
 
-	// param->address = mlx_get_data_addr(param->img_ptre,
-	// 								   &param->bitsperpixel, &param->linesize, &param->endian);
+	param->address = mlx_get_data_addr(param->img_ptre,
+									   &param->bitsperpixel, &param->linesize, &param->endian);
 	// TODO: make it initiaze data func
 	param->object_id = 0;
 }
@@ -113,12 +111,6 @@ int esc_hook(int button, void *param)
 // 	return first_word;
 // }
 
-t_object *get_last_object(t_object *obj)
-{
-	while(obj->next != 0)
-		obj = obj->next;
-	return obj;
-}
 
 int fill_struct(char **line)
 {
@@ -178,62 +170,68 @@ void DrawSphere(double r, int lats, int longs)
 	}
 }
 
-int main(int argc, char **argv)
-{
+// int main(int argc, char **argv)
+// {
 	
 
-	// error handling
+// 	// error handling
 
-	// read the file and parse it
-
-
-
-	// init
-	param = malloc(sizeof(t_parameters));
-	initializemlx(param);
-
-	//first draw
-	// printf("%s %d %d %d \n",param->address,param->endian,param->bitsperpixel,param->linesize);
-	// for( int i = 0; i<500; i++) {
-	// 	for (int j = 0; j< 500;j++)
-	// 		image_pixel_put(param,makepoint(j,i,0),0);
-	// }
-
-	//DrawSphere(300, 400, 500);
-
-    t_tuple camera;
-
-    camera = make_tuple(0,0,-5,1);
-    draw_sphere(camera,10);
-
-	mlx_put_image_to_window(param->mlx_ptre,param->win_ptre,param->img_ptre,0,0);
+// 	// read the file and parse it
 
 
-	//make a hook each time you rotate you re render that and do the light and all recalculation
 
-	// for all keys
-	mlx_hook(param->win_ptre, 02, 0L, esc_hook, param /*(the parameter)*/);
+// 	// init
+// 	param = malloc(sizeof(t_parameters));
+// 	initializemlx(param);
 
-	// for closin window
-	mlx_hook(param->win_ptre, 17, 0L, exitit, param /*(the parameter)*/);
+// 	//first draw
+// 	// printf("%s %d %d %d \n",param->address,param->endian,param->bitsperpixel,param->linesize);
+// 	// for( int i = 0; i<500; i++) {
+// 	// 	for (int j = 0; j< 500;j++)
+// 	// 		image_pixel_put(param,makepoint(j,i,0),0);
+// 	// }
 
-	put_menu(param);
-	mlx_loop(param->mlx_ptre);
+// 	//DrawSphere(300, 400, 500);
 
-	return (0);
-}
+//     t_tuple camera;
+
+//     camera = make_tuple(0,0,-5,1);
+//     draw_sphere(camera,10);
+
+// 	mlx_put_image_to_window(param->mlx_ptre,param->win_ptre,param->img_ptre,0,0);
 
 
+// 	//make a hook each time you rotate you re render that and do the light and all recalculation
+
+// 	// for all keys
+// 	mlx_hook(param->win_ptre, 02, 0L, esc_hook, param /*(the parameter)*/);
+
+// 	// for closin window
+// 	mlx_hook(param->win_ptre, 17, 0L, exitit, param /*(the parameter)*/);
+
+// 	put_menu(param);
+// 	mlx_loop(param->mlx_ptre);
+
+// 	return (0);
+// }
+
+/*
+“​ r ← ray(point(2, 3, 4), vector(1, 0, 0))
+​ 	  ​Then​ position(r, 0) = point(2, 3, 4)
+​ 	    ​And​ position(r, 1) = point(3, 3, 4)
+​ 	    ​And​ position(r, -1) = point(1, 3, 4)
+​ 	    ​And​ position(r, 2.5) = point(4.5, 3, 4)”
+
+Excerpt From: Jamis Buck. “The Ray Tracer Challenge.” Apple Books. 
+*/
 
 // int main()
 // {
-// 	t_sphere *s = sphere();
 // 	t_material m = make_material();
 //     t_tuple position = make_tuple (0, 0, 0,POINT);
-// 	t_tuple eyev = make_tuple(0, 0,-1,VECTOR);
+// 	t_tuple eyev = make_tuple(0, 0, -1,VECTOR);
 //     t_tuple normalv = make_tuple(0, 0, -1,VECTOR);
-//     t_light light = make_light(make_tuple(0, 0, 10,POINT), make_color(1, 1, 1));
+//     t_light light = make_light(make_tuple(0, 0, -10,POINT), make_color(1, 1, 1));
 //     t_tuple r = lighting(m, light, position, eyev, normalv);
 // 	printf("%.2f %.2f %.2f\n",r.x,r.y,r.z);
-// 	return (0);
 // }

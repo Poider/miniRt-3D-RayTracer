@@ -39,7 +39,6 @@ t_tuple negate_tuple(t_tuple tuple1)//to find opposite vector
         tuple1.y = -tuple1.y;
     if (!is_equal(tuple1.z,0))
         tuple1.z = -tuple1.z;
-    tuple1.w = tuple1.w;
     return tuple1;
 }
 
@@ -47,11 +46,10 @@ t_tuple tuple_scalar_multiplication(t_tuple tuple1, float scalar)//to make vecto
 {   
     t_tuple scaled_vector;
 
-    tuple1.x = tuple1.x * scalar;
-    tuple1.y = tuple1.y * scalar;
-    tuple1.z = tuple1.z * scalar;
-    tuple1.w = tuple1.w * scalar;
-    scaled_vector = tuple1;
+    scaled_vector.x = tuple1.x * scalar;
+    scaled_vector.y = tuple1.y * scalar;
+    scaled_vector.z = tuple1.z * scalar;
+    scaled_vector.w = tuple1.w * scalar;
     return scaled_vector;
 }
 

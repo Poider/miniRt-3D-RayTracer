@@ -1,52 +1,116 @@
 #include "./includes/miniRt.h"
 
-// t_intersections *ray_sphere_intersect(t_ray ray, t_sphere *sphere)
-// {
-//     t_equations_vars vars;
-
-//     vars.a = dot_product(ray.direction, ray.direction);
-//     vars.b = 2 * dot_product(ray.direction, substract_tuple(ray.origin, sphere->origin));
-//     vars.c = dot_product(substract_tuple(ray.origin, sphere->origin), substract_tuple(ray.origin, sphere->origin)) - pow(sphere->radius,2);
-   
-//     vars.determinant = (b * b) - (4.0 * a * c);
-//     if (vars.determinant < 0)
-// 		return NULL; //means no solutions
-// 	else
-// 	{
-// 		vars.sol1 = ((-1.0 * b) - sqrt(vars.determinant)) / (2.0 * a);
-// 		vars.sol2 = ((-1.0 * b) + sqrt(vars.determinant)) / (2.0 * a);
-// 	}
-// }
-
-t_intersections *intersection(float t, void *obj)
+void	add_intersection(t_intersections **intersections, t_intersections *new_intersection)
 {
-    return (ft_lstnew(t,obj));
-}
+	t_intersections	*temp;
 
-t_intersections *intersect(t_ray ray, t_sphere *sphere)
-{
-    t_equations_vars vars;
-    t_intersections *head_entersections = NULL;
-    t_tuple sphere_to_ray;
-    t_ray ray2 = ray;
-
-    //ray2 = transform_ray(ray,*invert_matrix(sphere->transformation));
-    sphere_to_ray =  substract_tuple(ray2.origin,sphere->origin);
-    vars.a = dot_product(ray2.direction, ray2.direction);
-    vars.b = 2 * dot_product(ray2.direction, sphere_to_ray);
-    vars.c = dot_product(substract_tuple(ray2.origin, sphere->origin), sphere_to_ray) - 1;
-    vars.determinant = (vars.b * vars.b) - (4.0 * vars.a * vars.c);
-    if (vars.determinant < 0)
-		return NULL; //means no solutions
+	if (!intersections)
+		return ;
+	if (*intersections == NULL)
+		*intersections = new_intersection;
 	else
 	{
-		vars.sol1 = ((-1.0 * vars.b) - sqrt(vars.determinant)) / (2.0 * vars.a);
-		vars.sol2 = ((-1.0 * vars.b) + sqrt(vars.determinant)) / (2.0 * vars.a);
-        ft_lstadd_back(&head_entersections,intersection(vars.sol1,sphere));
-        ft_lstadd_back(&head_entersections,intersection(vars.sol2,sphere));
-        return (head_entersections);
+		temp = get_last_intersection(*intersections);
+		temp -> next = new_intersection;
 	}
 }
+t_intersections	*get_last_intersection(t_intersections *intersections)
+{
+	t_intersections	*temp;
+
+	if (!intersections)
+		return (NULL);
+	temp = intersections;
+	while (temp -> next)
+		temp = temp -> next;
+	return (temp);
+}
+
+t_intersections	*get_new_intetsection(float t, void *object)
+{
+	t_intersections	*node;
+
+	node = malloc(sizeof(t_intersections));
+	if (!node)
+		return (NULL);
+	node -> t = t;
+	node ->object = object;
+	node -> next = NULL;
+	return (node);
+}
+
+void sort_intersectios(t_intersections *list_intersections)
+{
+	t_intersections *curr;
+	t_intersections *prev;
+
+	curr = list_intersections;
+	prev = curr;
+	while(curr)
+	{
+		if (is_greater(prev ->t, curr ->t))
+		{
+			float tmp = curr->t;
+			curr ->t = prev -> t;
+			prev ->t = tmp;
+		}
+		prev = curr;
+		curr = curr ->next;
+	}
+}
+
+
+t_intersections *intersect_word(t_world world, t_ray ray)
+{
+	t_intersections	*list_intersections = NULL;
+	t_object 		*object_iter = world.objects;;
+	while (object_iter)
+	{
+		if (list_intersections == NULL)
+			list_intersections = intersect(object_iter ->object,ray);
+		else
+			add_intersection(&list_intersections,intersect(object_iter ->object,ray));
+		object_iter = object_iter->next;
+	}
+	sort_intersectios(list_intersections);
+	return (list_intersections);
+}
+
+void free_list_intersection(t_intersections *list_intersections)
+{
+	t_intersections *tmp;
+
+	tmp = list_intersections;
+	while (tmp ->next)
+	{
+		list_intersections = tmp ->next;
+		free(tmp);
+		tmp = list_intersections;
+	}
+}
+
+int	get_size_intersections(t_intersections *intersections)
+{
+	t_intersections	*temp;
+	int		countnode;
+
+	countnode = 0;
+	temp = intersections;
+	while (temp)
+	{
+		temp = temp -> next;
+		countnode += 1;
+	}
+	return (countnode);
+}
+
+
+
+t_intersections *intersection(float t, void *object)
+{
+    return (get_new_intetsection(t,object));
+}
+
 
 void print_solution(t_intersections *head)
 {

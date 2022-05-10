@@ -28,5 +28,6 @@ t_tuple multiply_color(t_tuple c1, t_tuple c2)
     result_color.x = c1.x * c2.x;
     result_color.y = c1.y * c2.y;
     result_color.z = c1.z * c2.z;
+	result_color.w = c1.w * c2.w;
     return (result_color);
 }

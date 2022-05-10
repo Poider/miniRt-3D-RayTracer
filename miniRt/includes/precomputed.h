@@ -1,0 +1,14 @@
+#include "miniRt.h"
+
+typedef struct	s_precomputed
+{
+	float	t;
+	void	*object;
+	t_tuple	point;
+	t_tuple	eyev;
+	t_tuple	normalv;
+	int		is_inside;
+	t_material material;
+}				t_precomputed;
+
+t_precomputed	prepare_computations(t_intersections *intersection, t_ray ray);
