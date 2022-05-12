@@ -26,7 +26,7 @@ t_intersections	*get_last_intersection(t_intersections *intersections)
 	return (temp);
 }
 
-t_intersections	*get_new_intetsection(float t, void *object)
+t_intersections	*get_new_intetsection(float t, t_object *object)
 {
 	t_intersections	*node;
 
@@ -42,19 +42,21 @@ t_intersections	*get_new_intetsection(float t, void *object)
 void sort_intersectios(t_intersections *list_intersections)
 {
 	t_intersections *curr;
-	t_intersections *prev;
-
+	t_intersections *next_node;
 	curr = list_intersections;
-	prev = curr;
 	while(curr)
 	{
-		if (is_greater(prev ->t, curr ->t))
+		next_node = curr ->next;
+		while (next_node)
 		{
-			float tmp = curr->t;
-			curr ->t = prev -> t;
-			prev ->t = tmp;
+			if (is_greater(curr ->t, next_node ->t))
+			{
+				float tmp = curr->t;
+				curr ->t = next_node -> t;
+				next_node ->t = tmp;
+			}
+			next_node = next_node ->next;
 		}
-		prev = curr;
 		curr = curr ->next;
 	}
 }
@@ -67,9 +69,9 @@ t_intersections *intersect_word(t_world world, t_ray ray)
 	while (object_iter)
 	{
 		if (list_intersections == NULL)
-			list_intersections = intersect(object_iter ->object,ray);
+			list_intersections = intersect(object_iter,ray);
 		else
-			add_intersection(&list_intersections,intersect(object_iter ->object,ray));
+			add_intersection(&list_intersections,intersect(object_iter,ray));
 		object_iter = object_iter->next;
 	}
 	sort_intersectios(list_intersections);
@@ -106,7 +108,7 @@ int	get_size_intersections(t_intersections *intersections)
 
 
 
-t_intersections *intersection(float t, void *object)
+t_intersections *intersection(float t, t_object *object)
 {
     return (get_new_intetsection(t,object));
 }
@@ -124,19 +126,17 @@ void print_solution(t_intersections *head)
 //get hits
 t_intersections *hit(t_intersections *l_intersections)//list intersections
 {
-    float min;
     t_intersections *min_intersection;
     
 
-    min = MAX_INT;
     min_intersection = NULL;
     while(l_intersections)
     {
-        if (is_pos(l_intersections ->t) && is_lesser(l_intersections->t,min))
-        {
-            min = l_intersections ->t;
+        if (is_pos(l_intersections ->t))
+		{
             min_intersection = l_intersections;
-        }
+			break ;
+		}
         l_intersections =l_intersections ->next;
     }
     return (min_intersection);

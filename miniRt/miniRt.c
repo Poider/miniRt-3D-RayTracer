@@ -170,50 +170,50 @@ void DrawSphere(double r, int lats, int longs)
 	}
 }
 
-// int main(int argc, char **argv)
-// {
+int main(int argc, char **argv)
+{
 	
 
-// 	// error handling
+	// error handling
 
-// 	// read the file and parse it
-
-
-
-// 	// init
-// 	param = malloc(sizeof(t_parameters));
-// 	initializemlx(param);
-
-// 	//first draw
-// 	// printf("%s %d %d %d \n",param->address,param->endian,param->bitsperpixel,param->linesize);
-// 	// for( int i = 0; i<500; i++) {
-// 	// 	for (int j = 0; j< 500;j++)
-// 	// 		image_pixel_put(param,makepoint(j,i,0),0);
-// 	// }
-
-// 	//DrawSphere(300, 400, 500);
-
-//     t_tuple camera;
-
-//     camera = make_tuple(0,0,-5,1);
-//     draw_sphere(camera,10);
-
-// 	mlx_put_image_to_window(param->mlx_ptre,param->win_ptre,param->img_ptre,0,0);
+	// read the file and parse it
 
 
-// 	//make a hook each time you rotate you re render that and do the light and all recalculation
 
-// 	// for all keys
-// 	mlx_hook(param->win_ptre, 02, 0L, esc_hook, param /*(the parameter)*/);
+	// init
+	param = malloc(sizeof(t_parameters));
+	initializemlx(param);
 
-// 	// for closin window
-// 	mlx_hook(param->win_ptre, 17, 0L, exitit, param /*(the parameter)*/);
+	//first draw
+	// printf("%s %d %d %d \n",param->address,param->endian,param->bitsperpixel,param->linesize);
+	// for( int i = 0; i<500; i++) {
+	// 	for (int j = 0; j< 500;j++)
+	// 		image_pixel_put(param,makepoint(j,i,0),0);
+	// }
 
-// 	put_menu(param);
-// 	mlx_loop(param->mlx_ptre);
+	//DrawSphere(300, 400, 500);
 
-// 	return (0);
-// }
+    t_tuple camera;
+
+    camera = make_tuple(0,0,-5,1);
+    draw_world(camera,1);
+
+	mlx_put_image_to_window(param->mlx_ptre,param->win_ptre,param->img_ptre,0,0);
+
+
+	//make a hook each time you rotate you re render that and do the light and all recalculation
+
+	// for all keys
+	mlx_hook(param->win_ptre, 02, 0L, esc_hook, param /*(the parameter)*/);
+
+	// for closin window
+	mlx_hook(param->win_ptre, 17, 0L, exitit, param /*(the parameter)*/);
+
+	put_menu(param);
+	mlx_loop(param->mlx_ptre);
+
+	return (0);
+}
 
 /*
 “​ r ← ray(point(2, 3, 4), vector(1, 0, 0))
@@ -235,3 +235,36 @@ Excerpt From: Jamis Buck. “The Ray Tracer Challenge.” Apple Books.
 //     t_tuple r = lighting(m, light, position, eyev, normalv);
 // 	printf("%.2f %.2f %.2f\n",r.x,r.y,r.z);
 // }
+
+// int main()
+// {
+// 	t_world world = default_world();
+// 	//world.light = make_light(make_tuple(0, 0.25, 0,POINT), make_color(1, 1, 1));
+// 	// printf("inte : %.2f %.2f %.2f %.2f\n",world.light.intensity.x,world.light.intensity.y,world.light.intensity.z,world.light.intensity.w);
+// 	// printf("pos : %.2f %.2f %.2f %.2f\n",world.light.position.x,world.light.position.y,world.light.position.z,world.light.position.w);
+// 	t_sphere *s = (t_sphere *)world.objects ->object;
+// 	s ->material.ambient = 1;
+// 	s = (t_sphere *)world.objects ->next ->object;
+// 	s->material.ambient = 1;
+// 	t_ray r = make_ray(make_tuple(0, 0, 0.75,POINT), make_tuple(0, 0, -1,VECTOR));
+// 	t_tuple color = color_at(world,r);
+// 	printf("c : %.2f %.2f %.2f %.2f\n",color.x,color.y,color.z,color.w);
+
+// 	// printf("%.2f \n",comp.t);
+// 	// //printf("object radious = %.2f\n",*(t_sphere *)comp.object->object.radious);
+// 	// printf("is_inside = %d\n",comp.is_inside);
+// 	// printf("point : %.2f %.2f %.2f %.2f\n",comp.point.x,comp.point.y,comp.point.z,comp.point.w);
+// 	// printf("eyev : %.2f %.2f %.2f %.2f\n",comp.eyev.x,comp.eyev.y,comp.eyev.z,comp.eyev.w);
+// 	// printf("noraml : %.2f %.2f %.2f %.2f\n",comp.normalv.x,comp.normalv.y,comp.normalv.z,comp.normalv.w);
+
+// 	return (0);
+// }
+/*
+		“outer ← the first object in w
+​ 	    ​And​ outer.material.ambient ← 1
+​ 	    ​And​ inner ← the second object in w
+​ 	    ​And​ inner.material.ambient ← 1”
+
+Excerpt From: Jamis Buck. “The Ray Tracer Challenge.” Apple Books. 
+
+*/

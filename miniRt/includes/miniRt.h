@@ -25,14 +25,14 @@
 #include "math_utils.h"
 #include "color.h"
 #include "material.h"
-#include "light.h"
 #include "object.h"
-#include "world.h"
 #include "ray.h"
+#include "light.h"
+#include "world.h"
 #include "intersections.h"
+#include "precomputed.h"
 #include "sphere.h"
 #include "shading.h"
-#include "precomputed.h"
 #include "mlx.h"
 
 #include <unistd.h>
@@ -40,8 +40,8 @@
 #include <stdio.h>
 #include <math.h>
 
-#define WINDOW_WIDTH 500
-#define WINDOW_HEIGHT 500
+#define WINDOW_WIDTH 400
+#define WINDOW_HEIGHT 400
 #define COLOR 111111222
 #define EPSILON 0.001
 #define MARGIN 1

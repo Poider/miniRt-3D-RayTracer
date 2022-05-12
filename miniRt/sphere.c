@@ -38,10 +38,11 @@ void set_material(t_sphere *s , t_material material)
     s ->material = material;
 }
 
-t_intersections *intersect(t_sphere *sphere,t_ray ray)
+t_intersections *intersect(t_object *object,t_ray ray)
 {
     t_equations_vars vars;
     t_intersections *head_entersections = NULL;
+	t_sphere *sphere = object ->object;
     t_tuple sphere_to_ray;
     t_ray ray2 = ray;
 
@@ -57,8 +58,8 @@ t_intersections *intersect(t_sphere *sphere,t_ray ray)
 	{
 		vars.sol1 = ((-1.0 * vars.b) - sqrt(vars.determinant)) / (2.0 * vars.a);
 		vars.sol2 = ((-1.0 * vars.b) + sqrt(vars.determinant)) / (2.0 * vars.a);
-        add_intersection(&head_entersections,intersection(vars.sol1,sphere));
-        add_intersection(&head_entersections,intersection(vars.sol2,sphere));
+        add_intersection(&head_entersections,intersection(vars.sol1,object));
+        add_intersection(&head_entersections,intersection(vars.sol2,object));
         return (head_entersections);
 	}
 }
