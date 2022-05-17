@@ -33,6 +33,7 @@
 #include "precomputed.h"
 #include "sphere.h"
 #include "shading.h"
+#include "camera.h"
 #include "mlx.h"
 
 #include <unistd.h>
@@ -82,7 +83,7 @@ typedef struct	s_parameters // has map + image infos
 	int endian;
 	int bitsperpixel;
 	int linesize;
-
+	t_camera camera;
 
 	int object_id;//first object will be 1 on id
 	t_data *data;

@@ -39,7 +39,7 @@ t_tuple color_at(t_world world, t_ray ray)
 	if (hit_intersection)
 	{
 		comps = prepare_computations(hit_intersection, ray);
-		free_list_intersection(list_intersections);
+		//free_list_intersection(list_intersections);
 		return (shade_hit(world, comps));
 	}
 	else

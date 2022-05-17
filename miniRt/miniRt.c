@@ -33,7 +33,7 @@ void	image_pixel_put(t_parameters *param, t_point point, int color)
 	x = point.x;
 	y = point.y;
 	//printf("x:%d y %d z%d\n",x,y,z);
-	if (x > 0 && y > 0 && x < WINDOW_WIDTH && y < WINDOW_HEIGHT)
+	if (x > 0 && y > 0 && x < param->camera.hsize && y < param->camera.vsize)
 	{
 		// printf("check\n");
 		pixel = param->address + (y * (param->linesize)
@@ -78,9 +78,9 @@ void initializemlx(t_parameters *param)
 {
 	param->mlx_ptre = mlx_init();
 	param->win_ptre = mlx_new_window(param->mlx_ptre,
-									 WINDOW_WIDTH, WINDOW_HEIGHT, "mi ferst windew");
+									  param->camera.hsize, param->camera.vsize, "mi ferst windew");
 
-	param->img_ptre = mlx_new_image(param->mlx_ptre, WINDOW_WIDTH, WINDOW_HEIGHT);
+	param->img_ptre = mlx_new_image(param->mlx_ptre, param->camera.hsize, param->camera.vsize);
 
 	param->address = mlx_get_data_addr(param->img_ptre,
 									   &param->bitsperpixel, &param->linesize, &param->endian);
@@ -170,6 +170,103 @@ void DrawSphere(double r, int lats, int longs)
 	}
 }
 
+void	render(t_camera camera, t_world world)
+{
+	int y;
+    int x;
+    
+    y = 0;
+    while (y < camera.vsize)
+    {
+        x = 0;
+        while (x < camera.hsize)
+        {
+			t_ray ray = ray_for_pixel(camera, x, y);
+			plot(x,y,color_at(world,ray));
+            x++;
+        }
+        y++;
+    }
+}
+
+
+void create_test_scene(t_world *world)
+{
+
+	//walls
+	t_sphere *floor = sphere();
+
+	floor->transformation =  scaling(make_tuple(10, 0.01, 10,VECTOR));
+	floor->material = make_material();
+	floor->material.color = make_color(1, 0.9, 0.9);
+	floor->material.specular = 0;
+
+
+
+	//LEFT WALL
+	t_sphere *left_wall = sphere();
+	left_wall->transformation = multiply_matrices(translation(make_tuple(0, 0, 5,POINT)),multiply_matrices(rotation_y(-M_PI/4) ,multiply_matrices(rotation_x(M_PI/2),scaling(make_tuple(10, 0.01, 10,VECTOR)))));
+	left_wall->material = floor->material;
+
+	//RIGHT WALL
+	t_sphere *right_wall = sphere();
+	right_wall->transformation = multiply_matrices(translation(make_tuple(0, 0, 5,POINT)),multiply_matrices(rotation_y(M_PI/4) ,multiply_matrices(rotation_x(M_PI/2),scaling(make_tuple(10, 0.01, 10,VECTOR)))));
+	right_wall->material = floor->material;
+
+
+	t_sphere *middle_sphere = sphere();
+	middle_sphere->transformation = translation(make_tuple(-0.5, 1, 0.5,POINT));
+	middle_sphere->material = make_material();
+	middle_sphere->material.color = make_color(0.1, 1, 0.5);
+	middle_sphere->material.diffuse = 0.7;
+	middle_sphere->material.specular = 0.3;
+
+	t_sphere *right_sphere = sphere();
+	right_sphere->transformation = multiply_matrices(translation(make_tuple(1.5, 0.5, -0.5,POINT)) , scaling(make_tuple(0.5, 0.5, 0.5,VECTOR)));
+	right_sphere->material = make_material();
+	right_sphere->material.color = make_color(0.5, 1, 0.1);
+	right_sphere->material.diffuse = 0.7;
+	right_sphere->material.specular = 0.3;
+
+	t_sphere *left_sphere = sphere();
+	left_sphere->transformation = multiply_matrices(translation(make_tuple (-1.5, 0.33, -0.75,POINT)) , scaling(make_tuple(0.33, 0.33, 0.33,VECTOR)));
+	left_sphere->material = make_material();
+	left_sphere->material.color = make_color(1, 0.8, 0.1);
+	left_sphere->material.diffuse = 0.7;
+	left_sphere->material.specular = 0.3;
+
+	//lighting
+	world->light = make_light(make_tuple(-10, 10, -10,POINT), make_color(1, 1, 1));
+	
+
+	t_object *objects;
+
+	objects = NULL;
+	add_object(&objects,create_object(SPHERE,floor));
+	add_object(&objects,create_object(SPHERE,left_wall));
+	add_object(&objects,create_object(SPHERE,right_wall));
+	add_object(&objects,create_object(SPHERE,middle_sphere));
+	add_object(&objects,create_object(SPHERE,left_sphere));
+	add_object(&objects,create_object(SPHERE,right_sphere));
+	world ->objects = objects;
+}	
+
+
+void set_obj_inverse_transformation(t_object *objects)
+{
+	t_object shape;
+	while (objects)
+	{
+		if (objects->type_object == SPHERE)
+		{
+			t_sphere *s = (t_sphere *)objects->object;
+			s->inverse_transformation = invert_matrix(s ->transformation);
+		}
+		objects = objects ->next;
+	}
+
+}
+
 int main(int argc, char **argv)
 {
 	
@@ -182,21 +279,18 @@ int main(int argc, char **argv)
 
 	// init
 	param = malloc(sizeof(t_parameters));
+	t_world world;
+	create_test_scene(&world);
+	set_obj_inverse_transformation(world.objects);
+
+
+	t_camera camera = make_camera(700, 700, M_PI / 3);
+	//camera.transform = view_transformation(make_tuple(0, 1.5, -5,POINT),make_tuple(0, 1, 0,POINT),make_tuple(0, 1, 0,VECTOR));
+	set_camera_transformation(&camera,make_tuple(0, 1.5, -5,POINT),make_tuple(0, 1, 0,POINT),make_tuple(0, 1, 0,VECTOR));
+	param ->camera = camera;
 	initializemlx(param);
-
-	//first draw
-	// printf("%s %d %d %d \n",param->address,param->endian,param->bitsperpixel,param->linesize);
-	// for( int i = 0; i<500; i++) {
-	// 	for (int j = 0; j< 500;j++)
-	// 		image_pixel_put(param,makepoint(j,i,0),0);
-	// }
-
-	//DrawSphere(300, 400, 500);
-
-    t_tuple camera;
-
-    camera = make_tuple(0,0,-5,1);
-    draw_world(camera,1);
+	render(camera,world);
+	
 
 	mlx_put_image_to_window(param->mlx_ptre,param->win_ptre,param->img_ptre,0,0);
 
@@ -214,57 +308,3 @@ int main(int argc, char **argv)
 
 	return (0);
 }
-
-/*
-“​ r ← ray(point(2, 3, 4), vector(1, 0, 0))
-​ 	  ​Then​ position(r, 0) = point(2, 3, 4)
-​ 	    ​And​ position(r, 1) = point(3, 3, 4)
-​ 	    ​And​ position(r, -1) = point(1, 3, 4)
-​ 	    ​And​ position(r, 2.5) = point(4.5, 3, 4)”
-
-Excerpt From: Jamis Buck. “The Ray Tracer Challenge.” Apple Books. 
-*/
-
-// int main()
-// {
-// 	t_material m = make_material();
-//     t_tuple position = make_tuple (0, 0, 0,POINT);
-// 	t_tuple eyev = make_tuple(0, 0, -1,VECTOR);
-//     t_tuple normalv = make_tuple(0, 0, -1,VECTOR);
-//     t_light light = make_light(make_tuple(0, 0, -10,POINT), make_color(1, 1, 1));
-//     t_tuple r = lighting(m, light, position, eyev, normalv);
-// 	printf("%.2f %.2f %.2f\n",r.x,r.y,r.z);
-// }
-
-// int main()
-// {
-// 	t_world world = default_world();
-// 	//world.light = make_light(make_tuple(0, 0.25, 0,POINT), make_color(1, 1, 1));
-// 	// printf("inte : %.2f %.2f %.2f %.2f\n",world.light.intensity.x,world.light.intensity.y,world.light.intensity.z,world.light.intensity.w);
-// 	// printf("pos : %.2f %.2f %.2f %.2f\n",world.light.position.x,world.light.position.y,world.light.position.z,world.light.position.w);
-// 	t_sphere *s = (t_sphere *)world.objects ->object;
-// 	s ->material.ambient = 1;
-// 	s = (t_sphere *)world.objects ->next ->object;
-// 	s->material.ambient = 1;
-// 	t_ray r = make_ray(make_tuple(0, 0, 0.75,POINT), make_tuple(0, 0, -1,VECTOR));
-// 	t_tuple color = color_at(world,r);
-// 	printf("c : %.2f %.2f %.2f %.2f\n",color.x,color.y,color.z,color.w);
-
-// 	// printf("%.2f \n",comp.t);
-// 	// //printf("object radious = %.2f\n",*(t_sphere *)comp.object->object.radious);
-// 	// printf("is_inside = %d\n",comp.is_inside);
-// 	// printf("point : %.2f %.2f %.2f %.2f\n",comp.point.x,comp.point.y,comp.point.z,comp.point.w);
-// 	// printf("eyev : %.2f %.2f %.2f %.2f\n",comp.eyev.x,comp.eyev.y,comp.eyev.z,comp.eyev.w);
-// 	// printf("noraml : %.2f %.2f %.2f %.2f\n",comp.normalv.x,comp.normalv.y,comp.normalv.z,comp.normalv.w);
-
-// 	return (0);
-// }
-/*
-		“outer ← the first object in w
-​ 	    ​And​ outer.material.ambient ← 1
-​ 	    ​And​ inner ← the second object in w
-​ 	    ​And​ inner.material.ambient ← 1”
-
-Excerpt From: Jamis Buck. “The Ray Tracer Challenge.” Apple Books. 
-
-*/

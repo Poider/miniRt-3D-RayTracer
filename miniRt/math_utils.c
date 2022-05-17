@@ -8,6 +8,12 @@ float abs1(float x)
 }
 
 
+float negate_val(float a)
+{
+	if (is_equal(a, 0))
+		return (a);
+	return (-a);
+}
 
 int is_equal(float a, float b)
 {

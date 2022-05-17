@@ -6,6 +6,7 @@ typedef struct  s_sphere {
     float radius;
     int object_id;
     t_matrices *transformation;
+	t_matrices *inverse_transformation;
     t_material material;
 }               t_sphere;
 

@@ -53,7 +53,6 @@ t_matrices *translation(t_tuple vector)
 	m[0][3] = vector.x;
 	m[1][3] = vector.y;
 	m[2][3] = vector.z;
-	m[3][3] = vector.w;
 	return matrix;
 }
 

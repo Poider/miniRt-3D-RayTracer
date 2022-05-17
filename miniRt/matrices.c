@@ -5,6 +5,7 @@ void matrix_destroyer(t_matrices *matrix)
 {
     int i;
 
+	i = 0;
     while(i < matrix->rows_num)
     {
         free(matrix->matrix[i]);

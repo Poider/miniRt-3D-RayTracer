@@ -51,9 +51,12 @@ void sort_intersectios(t_intersections *list_intersections)
 		{
 			if (is_greater(curr ->t, next_node ->t))
 			{
+				t_object *obj_tmp = curr ->object;
 				float tmp = curr->t;
 				curr ->t = next_node -> t;
+				curr ->object = next_node ->object;
 				next_node ->t = tmp;
+				next_node->object = obj_tmp;
 			}
 			next_node = next_node ->next;
 		}
@@ -75,6 +78,14 @@ t_intersections *intersect_word(t_world world, t_ray ray)
 		object_iter = object_iter->next;
 	}
 	sort_intersectios(list_intersections);
+	// t_intersections *tmp = list_intersections;
+	// //object_iter = list_intersections;
+	// while (tmp)
+	// {
+	// 	printf("%.2f  ",tmp ->t);
+	// 	tmp = tmp ->next;
+	// }
+	// printf("\n\n");
 	return (list_intersections);
 }
 
@@ -125,21 +136,14 @@ void print_solution(t_intersections *head)
 
 //get hits
 t_intersections *hit(t_intersections *l_intersections)//list intersections
-{
-    t_intersections *min_intersection;
-    
-
-    min_intersection = NULL;
+{    
     while(l_intersections)
     {
-        if (is_pos(l_intersections ->t))
-		{
-            min_intersection = l_intersections;
-			break ;
-		}
+        if (l_intersections->t >= 0)
+           return (l_intersections);
         l_intersections =l_intersections ->next;
     }
-    return (min_intersection);
+    return (0);
 }
 
 //sort_intersections(t_ray *ray)

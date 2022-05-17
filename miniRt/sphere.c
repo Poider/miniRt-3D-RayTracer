@@ -42,11 +42,11 @@ t_intersections *intersect(t_object *object,t_ray ray)
 {
     t_equations_vars vars;
     t_intersections *head_entersections = NULL;
-	t_sphere *sphere = object ->object;
+	t_sphere *sphere = (t_sphere *)object ->object;
     t_tuple sphere_to_ray;
     t_ray ray2 = ray;
 
-    ray2 = transform_ray(ray,*invert_matrix(sphere->transformation));
+    ray2 = transform_ray(ray,*sphere ->inverse_transformation);
     sphere_to_ray =  substract_tuple(ray2.origin,sphere->origin);
     vars.a = dot_product(ray2.direction, ray2.direction);
     vars.b = 2 * dot_product(ray2.direction, sphere_to_ray);
