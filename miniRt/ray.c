@@ -17,7 +17,7 @@ t_ray make_ray(t_tuple origin,t_tuple direction)
     return (ray);
 }
 
-t_tuple position(t_ray ray, float distance)
+t_tuple ray_position(t_ray ray, float distance)
 {
     return (add_tuple(ray.origin,tuple_scalar_multiplication(ray.direction,distance)));
 }

@@ -5,6 +5,7 @@ void matrix_destroyer(t_matrices *matrix)
 {
     int i;
 
+	i = 0;
     while(i < matrix->rows_num)
     {
         free(matrix->matrix[i]);
@@ -264,7 +265,7 @@ t_matrices *transpose_matrix(t_matrices *matrix)
     int j;
 
     i = 0;
-    transposed_matrix = create_matrix(matrix->cols_num,matrix->rows_num);
+    transposed_matrix = create_matrix(matrix->rows_num,matrix->cols_num);
     while(i < matrix->rows_num)
     {
         j = 0;
@@ -338,11 +339,13 @@ t_matrices *invert_matrix(t_matrices *matrix)
     float det;
 
     // if(!is_invertible_matrix(matrix))
-        // return NULL;
-         
+    //     return NULL;
     det = determinant(matrix);
     if(is_equal(det,0))
+    {
+        printf("here %.2f\n",det);
         return NULL;
+    }
     inverted = cofactor_matrix(matrix);
     transposed = transpose_matrix(inverted);
     free_matrix(inverted);
@@ -352,20 +355,21 @@ t_matrices *invert_matrix(t_matrices *matrix)
 
 // matrix transformations
 
-// transformation*vector//transformation * identity
-t_matrices *transform(void (*func)(void),t_matrices *sphere_matrix)
-{//multiply tuples to transform them
-    t_matrices *transformed;
-    t_matrices *transformation;
+// // transformation*vector//transformation * identity
+// t_matrices *transform(void (*func)(void),t_matrices *sphere_matrix)
+// {//multiply tuples to transform them
+//     t_matrices *transformed;
+//     t_matrices *transformation;
 
-    transformation = func();
-        // multiply matrices here vv not matrix tuple
-    transformed = multiply_matrices(transformation,sphere_matrix);// check the order of the multiplication
-    free_matrix(sphere_matrix);
-    free_matrix(transformation);
-    return transformed;
-}// works like : sphere.matrix = transform(transformation,sphere.matrix)
-
+//     transformation = func();
+//         // multiply matrices here vv not matrix tuple
+//     transformed = multiply_matrices(transformation,sphere_matrix);// check the order of the multiplication
+//     free_matrix(sphere_matrix);
+//     free_matrix(transformation);
+//     return transformed;
+// }// works like : sphere.matrix = transform(transformation,sphere.matrix)
+// sphere.matrix = transform(rotation_x,,sphere.matrix)
+// sphere.matrix = transform(scaling,sphere.matrix)
 void print_matrix(t_matrices matrix)
 {
     int i;
@@ -420,20 +424,20 @@ void print_matrix(t_matrices matrix)
 //     return (0);
 // }
 
-int main()
-{
-    t_matrices *m;
-    m = create_matrix(3,3);
-    m ->matrix[0][0] = 1;m ->matrix[0][1] = 2;m ->matrix[0][2] = 3;
-    m ->matrix[1][0] = 4;m ->matrix[1][1] = 5;m ->matrix[1][2] = 6;
-    m ->matrix[2][0] = 7;m ->matrix[2][1] = 8;m ->matrix[2][2] = 10;
-    print_matrix(*m);
-    t_matrices *c = invert_matrix(m);
-    // if(c == NULL) {printf("yes"); return 0;}
-    printf("after:\n");
-    print_matrix(*c);
-    //its normal for it to segfault on matrices under 3, either cus det is null and its non invertible or cus its freed on calculating determinant then tried to get cofactor matrix with the freed on
-    // printf("%d",c->cols_num);
+// int main()
+// {
+//     t_matrices *m;
+//     m = create_matrix(3,3);
+//     m ->matrix[0][0] = 1;m ->matrix[0][1] = 2;m ->matrix[0][2] = 3;
+//     m ->matrix[1][0] = 4;m ->matrix[1][1] = 5;m ->matrix[1][2] = 6;
+//     m ->matrix[2][0] = 7;m ->matrix[2][1] = 8;m ->matrix[2][2] = 10;
+//     print_matrix(*m);
+//     t_matrices *c = invert_matrix(m);
+//     // if(c == NULL) {printf("yes"); return 0;}
+//     printf("after:\n");
+//     print_matrix(*c);
+//     //its normal for it to segfault on matrices under 3, either cus det is null and its non invertible or cus its freed on calculating determinant then tried to get cofactor matrix with the freed on
+//     // printf("%d",c->cols_num);
     
-}
+// }
 

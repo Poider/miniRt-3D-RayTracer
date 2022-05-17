@@ -38,6 +38,7 @@ t_matrices *cofactor_matrix(t_matrices *matrix);
 t_matrices *matrix_element_divide(t_matrices *matrix, float num);
 t_matrices *invert_matrix(t_matrices *matrix);
 t_matrices *transform(void (*func)(void),t_matrices *sphere_matrix);
+void print_matrix(t_matrices matrix);
 
 
 //transformations

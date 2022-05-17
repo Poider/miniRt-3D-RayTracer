@@ -50,9 +50,9 @@ t_matrices *translation(t_tuple vector)
 
 	matrix = identity_matrix(DEFAULT_DIMENSION);
 	m = matrix->matrix;
-	m[3][0] = vector.x;
-	m[3][1] = vector.y;
-	m[3][2] = vector.z;
+	m[0][3] = vector.x;
+	m[1][3] = vector.y;
+	m[2][3] = vector.z;
 	return matrix;
 }
 

@@ -29,18 +29,16 @@ void	image_pixel_put(t_parameters *param, t_point point, int color)
 	char	*pixel;
 	int		x;
 	int		y;
-	int		z;
 
 	x = point.x;
 	y = point.y;
-	z = point.z;
 	//printf("x:%d y %d z%d\n",x,y,z);
-	if (x > 0 && y > 0 && x < WINDOW_WIDTH && y < WINDOW_HEIGHT)
+	if (x > 0 && y > 0 && x < param->camera.hsize && y < param->camera.vsize)
 	{
 		// printf("check\n");
 		pixel = param->address + (y * (param->linesize)
 				+ x * (param->bitsperpixel) / 8);
-		*(int *)pixel = COLOR;
+		*(int *)pixel = color;
 	}
 }
 
@@ -80,9 +78,9 @@ void initializemlx(t_parameters *param)
 {
 	param->mlx_ptre = mlx_init();
 	param->win_ptre = mlx_new_window(param->mlx_ptre,
-									 WINDOW_WIDTH, WINDOW_HEIGHT, "mi ferst windew");
+									  param->camera.hsize, param->camera.vsize, "mi ferst windew");
 
-	param->img_ptre = mlx_new_image(param->mlx_ptre, WINDOW_WIDTH, WINDOW_HEIGHT);
+	param->img_ptre = mlx_new_image(param->mlx_ptre, param->camera.hsize, param->camera.vsize);
 
 	param->address = mlx_get_data_addr(param->img_ptre,
 									   &param->bitsperpixel, &param->linesize, &param->endian);
@@ -113,12 +111,6 @@ int esc_hook(int button, void *param)
 // 	return first_word;
 // }
 
-t_object *get_last_object(t_object *obj)
-{
-	while(obj->next != 0)
-		obj = obj->next;
-	return obj;
-}
 
 int fill_struct(char **line)
 {
@@ -148,9 +140,9 @@ int fill_struct(char **line)
 // 	return 1;
 //}
 
-void plot(int x,int y,int z)
+void plot(int x,int y,t_tuple color)
 {
-	image_pixel_put(param,makepoint(x,y,z),0);
+	image_pixel_put(param,makepoint(x,y,0),get_color(color));
 }
 
 void DrawSphere(double r, int lats, int longs)
@@ -172,10 +164,107 @@ void DrawSphere(double r, int lats, int longs)
 			double x = cos(lng);
 			double y = sin(lng);
 
-			plot(x * zr0, y * zr0, z0);
-			plot(x * zr1, y * zr1, z1);
+			//plot(x * zr0, y * zr0, z0);
+			//plot(x * zr1, y * zr1, z1);
 		}
 	}
+}
+
+void	render(t_camera camera, t_world world)
+{
+	int y;
+    int x;
+    
+    y = 0;
+    while (y < camera.vsize)
+    {
+        x = 0;
+        while (x < camera.hsize)
+        {
+			t_ray ray = ray_for_pixel(camera, x, y);
+			plot(x,y,color_at(world,ray));
+            x++;
+        }
+        y++;
+    }
+}
+
+
+void create_test_scene(t_world *world)
+{
+
+	//walls
+	t_sphere *floor = sphere();
+
+	floor->transformation =  scaling(make_tuple(10, 0.01, 10,VECTOR));
+	floor->material = make_material();
+	floor->material.color = make_color(1, 0.9, 0.9);
+	floor->material.specular = 0;
+
+
+
+	//LEFT WALL
+	t_sphere *left_wall = sphere();
+	left_wall->transformation = multiply_matrices(translation(make_tuple(0, 0, 5,POINT)),multiply_matrices(rotation_y(-M_PI/4) ,multiply_matrices(rotation_x(M_PI/2),scaling(make_tuple(10, 0.01, 10,VECTOR)))));
+	left_wall->material = floor->material;
+
+	//RIGHT WALL
+	t_sphere *right_wall = sphere();
+	right_wall->transformation = multiply_matrices(translation(make_tuple(0, 0, 5,POINT)),multiply_matrices(rotation_y(M_PI/4) ,multiply_matrices(rotation_x(M_PI/2),scaling(make_tuple(10, 0.01, 10,VECTOR)))));
+	right_wall->material = floor->material;
+
+
+	t_sphere *middle_sphere = sphere();
+	middle_sphere->transformation = translation(make_tuple(-0.5, 1, 0.5,POINT));
+	middle_sphere->material = make_material();
+	middle_sphere->material.color = make_color(0.1, 1, 0.5);
+	middle_sphere->material.diffuse = 0.7;
+	middle_sphere->material.specular = 0.3;
+
+	t_sphere *right_sphere = sphere();
+	right_sphere->transformation = multiply_matrices(translation(make_tuple(1.5, 0.5, -0.5,POINT)) , scaling(make_tuple(0.5, 0.5, 0.5,VECTOR)));
+	right_sphere->material = make_material();
+	right_sphere->material.color = make_color(0.5, 1, 0.1);
+	right_sphere->material.diffuse = 0.7;
+	right_sphere->material.specular = 0.3;
+
+	t_sphere *left_sphere = sphere();
+	left_sphere->transformation = multiply_matrices(translation(make_tuple (-1.5, 0.33, -0.75,POINT)) , scaling(make_tuple(0.33, 0.33, 0.33,VECTOR)));
+	left_sphere->material = make_material();
+	left_sphere->material.color = make_color(1, 0.8, 0.1);
+	left_sphere->material.diffuse = 0.7;
+	left_sphere->material.specular = 0.3;
+
+	//lighting
+	world->light = make_light(make_tuple(-10, 10, -10,POINT), make_color(1, 1, 1));
+	
+
+	t_object *objects;
+
+	objects = NULL;
+	add_object(&objects,create_object(SPHERE,floor));
+	add_object(&objects,create_object(SPHERE,left_wall));
+	add_object(&objects,create_object(SPHERE,right_wall));
+	add_object(&objects,create_object(SPHERE,middle_sphere));
+	add_object(&objects,create_object(SPHERE,left_sphere));
+	add_object(&objects,create_object(SPHERE,right_sphere));
+	world ->objects = objects;
+}	
+
+
+void set_obj_inverse_transformation(t_object *objects)
+{
+	t_object shape;
+	while (objects)
+	{
+		if (objects->type_object == SPHERE)
+		{
+			t_sphere *s = (t_sphere *)objects->object;
+			s->inverse_transformation = invert_matrix(s ->transformation);
+		}
+		objects = objects ->next;
+	}
+
 }
 
 int main(int argc, char **argv)
@@ -190,21 +279,18 @@ int main(int argc, char **argv)
 
 	// init
 	param = malloc(sizeof(t_parameters));
+	t_world world;
+	create_test_scene(&world);
+	set_obj_inverse_transformation(world.objects);
+
+
+	t_camera camera = make_camera(700, 700, M_PI / 3);
+	//camera.transform = view_transformation(make_tuple(0, 1.5, -5,POINT),make_tuple(0, 1, 0,POINT),make_tuple(0, 1, 0,VECTOR));
+	set_camera_transformation(&camera,make_tuple(0, 1.5, -5,POINT),make_tuple(0, 1, 0,POINT),make_tuple(0, 1, 0,VECTOR));
+	param ->camera = camera;
 	initializemlx(param);
-
-	//first draw
-	// printf("%s %d %d %d \n",param->address,param->endian,param->bitsperpixel,param->linesize);
-	// for( int i = 0; i<500; i++) {
-	// 	for (int j = 0; j< 500;j++)
-	// 		image_pixel_put(param,makepoint(j,i,0),0);
-	// }
-
-	//DrawSphere(300, 400, 500);
-
-    t_tuple camera;
-
-    camera = make_tuple(0,0,-5,1);
-    draw_sphere(camera,10);
+	render(camera,world);
+	
 
 	mlx_put_image_to_window(param->mlx_ptre,param->win_ptre,param->img_ptre,0,0);
 

@@ -16,3 +16,6 @@ int is_equal(float a, float b);
 int is_pos(int a);
 int is_greater(float a, float b);
 int is_lesser(float a, float b);
+float min(float a,float b);
+float max(float a,float b);
+float negate_val(float a);
