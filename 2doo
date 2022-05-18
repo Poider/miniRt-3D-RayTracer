@@ -1,0 +1,25 @@
+normal at, make it use inversed matrix insteda of calculating it 
+
+copy transformation matrices
+
+make light multiple sources
+
+
+//how to calculate normals:
+/*note:: in calculating normal we need to take the point 
+and convert it to the object space so that its centered at the origin,
+then we can calculate normal normally but its in object space 
+and to convert it back to world space 
+we need to multiply with transpose of the inversed transformation matrix*/
+
+//t_world commented? nope
+
+check world.c for the the color_at/draw_world
+
+//shade_hit is where to call lighting of all light sources
+
+abs warning?
+
+make sure you're using is equal if youre trying to compare floats
+
+try to understand over point a little more

@@ -1,3 +1,3 @@
 #include "miniRt.h"
 
-t_tuple			shade_hit(t_world world, t_precomputed comps);
+int is_shadowed(t_world *world, t_tuple point);

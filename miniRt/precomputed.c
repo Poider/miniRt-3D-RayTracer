@@ -30,5 +30,7 @@ t_precomputed prepare_computations(t_intersections *intersection, t_ray ray)
 	else
 		pre_computed.is_inside = FALSE;
 	pre_computed.material = get_material_object(*intersection->object);
+	pre_computed.over_point = add_tuple(pre_computed.point, tuple_scalar_multiplication(pre_computed.normalv, EPSILON));
+	// printf("%f %f %f / over %f %f %f\n",pre_computed.point.x,pre_computed.point.y,pre_computed.point.z,pre_computed.over_point.x,pre_computed.over_point.y,pre_computed.over_point.z);
 	return (pre_computed);
 }

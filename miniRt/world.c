@@ -39,8 +39,9 @@ t_tuple color_at(t_world world, t_ray ray)
 	if (hit_intersection)
 	{
 		comps = prepare_computations(hit_intersection, ray);
+		float is_shadow = is_shadowed(&world,comps.over_point);
 		//free_list_intersection(list_intersections);
-		return (shade_hit(world, comps));
+		return (shade_hit(world, comps,is_shadow));
 	}
 	else
 		return BLACK

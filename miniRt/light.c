@@ -15,13 +15,12 @@ t_tuple  reflect(t_tuple in, t_tuple normal)
     return tuple_normalize((substract_tuple(in,tuple_scalar_multiplication(normal,2 * in_normal_dot))));
 }
 
-t_tuple  lighting(t_world world, t_precomputed comps)
+t_tuple  lighting(t_world world, t_precomputed comps, int is_shadow)
 {
     t_tuple diffuse,specular;
     t_tuple effective_color = multiply_color(comps.material.color,world.light.intensity);
-    
     // find the direction to the light source 
-    t_tuple lightv = tuple_normalize(substract_tuple(world.light.position,comps.point));
+    t_tuple lightv = tuple_normalize(substract_tuple(world.light.position,comps.over_point));
     
     // compute the ambient contribution 
     t_tuple ambient =  tuple_scalar_multiplication(effective_color, comps.material.ambient);
@@ -30,7 +29,7 @@ t_tuple  lighting(t_world world, t_precomputed comps)
     // light vector and the normal vector. A negative number means the 
     // light is on the other side of the surface. 
     float light_dot_normal = dot_product(lightv, comps.normalv);
-    if (light_dot_normal < 0)
+    if (light_dot_normal < 0 || is_shadow == TRUE)
     {
         diffuse = BLACK
         specular = BLACK
@@ -61,7 +60,7 @@ t_tuple  lighting(t_world world, t_precomputed comps)
     return (add_tuple(add_tuple(ambient, diffuse),specular));
 }
 
-t_tuple shade_hit(t_world world, t_precomputed comps)
+t_tuple shade_hit(t_world world, t_precomputed comps, int is_shadow)
 {
-	return (lighting(world, comps));
+	return (lighting(world, comps, is_shadow));
 }

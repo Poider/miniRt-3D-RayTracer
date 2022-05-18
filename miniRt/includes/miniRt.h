@@ -41,8 +41,8 @@
 #include <stdio.h>
 #include <math.h>
 
-#define WINDOW_WIDTH 400
-#define WINDOW_HEIGHT 400
+#define WINDOW_WIDTH 100
+#define WINDOW_HEIGHT 100
 #define COLOR 111111222
 #define EPSILON 0.001
 #define MARGIN 1

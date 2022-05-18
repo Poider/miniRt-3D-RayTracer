@@ -19,6 +19,7 @@ typedef struct	s_precomputed
 	float		t;
 	t_object	*object;
 	t_tuple		point;
+	t_tuple		over_point;
 	t_tuple		eyev;
 	t_tuple		normalv;
 	int			is_inside;
@@ -28,4 +29,5 @@ typedef struct	s_precomputed
 
 t_light make_light(t_tuple position, t_tuple intensity);
 t_tuple  reflect(t_tuple in, t_tuple normal);
-t_tuple  lighting(t_world world, t_precomputed comps);
+t_tuple  lighting(t_world world, t_precomputed comps, int is_shadow);
+t_tuple shade_hit(t_world world, t_precomputed comps, int is_shadow);
