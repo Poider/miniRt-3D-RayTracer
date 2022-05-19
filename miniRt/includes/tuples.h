@@ -1,5 +1,6 @@
 #include "miniRt.h"
 
+# define ORIGIN make_tuple(0,0,0,POINT)
 typedef struct  s_tuple{
     float x;
     float y;

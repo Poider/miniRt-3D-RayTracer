@@ -3,15 +3,20 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mel-amma <mel-amma@student.42.fr>          +#+  +:+       +#+         #
+#    By: klaarous <klaarous@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/03 18:14:03 by mel-amma          #+#    #+#              #
-#    Updated: 2022/04/04 16:41:17 by mel-amma         ###   ########.fr        #
+#    Updated: 2022/04/24 14:38:26 by klaarous         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRC = miniRt.c helpers.c split.c get_next_line.c get_next_line_utils.c
+# ./gnl/get_next_line.c ./gnl/get_next_line_utils.c
+SRC = miniRt.c helpers.c split.c \
+		camera.c color.c intersections.c light.c material.c math_utils.c matrices.c\
+		object.c precomputed.c ray.c shading.c sphere.c transformation_matrices.c\
+		tuples.c world.c
 NAME = miniRt
+LIBRARIES = ../libmlx_Linux.a -lX11 -lXext
 RM = rm -f
 CFLAGS =  -g -I /usr/local/include -L /usr/local/lib -lmlx -framework OpenGl -framework AppKit -fsanitize=address
 
