@@ -18,21 +18,29 @@ t_tuple  reflect(t_tuple in, t_tuple normal)
 t_tuple  lighting(t_world world, t_precomputed comps, int is_shadow)
 {
     t_tuple diffuse,specular;
-    t_tuple effective_color = multiply_color(comps.material.color,world.light.intensity);
+	t_tuple effective_color;
+	t_tuple color;
+	if (comps.material.pattern)
+		color = pattern_at_shape(comps.material.pattern , comps.point, comps.object);
+	else
+		color = comps.material.color;
+    effective_color = multiply_color(color,world.light.intensity);
     // find the direction to the light source 
     t_tuple lightv = tuple_normalize(substract_tuple(world.light.position,comps.over_point));
     
-    // compute the ambient contribution 
+    // compute the ambient contribution
+
     t_tuple ambient =  tuple_scalar_multiplication(effective_color, comps.material.ambient);
     
     // light_dot_normal represents the cosine of the angle between the 
     // light vector and the normal vector. A negative number means the 
     // light is on the other side of the surface. 
     float light_dot_normal = dot_product(lightv, comps.normalv);
+	//is_shadow = FALSE;
     if (light_dot_normal < 0 || is_shadow == TRUE)
     {
-        diffuse = BLACK
-        specular = BLACK
+        diffuse = BLACK;
+        specular = BLACK;
     }
     else
     {
@@ -48,7 +56,7 @@ t_tuple  lighting(t_world world, t_precomputed comps, int is_shadow)
 		//printf("reflect  : %.2f %.2f %.2f %.2f\n",reflectv.x,reflectv.w,reflectv.z,reflectv.w);
         float reflect_dot_eye = dot_product(reflectv, comps.eyev);
         if (reflect_dot_eye < 0)
-            specular =  BLACK
+            specular =  BLACK;
         else 
         {
             // compute the specular contribution
@@ -60,7 +68,46 @@ t_tuple  lighting(t_world world, t_precomputed comps, int is_shadow)
     return (add_tuple(add_tuple(ambient, diffuse),specular));
 }
 
-t_tuple shade_hit(t_world world, t_precomputed comps, int is_shadow)
+// color_at --> shade_hit -> reflected_color
+// reflected_color  ->color_at
+t_tuple color_at(t_world world, t_ray ray, int max_depth)
 {
-	return (lighting(world, comps, is_shadow));
+	t_intersections *list_intersections;
+	t_intersections *hit_intersection;
+	t_precomputed comps;
+
+	list_intersections = intersect_word(world, ray);
+	hit_intersection = hit(list_intersections);
+	if (hit_intersection)
+	{
+		comps = prepare_computations(hit_intersection, ray);
+		free_list_intersection(list_intersections);
+		return (shade_hit(world, comps, max_depth));
+	}
+	else
+		return BLACK;
+}
+
+t_tuple	reflected_color(t_world world, t_precomputed comps, int max_depth)
+{
+	t_ray	reflected_ray;
+	t_tuple	color;
+	if (is_equal(comps.material.reflective, 0) || max_depth >= MAX_DEPTH)
+		return (BLACK);
+	reflected_ray = make_ray(comps.over_point, comps.reflecv);
+	color = color_at(world, reflected_ray, max_depth);
+	return (tuple_scalar_multiplication(color, comps.material.reflective));
+}
+
+
+t_tuple shade_hit(t_world world, t_precomputed comps, int max_depth)
+{
+	int		is_shadow;
+	t_tuple	color_surface;
+	t_tuple	color_reflection;
+
+	is_shadow = is_shadowed(&world,comps.over_point);
+	color_surface = lighting(world, comps, is_shadow);
+	color_reflection = reflected_color(world ,  comps,max_depth + 1);
+	return (add_tuple(color_surface, color_reflection));
 }

@@ -4,7 +4,7 @@ t_world create_world()
 {
 	t_world world;
 
-	world.light.intensity = BLACK
+	world.light.intensity = BLACK;
 	world.objects = NULL;
 	return (world);
 }
@@ -22,29 +22,10 @@ t_world default_world()//just for test
 	s1 ->material.specular = 0.2;
 	add_object(&objects,create_object(SPHERE,s1));
 	s2 = sphere();
-	set_tranform(s2,scaling(make_tuple(0.5, 0.5, 0.5,VECTOR)));
+	set_tranform(objects->next,scaling(make_tuple(0.5, 0.5, 0.5,VECTOR)));
 	add_object(&objects,create_object(SPHERE,s2));
 	world.objects = objects;
 	return (world);
-}
-
-t_tuple color_at(t_world world, t_ray ray)
-{
-	t_intersections *list_intersections;
-	t_intersections *hit_intersection;
-	t_precomputed comps;
-
-	list_intersections = intersect_word(world, ray);
-	hit_intersection = hit(list_intersections);
-	if (hit_intersection)
-	{
-		comps = prepare_computations(hit_intersection, ray);
-		float is_shadow = is_shadowed(&world,comps.over_point);
-		//free_list_intersection(list_intersections);
-		return (shade_hit(world, comps,is_shadow));
-	}
-	else
-		return BLACK
 }
 
 void draw_world(t_tuple camera, float z_image_plane)
@@ -70,7 +51,7 @@ void draw_world(t_tuple camera, float z_image_plane)
             word_x = -half + pixel_size * x;
             t_tuple position = make_tuple(word_x,word_y,z_image_plane,POINT);
             t_ray ray = make_ray(camera,tuple_normalize(substract_tuple(position,camera)));
-			plot(x,y,color_at(world,ray));
+			plot(x,y,color_at(world,ray,0));
             x++;
         }
         y++;

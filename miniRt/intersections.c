@@ -26,7 +26,7 @@ t_intersections	*get_last_intersection(t_intersections *intersections)
 	return (temp);
 }
 
-t_intersections	*get_new_intetsection(float t, t_object *object)
+t_intersections	*get_new_intetsection(float t, t_object *shape)
 {
 	t_intersections	*node;
 
@@ -34,7 +34,7 @@ t_intersections	*get_new_intetsection(float t, t_object *object)
 	if (!node)
 		return (NULL);
 	node -> t = t;
-	node ->object = object;
+	node ->object = shape;
 	node -> next = NULL;
 	return (node);
 }
@@ -68,26 +68,21 @@ void sort_intersectios(t_intersections *list_intersections)
 t_intersections *intersect_word(t_world world, t_ray ray)
 {
 	t_intersections	*list_intersections = NULL;
+	t_ray			transformed_ray;
 	t_object 		*object_iter = world.objects;;
 	while (object_iter)
 	{
+    	transformed_ray = transform_ray(ray,*object_iter->inverse_transformation);
 		if (list_intersections == NULL)
-			list_intersections = intersect(object_iter,ray);
+			list_intersections = object_iter->local_intersect(object_iter, transformed_ray);
 		else
-			add_intersection(&list_intersections,intersect(object_iter,ray));
+			add_intersection(&list_intersections, object_iter->local_intersect(object_iter,transformed_ray));
 		object_iter = object_iter->next;
 	}
 	sort_intersectios(list_intersections);
-	// t_intersections *tmp = list_intersections;
-	// //object_iter = list_intersections;
-	// while (tmp)
-	// {
-	// 	printf("%.2f  ",tmp ->t);
-	// 	tmp = tmp ->next;
-	// }
-	// printf("\n\n");
 	return (list_intersections);
 }
+
 
 void free_list_intersection(t_intersections *list_intersections)
 {
@@ -119,9 +114,9 @@ int	get_size_intersections(t_intersections *intersections)
 
 
 
-t_intersections *intersection(float t, t_object *object)
+t_intersections *intersection(float t, t_object *shape)
 {
-    return (get_new_intetsection(t,object));
+    return (get_new_intetsection(t,shape));
 }
 
 

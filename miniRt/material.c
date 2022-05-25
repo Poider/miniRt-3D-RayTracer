@@ -9,6 +9,12 @@ t_material make_material()
     material.diffuse = 0.9;
     material.specular = 0.9;
     material.shininess = 200.00;
+	material.reflective = 0;
+	material.pattern = NULL;
     return (material);
 }
 
+void set_material_pattern(t_material *material,t_pattern *pattern)
+{
+	material ->pattern = pattern;
+}

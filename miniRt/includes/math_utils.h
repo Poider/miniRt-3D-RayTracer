@@ -13,6 +13,7 @@ typedef struct  s_equations_vars{
 
 //float abs(float x);
 int is_equal(float a, float b);
+float abs_float(float x);
 int is_pos(int a);
 int is_greater(float a, float b);
 int is_lesser(float a, float b);

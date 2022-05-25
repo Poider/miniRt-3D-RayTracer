@@ -145,31 +145,6 @@ void plot(int x,int y,t_tuple color)
 	image_pixel_put(param,makepoint(x,y,0),get_color(color));
 }
 
-void DrawSphere(double r, int lats, int longs)
-{
-	int i, j;
-	for (i = 0; i <= lats; i++)
-	{
-		double lat0 = 3.14 * (-0.5 + (double)(i - 1) / lats);
-		double z0 = sin(lat0) * r;
-		double zr0 = cos(lat0) * r;
-
-		double lat1 = 3.14 * (-0.5 + (double)i / lats);
-		double z1 = sin(lat1) * r;
-		double zr1 = cos(lat1) * r;
-
-		for (j = 0; j <= longs; j++)
-		{
-			double lng = 2 * 3.14 * (double)(j - 1) / longs;
-			double x = cos(lng);
-			double y = sin(lng);
-
-			//plot(x * zr0, y * zr0, z0);
-			//plot(x * zr1, y * zr1, z1);
-		}
-	}
-}
-
 void	render(t_camera camera, t_world world)
 {
 	int y;
@@ -182,7 +157,7 @@ void	render(t_camera camera, t_world world)
         while (x < camera.hsize)
         {
 			t_ray ray = ray_for_pixel(camera, x, y);
-			plot(x,y,color_at(world,ray));
+			plot(x,y,color_at(world,ray,0));
             x++;
         }
         y++;
@@ -194,39 +169,45 @@ void create_test_scene(t_world *world)
 {
 
 	//walls
-	t_sphere *floor = sphere();
-
-	floor->transformation =  scaling(make_tuple(10, 0.01, 10,VECTOR));
-	floor->material = make_material();
+	t_plane *floor = plane();
 	floor->material.color = make_color(1, 0.9, 0.9);
 	floor->material.specular = 0;
-
-
+	floor->material.reflective = 1;
+	set_material_pattern(&floor->material,make_pattern(WHITE, BLACK, CHECKERBORAD_PATTERN, TRUE));
+	set_transformation_pattern(floor->material.pattern,scaling(make_tuple(0.5,0.5,0.5,POINT)));
+	//set_material_pattern(&floor->material,make_pattern(WHITE, BLACK, STRIPE_PATTERN));
 
 	//LEFT WALL
-	t_sphere *left_wall = sphere();
-	left_wall->transformation = multiply_matrices(translation(make_tuple(0, 0, 5,POINT)),multiply_matrices(rotation_y(-M_PI/4) ,multiply_matrices(rotation_x(M_PI/2),scaling(make_tuple(10, 0.01, 10,VECTOR)))));
+	t_plane *left_wall = plane();
+	left_wall->transformation = multiply_matrices(translation(make_tuple(0,0,5, POINT)),rotation_x(M_PI / 2));
 	left_wall->material = floor->material;
+	left_wall->material.color = make_color(0.9,0.9,0.7);
 
 	//RIGHT WALL
-	t_sphere *right_wall = sphere();
-	right_wall->transformation = multiply_matrices(translation(make_tuple(0, 0, 5,POINT)),multiply_matrices(rotation_y(M_PI/4) ,multiply_matrices(rotation_x(M_PI/2),scaling(make_tuple(10, 0.01, 10,VECTOR)))));
+	t_plane *right_wall = plane();
+	right_wall->transformation = multiply_matrices(translation(make_tuple(0, 0, 5,POINT)),multiply_matrices(rotation_y(M_PI/4) ,rotation_x(M_PI/2)));
 	right_wall->material = floor->material;
+	right_wall->material.color = make_color(0.8,0.9,0.9);
 
 
 	t_sphere *middle_sphere = sphere();
 	middle_sphere->transformation = translation(make_tuple(-0.5, 1, 0.5,POINT));
 	middle_sphere->material = make_material();
-	middle_sphere->material.color = make_color(0.1, 1, 0.5);
+	middle_sphere->material.color = make_color(1, 0, 0.1);
 	middle_sphere->material.diffuse = 0.7;
-	middle_sphere->material.specular = 0.3;
+	middle_sphere->material.specular = 0.5;
+	//set_material_pattern(&middle_sphere->material,make_pattern(make_color(1,1,0),make_color(0,0,1) ,RING_PATTERN, TRUE));
+	//set_transformation_pattern(middle_sphere->material.pattern,multiply_matrices(scaling(make_tuple(0.1,0.1,0.1,VECTOR)),multiply_matrices(rotation_y(45) ,rotation_x(-90))));
+
 
 	t_sphere *right_sphere = sphere();
-	right_sphere->transformation = multiply_matrices(translation(make_tuple(1.5, 0.5, -0.5,POINT)) , scaling(make_tuple(0.5, 0.5, 0.5,VECTOR)));
+	right_sphere->transformation = multiply_matrices(translation(make_tuple(1.5, 0.5, -0.5,POINT)) ,scaling(make_tuple(0.5, 0.5, 0.5,VECTOR)));
 	right_sphere->material = make_material();
 	right_sphere->material.color = make_color(0.5, 1, 0.1);
 	right_sphere->material.diffuse = 0.7;
 	right_sphere->material.specular = 0.3;
+	set_material_pattern(&right_sphere->material,make_pattern(make_color(1,1,0),make_color(0,0,1) ,RING_PATTERN, TRUE));
+	set_transformation_pattern(right_sphere->material.pattern,multiply_matrices(scaling(make_tuple(0.1,0.1,0.1,VECTOR)),multiply_matrices(rotation_y(45) ,rotation_x(-90))));
 
 	t_sphere *left_sphere = sphere();
 	left_sphere->transformation = multiply_matrices(translation(make_tuple (-1.5, 0.33, -0.75,POINT)) , scaling(make_tuple(0.33, 0.33, 0.33,VECTOR)));
@@ -234,6 +215,9 @@ void create_test_scene(t_world *world)
 	left_sphere->material.color = make_color(1, 0.8, 0.1);
 	left_sphere->material.diffuse = 0.7;
 	left_sphere->material.specular = 0.3;
+	set_material_pattern(&left_sphere->material,make_pattern(make_color(1,0,0),make_color(0,1,0) ,GRADIENT_PATTERN, TRUE));
+	set_transformation_pattern(left_sphere->material.pattern,multiply_matrices(translation(make_tuple(1,0,0,POINT)),scaling(make_tuple(2,2,2,VECTOR))));
+	//set_transformation_pattern(left_sphere->material.pattern,rotation_z(M_PI / 4));
 
 	//lighting
 	world->light = make_light(make_tuple(-10, 10, -10,POINT), make_color(1, 1, 1));
@@ -242,12 +226,12 @@ void create_test_scene(t_world *world)
 	t_object *objects;
 
 	objects = NULL;
-	add_object(&objects,create_object(SPHERE,floor));
-	add_object(&objects,create_object(SPHERE,left_wall));
-	add_object(&objects,create_object(SPHERE,right_wall));
+	add_object(&objects,create_object(PLANE,floor));
+	// add_object(&objects,create_object(PLANE,left_wall));
+	// add_object(&objects,create_object(PLANE,right_wall));
 	add_object(&objects,create_object(SPHERE,middle_sphere));
-	add_object(&objects,create_object(SPHERE,left_sphere));
-	add_object(&objects,create_object(SPHERE,right_sphere));
+	//add_object(&objects,create_object(SPHERE,left_sphere));
+	//add_object(&objects,create_object(SPHERE,right_sphere));
 	world ->objects = objects;
 }	
 
@@ -281,12 +265,14 @@ int main(int argc, char **argv)
 	param = malloc(sizeof(t_parameters));
 	t_world world;
 	create_test_scene(&world);
-	set_obj_inverse_transformation(world.objects);
+	//set_obj_inverse_transformation(world.objects);
 
 
-	t_camera camera = make_camera(700, 700, M_PI / 3);
+	t_camera camera = make_camera(1500, 1300, M_PI / 3);
+	//t_camera camera = make_camera(1500, 1000, M_PI / 2);
 	//camera.transform = view_transformation(make_tuple(0, 1.5, -5,POINT),make_tuple(0, 1, 0,POINT),make_tuple(0, 1, 0,VECTOR));
 	set_camera_transformation(&camera,make_tuple(0, 1.5, -5,POINT),make_tuple(0, 1, 0,POINT),make_tuple(0, 1, 0,VECTOR));
+	
 	param ->camera = camera;
 	initializemlx(param);
 	render(camera,world);
@@ -308,3 +294,5 @@ int main(int argc, char **argv)
 
 	return (0);
 }
+
+
