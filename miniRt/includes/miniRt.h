@@ -19,23 +19,26 @@
 #define VECTOR 0
 #define POINT 1
 
+#define MAX_DEPTH 5
+
 #include "../gnl/get_next_line.h"
 #include "tuples.h"
 #include "matrices.h"
 #include "math_utils.h"
 #include "color.h"
 #include "material.h"
-#include "object.h"
 #include "ray.h"
+#include "object.h"
 #include "light.h"
+#include "pattern.h"
 #include "world.h"
 #include "intersections.h"
 #include "precomputed.h"
 #include "sphere.h"
+#include "plane.h"
 #include "shading.h"
 #include "camera.h"
 #include "mlx.h"
-
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>

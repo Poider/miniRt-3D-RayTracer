@@ -19,7 +19,7 @@ t_sphere *sphere()
     t_sphere *sphere;
 
     sphere = malloc(sizeof(t_sphere));
-    sphere->origin = make_tuple(0,0,0,1); //(0,0,0) usually (use make_tuple function to send a tuple in)
+    sphere->origin = ORIGIN; //(0,0,0) usually (use make_tuple function to send a tuple in)
     sphere->radius = 1.0;
     object_id++;
     sphere->object_id = object_id;
@@ -28,29 +28,18 @@ t_sphere *sphere()
     return sphere;
 }
 
-void set_tranform(t_sphere *s,t_matrices *matrix)
-{
-    s->transformation = matrix;
-}
 
-void set_material(t_sphere *s , t_material material)
-{
-    s ->material = material;
-}
-
-t_intersections *intersect(t_object *object,t_ray ray)
+t_intersections *intersect_sphere(t_object *shape,t_ray ray)
 {
     t_equations_vars vars;
     t_intersections *head_entersections = NULL;
-	t_sphere *sphere = (t_sphere *)object ->object;
     t_tuple sphere_to_ray;
-    t_ray ray2 = ray;
+	t_sphere *sphere = (t_sphere *)shape ->object;
 
-    ray2 = transform_ray(ray,*sphere ->inverse_transformation);
-    sphere_to_ray =  substract_tuple(ray2.origin,sphere->origin);
-    vars.a = dot_product(ray2.direction, ray2.direction);
-    vars.b = 2 * dot_product(ray2.direction, sphere_to_ray);
-    vars.c = dot_product(substract_tuple(ray2.origin, sphere->origin), sphere_to_ray) - 1;
+    sphere_to_ray =  substract_tuple(ray.origin,sphere->origin);
+    vars.a = dot_product(ray.direction, ray.direction);
+    vars.b = 2 * dot_product(ray.direction, sphere_to_ray);
+    vars.c = dot_product(substract_tuple(ray.origin, sphere->origin), sphere_to_ray) - 1;
     vars.determinant = (vars.b * vars.b) - (4.0 * vars.a * vars.c);
     if (vars.determinant < 0)
 		return NULL; //means no solutions
@@ -58,19 +47,19 @@ t_intersections *intersect(t_object *object,t_ray ray)
 	{
 		vars.sol1 = ((-1.0 * vars.b) - sqrt(vars.determinant)) / (2.0 * vars.a);
 		vars.sol2 = ((-1.0 * vars.b) + sqrt(vars.determinant)) / (2.0 * vars.a);
-        add_intersection(&head_entersections,intersection(vars.sol1,object));
-        add_intersection(&head_entersections,intersection(vars.sol2,object));
+        add_intersection(&head_entersections,intersection(vars.sol1,shape));
+        add_intersection(&head_entersections,intersection(vars.sol2,shape));
         return (head_entersections);
 	}
 }
 
-t_tuple normal_at(t_sphere *sphere,t_tuple world_point)
+t_tuple normal_at_sphere(t_object *shape,t_tuple object_point)
 {
-    t_tuple object_point = multiply_matrix_tuple(*invert_matrix(sphere->transformation),world_point);
+	t_sphere *sphere;
+
+	sphere = (t_sphere *)shape ->object;
     t_tuple object_normal = substract_tuple(object_point,make_tuple(0, 0, 0,POINT));
-    t_tuple world_normal =  multiply_matrix_tuple(*transpose_matrix(invert_matrix(sphere->transformation)),object_normal);
-    world_normal.w = 0;
-    return  tuple_normalize(world_normal);
+    return  (object_normal);
 }
 
 

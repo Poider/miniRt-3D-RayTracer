@@ -338,8 +338,6 @@ t_matrices *invert_matrix(t_matrices *matrix)
     t_matrices *inverted;
     float det;
 
-    // if(!is_invertible_matrix(matrix))
-    //     return NULL;
     det = determinant(matrix);
     if(is_equal(det,0))
     {

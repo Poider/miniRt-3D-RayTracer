@@ -1,8 +1,16 @@
 #include "./includes/miniRt.h"
 
-float abs1(float x)
+int is_greater(float a, float b)
+{
+    if(a - b >= EPSILON)
+        return TRUE;
+    return FALSE;
+}
+
+
+float abs_float(float x)
 {   
-    if(x > 0)
+    if(x >= 0)
         return x;
     return -x;
 }
@@ -17,17 +25,10 @@ float negate_val(float a)
 
 int is_equal(float a, float b)
 {
-    if(abs1(a-b) < EPSILON)
+    if(abs_float(a-b) < EPSILON)
         return TRUE;
     else
         return FALSE;
-}
-
-int is_greater(float a, float b)
-{
-    if(a - b >= EPSILON)
-        return TRUE;
-    return FALSE;
 }
 
 int is_lesser(float a, float b)

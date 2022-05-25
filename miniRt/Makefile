@@ -6,7 +6,7 @@
 #    By: klaarous <klaarous@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/03 18:14:03 by mel-amma          #+#    #+#              #
-#    Updated: 2022/04/24 14:38:26 by klaarous         ###   ########.fr        #
+#    Updated: 2022/05/22 14:25:34 by klaarous         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@
 SRC = miniRt.c helpers.c split.c \
 		camera.c color.c intersections.c light.c material.c math_utils.c matrices.c\
 		object.c precomputed.c ray.c shading.c sphere.c transformation_matrices.c\
-		tuples.c world.c
+		tuples.c world.c plane.c pattern.c
 NAME = miniRt
 LIBRARIES = ../libmlx_Linux.a -lX11 -lXext
 RM = rm -f
