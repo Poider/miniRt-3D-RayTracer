@@ -14,7 +14,7 @@ t_material get_material_object(t_object shape)
 }
 
 t_precomputed prepare_computations(t_intersections *intersection, t_ray ray)
-{
+{//that ray is the ray sent through pixels
 	t_precomputed pre_computed;
 
 	pre_computed.t = intersection ->t;

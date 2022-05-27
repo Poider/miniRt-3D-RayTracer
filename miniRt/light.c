@@ -21,7 +21,7 @@ t_tuple  lighting(t_world world, t_precomputed comps, int is_shadow)
 	t_tuple effective_color;
 	t_tuple color;
 	if (comps.material.pattern)
-		color = pattern_at_shape(comps.material.pattern , comps.point, comps.object);
+		color = pattern_at_shape(comps.material.pattern , comps.over_point, comps.object);
 	else
 		color = comps.material.color;
     effective_color = multiply_color(color,world.light.intensity);
