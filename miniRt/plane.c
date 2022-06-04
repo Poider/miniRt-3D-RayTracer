@@ -6,6 +6,7 @@ t_plane	*plane()
 
     plane = malloc(sizeof(t_plane));
     plane->transformation = identity_matrix(DEFAULT_DIMENSION);
+	plane->inverse_transformation = NULL;
 	plane->material = make_material();
     return (plane);
 }

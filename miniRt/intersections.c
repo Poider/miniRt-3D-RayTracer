@@ -120,6 +120,19 @@ t_intersections *intersection(float t, t_object *shape)
 }
 
 
+t_intersections	*get_prev_object(t_intersections *list, t_object *object)
+{
+	t_intersections *prev = list;
+	while (list)
+	{
+		if (list ->object == object)
+			return (prev);
+		prev = list;
+		list = list ->next;
+	}
+	return (0);
+}
+
 void print_solution(t_intersections *head)
 {
     while (head)

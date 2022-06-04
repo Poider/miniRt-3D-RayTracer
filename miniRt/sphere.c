@@ -28,6 +28,17 @@ t_sphere *sphere()
     return sphere;
 }
 
+t_sphere 		*glass_sphere()
+{
+	t_sphere	*s;
+
+	s = sphere();
+	s->material.transparency = 1;
+	s->material.refractive_index = 1.5;
+	return (s);
+}
+
+
 
 t_intersections *intersect_sphere(t_object *shape,t_ray ray)
 {

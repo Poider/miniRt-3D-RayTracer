@@ -13,19 +13,7 @@ typedef struct  s_world
 	t_object	*objects;
 }               t_world;
 
-
-typedef struct	s_precomputed
-{
-	float		t;
-	t_object	*object;
-	t_tuple		point;
-	t_tuple		over_point;
-	t_tuple		eyev;
-	t_tuple		normalv;
-	t_tuple		reflecv;
-	int			is_inside;
-	t_material 	material;
-}				t_precomputed;
+typedef struct  s_precomputed t_precomputed;
 
 
 t_light make_light(t_tuple position, t_tuple intensity);

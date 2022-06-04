@@ -25,7 +25,7 @@ float negate_val(float a)
 
 int is_equal(float a, float b)
 {
-    if(abs_float(a-b) < EPSILON)
+    if(abs_float(a-b) <= EPSILON)
         return TRUE;
     else
         return FALSE;

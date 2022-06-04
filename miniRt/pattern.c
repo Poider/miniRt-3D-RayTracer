@@ -30,7 +30,7 @@ t_pattern	*make_pattern(t_tuple white ,t_tuple black, int type_pattern, int is_3
 	pattern ->type_pattern = type_pattern;
 	pattern ->transformation = identity_matrix(DEFAULT_DIMENSION);
 	pattern ->is_3D = is_3D;
-	pattern ->inverse_transformation = pattern ->transformation;
+	pattern ->inverse_transformation = identity_matrix(DEFAULT_DIMENSION);
 	set_local_pattern_function(pattern);
 	return (pattern);
 }
@@ -44,7 +44,9 @@ void	set_transformation_pattern(t_pattern *pattern, t_matrices *matrix)
 	pattern ->transformation = matrix;
 	inverse_transform = invert_matrix(matrix);
 	if (inverse_transform)
-		pattern ->inverse_transformation = inverse_transform;
+		pattern->inverse_transformation = inverse_transform;
+	else
+		printf("aaaa\n");
 }
 
 t_tuple stripe_at(t_pattern *pattern,t_tuple point)
@@ -86,7 +88,7 @@ t_tuple		ring_at(t_pattern *pattern,t_tuple point)
 
 t_tuple		checkerbord_at(t_pattern *pattern,t_tuple point)
 {
-	int floor_z;
+	float floor_z;
 
 	floor_z = 0;
 	if (pattern->is_3D)
