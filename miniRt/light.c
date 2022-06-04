@@ -21,7 +21,7 @@ t_tuple  lighting(t_world world, t_precomputed comps, int is_shadow)
 	t_tuple effective_color;
 	t_tuple color;
 	if (comps.material.pattern)
-		color = pattern_at_shape(comps.material.pattern , comps.point, comps.object);
+		color = pattern_at_shape(comps.object->material.pattern , comps.over_point, comps.object);
 	else
 		color = comps.material.color;
     effective_color = multiply_color(color,world.light.intensity);
@@ -36,7 +36,7 @@ t_tuple  lighting(t_world world, t_precomputed comps, int is_shadow)
     // light vector and the normal vector. A negative number means the 
     // light is on the other side of the surface. 
     float light_dot_normal = dot_product(lightv, comps.normalv);
-	//is_shadow = FALSE;
+	//is_shadow = TRUE;
     if (light_dot_normal < 0 || is_shadow == TRUE)
     {
         diffuse = BLACK;
@@ -80,24 +80,51 @@ t_tuple color_at(t_world world, t_ray ray, int max_depth)
 	hit_intersection = hit(list_intersections);
 	if (hit_intersection)
 	{
-		comps = prepare_computations(hit_intersection, ray);
+		comps = prepare_computations(hit_intersection, ray, list_intersections);
 		free_list_intersection(list_intersections);
 		return (shade_hit(world, comps, max_depth));
 	}
-	else
-		return BLACK;
+	return BLACK;
 }
 
 t_tuple	reflected_color(t_world world, t_precomputed comps, int max_depth)
 {
 	t_ray	reflected_ray;
 	t_tuple	color;
-	if (is_equal(comps.material.reflective, 0) || max_depth >= MAX_DEPTH)
+
+	if (is_equal(comps.object->material.reflective, 0.00) || max_depth >= MAX_DEPTH)
 		return (BLACK);
 	reflected_ray = make_ray(comps.over_point, comps.reflecv);
 	color = color_at(world, reflected_ray, max_depth);
-	return (tuple_scalar_multiplication(color, comps.material.reflective));
+	t_tuple res_color = tuple_scalar_multiplication(color, comps.object->material.reflective);
+	//printf("%.2f %.2f %.2f %.2f\n",res_color.x,res_color.y,res_color.z,res_color.w);
+	return (res_color);
 }
+
+
+t_tuple	refracted_color(t_world world, t_precomputed comps, int max_depth)
+{
+	t_ray	refracted_ray;
+	float	n_ratio;
+	t_tuple color;
+
+	if (is_equal(comps.object->material.transparency, 0.00) || max_depth >= MAX_DEPTH)
+		return (BLACK);
+	n_ratio = comps.n1 / comps.n2;
+	float	cos_i = dot_product(comps.eyev, comps.normalv);
+	float	sin2_t = (n_ratio * n_ratio) * (1 - cos_i * cos_i);
+	if (sin2_t > 1)
+		return (BLACK);
+	float cos_t = sqrt(1.0 - sin2_t);
+	t_tuple direction = substract_tuple(tuple_scalar_multiplication(comps.normalv, (n_ratio * cos_i - cos_t)) ,
+										tuple_scalar_multiplication(comps.eyev ,n_ratio)
+									);
+	refracted_ray = make_ray(comps.under_point, direction);
+	color = color_at(world, refracted_ray, max_depth);
+	t_tuple res_color = tuple_scalar_multiplication(color, comps.object->material.transparency);
+	return (res_color);
+}
+
 
 
 t_tuple shade_hit(t_world world, t_precomputed comps, int max_depth)
@@ -105,9 +132,11 @@ t_tuple shade_hit(t_world world, t_precomputed comps, int max_depth)
 	int		is_shadow;
 	t_tuple	color_surface;
 	t_tuple	color_reflection;
+	t_tuple	color_refraction;
 
 	is_shadow = is_shadowed(&world,comps.over_point);
 	color_surface = lighting(world, comps, is_shadow);
-	color_reflection = reflected_color(world ,  comps,max_depth + 1);
-	return (add_tuple(color_surface, color_reflection));
+	color_reflection = reflected_color(world, comps,max_depth + 1);
+	color_refraction = refracted_color(world, comps , max_depth + 1);
+	return (add_tuple(add_tuple(color_surface, color_reflection), color_refraction));
 }

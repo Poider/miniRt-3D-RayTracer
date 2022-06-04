@@ -33,11 +33,11 @@ t_tuple substract_tuple(t_tuple tuple1, t_tuple tuple2)
 
 t_tuple negate_tuple(t_tuple tuple1)//to find opposite vector
 {
-    if (!is_equal(tuple1.x,0))
+    if (!is_equal(tuple1.x,0.0))
         tuple1.x = -tuple1.x;
-    if (!is_equal(tuple1.y,0))
+    if (!is_equal(tuple1.y,0.0))
         tuple1.y = -tuple1.y;
-    if (!is_equal(tuple1.z,0))
+    if (!is_equal(tuple1.z,0.0))
         tuple1.z = -tuple1.z;
     return tuple1;
 }

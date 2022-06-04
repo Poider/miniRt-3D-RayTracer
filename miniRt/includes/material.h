@@ -10,6 +10,8 @@ typedef struct s_material
   float		specular;
   float		shininess;
   float		reflective;
+  float		transparency;
+  float		refractive_index;
   t_pattern	*pattern;
 }              t_material;
 

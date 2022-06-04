@@ -12,6 +12,7 @@ typedef struct  s_sphere {
 
 
 t_sphere 		*sphere();
+t_sphere 		*glass_sphere();
 //t_sphere *create_sphere(float radius, t_tuple origin, t_parameters *param);
 void 			draw_sphere(t_tuple camera, float z_image_plane);
 t_tuple			normal_at_sphere(t_object *sphere,t_tuple world_point);

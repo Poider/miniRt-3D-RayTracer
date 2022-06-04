@@ -34,7 +34,9 @@ t_object	*get_last_object(t_object *objects)
 		return (NULL);
 	temp = objects;
 	while (temp -> next)
+	{
 		temp = temp -> next;
+	}
 	return (temp);
 }
 
