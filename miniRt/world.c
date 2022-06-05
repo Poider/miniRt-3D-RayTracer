@@ -4,7 +4,7 @@ t_world create_world()
 {
 	t_world world;
 
-	world.light.intensity = BLACK;
+	world.light = NULL;
 	world.objects = NULL;
 	return (world);
 }

@@ -1,12 +1,44 @@
 #include "includes/miniRt.h"
 
-t_light make_light(t_tuple position, t_tuple intensity)
+t_light	*make_light(t_tuple position, t_tuple intensity)
 {
-    t_light point_light;
+    t_light *point_light;
 
-    point_light.position = position;
-    point_light.intensity = intensity;
+	point_light = malloc(sizeof(t_light));
+    point_light->position = position;
+    point_light->intensity = intensity;
+	point_light ->next = NULL;
     return (point_light);
+}
+
+
+void		add_light(t_light **lights, t_object *new_light)
+{
+	t_light	*temp;
+
+	if (!lights)
+		return ;
+	if (*lights == NULL)
+		*lights = new_light;
+	else
+	{
+		temp = get_last_light(*lights);
+		temp -> next = new_light;
+	}
+}
+
+t_light	*get_last_light(t_light *objects)
+{
+	t_light	*temp;
+
+	if (!objects)
+		return (NULL);
+	temp = objects;
+	while (temp -> next)
+	{
+		temp = temp -> next;
+	}
+	return (temp);
 }
 
 t_tuple  reflect(t_tuple in, t_tuple normal)
@@ -24,9 +56,9 @@ t_tuple  lighting(t_world world, t_precomputed comps, int is_shadow)
 		color = pattern_at_shape(comps.object->material.pattern , comps.over_point, comps.object);
 	else
 		color = comps.material.color;
-    effective_color = multiply_color(color,world.light.intensity);
+    effective_color = multiply_color(color,world.light->intensity);
     // find the direction to the light source 
-    t_tuple lightv = tuple_normalize(substract_tuple(world.light.position,comps.over_point));
+    t_tuple lightv = tuple_normalize(substract_tuple(world.light->position,comps.over_point));
     
     // compute the ambient contribution
 
@@ -61,7 +93,7 @@ t_tuple  lighting(t_world world, t_precomputed comps, int is_shadow)
         {
             // compute the specular contribution
             float factor = pow(reflect_dot_eye, comps.material.shininess);
-            specular = tuple_scalar_multiplication(world.light.intensity, comps.material.specular * factor);
+            specular = tuple_scalar_multiplication(world.light->intensity, comps.material.specular * factor);
         }
     }
     // Add the three contributions together to get the final shading 

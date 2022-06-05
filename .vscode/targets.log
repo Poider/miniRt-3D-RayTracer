@@ -6,9 +6,8 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # PARTICULAR PURPOSE.
 
 # This program built for i386-apple-darwin11.3.0
- 
 
-# Make data base, printed on Wed May 25 13:43:17 2022
+# Make data base, printed on Sun Jun  5 12:16:50 2022
 
 # Variables
 
@@ -37,13 +36,13 @@ MAKEFILE_LIST :=
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /var/folders/zz/zyxvpxvq6csfxvn_n0000jxr0004gf/T/vscode-ipc-76bbdbb0-ea8c-4fd7-a683-78063e9259cf.sock
+VSCODE_IPC_HOOK_EXTHOST = /var/folders/zz/zyxvpxvq6csfxvn_n0000jxr0004gf/T/vscode-ipc-a87b18a8-02e8-4693-a725-2c7ceb527709.sock
 # environment
 VSCODE_CWD = /
 # environment
-Apple_PubSub_Socket_Render = /private/tmp/com.apple.launchd.xpqhuL62gB/Render
+Apple_PubSub_Socket_Render = /private/tmp/com.apple.launchd.XjnmKNA6BB/Render
 # environment
-PATH = /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki
+PATH = /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki:/Library/Frameworks/Mono.framework/Versions/Current/Commands
 # environment
 LSCOLORS = Gxfxcxdxbxegedabagacad
 # environment
@@ -53,7 +52,7 @@ ELECTRON_RUN_AS_NODE = 1
 # default
 .FEATURES := target-specific order-only second-expansion else-if archives jobserver check-symlink
 # environment
-SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.JZ4byLAz57/Listeners
+SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.3CNuth4IsD/Listeners
 # automatic
 %F = $(notdir $%)
 # environment
@@ -69,7 +68,7 @@ HOME = /Users/klaarous
 # default
 MAKEFILEPATH := /Applications/Xcode.app/Contents/Developer/Makefiles
 # environment
-VSCODE_CODE_CACHE_PATH = /Users/klaarous/Library/Application Support/Code/CachedData/dfd34e8260c270da74b5c2d86d61aee4b6d56977
+VSCODE_CODE_CACHE_PATH = /Users/klaarous/Library/Application Support/Code/CachedData/c3511e6c69bb39013c4a4b7b9566ec1ca73fc4d5
 # environment
 LOGNAME = klaarous
 # environment
@@ -107,7 +106,7 @@ TMPDIR = /var/folders/zz/zyxvpxvq6csfxvn_n0000jxr0004gf/T/
 # automatic
 *F = $(notdir $*)
 # environment
-VSCODE_IPC_HOOK = /Users/klaarous/Library/Application Support/Code/1.66.2-main.sock
+VSCODE_IPC_HOOK = /Users/klaarous/Library/Application Support/Code/1.67.2-main.sock
 # makefile
 MAKEFLAGS = Rrqp
 # environment
@@ -115,7 +114,7 @@ MFLAGS = -Rrqp
 # automatic
 *D = $(patsubst %/,%,$(dir $*))
 # environment
-XPC_SERVICE_NAME = com.apple.xpc.launchd.oneshot.0x10000004.Electron
+XPC_SERVICE_NAME = com.apple.xpc.launchd.oneshot.0x10000003.Electron
 # automatic
 +D = $(patsubst %/,%,$(dir $+))
 # automatic
@@ -133,7 +132,7 @@ PAGER = less
 # environment
 LC_ALL = C
 # environment
-SECURITYSESSIONID = 186a9
+SECURITYSESSIONID = 186aa
 # automatic
 ^F = $(notdir $^)
 # default
@@ -145,7 +144,7 @@ MAKELEVEL := 0
 # environment
 LANG = C
 # environment
-VSCODE_PID = 1157
+VSCODE_PID = 45191
 # variable set hash-table stats:
 # Load=67/1024=7%, Rehash=0, Collisions=1/88=1%
 
@@ -229,7 +228,7 @@ GNUmakefile:
 # strcache size: total = 0 / max = 0 / min = 4096 / avg = 0
 # strcache free: total = 0 / max = 0 / min = 4096 / avg = 0
 
-# Finished Make data base on Wed May 25 13:43:17 2022
+# Finished Make data base on Sun Jun  5 12:16:50 2022
 
  
 make: *** No rule to make target `all'.  Stop.

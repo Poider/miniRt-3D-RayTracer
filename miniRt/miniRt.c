@@ -232,7 +232,10 @@ void create_test_scene(t_world *world)
 	//set_transformation_pattern(left_sphere->material.pattern,rotation_z(M_PI / 4));
 
 	//lighting
-	world->light = make_light(make_tuple(-10, 10, -10,POINT), make_color(1, 1, 1));
+	t_light *lights_scene = NULL;
+	add_light(&lights_scene,  make_light(make_tuple(-10, 10, -10,POINT), make_color(1, 1, 1)));
+	add_light(&lights_scene,  make_light(make_tuple(10, 10, -10,POINT), make_color(1, 1, 1)));
+	world->light = lights_scene;
 	
 
 	t_object *objects;
