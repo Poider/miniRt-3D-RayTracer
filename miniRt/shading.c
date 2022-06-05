@@ -1,7 +1,7 @@
 #include "./includes/miniRt.h"
 
 //what if that shadowed point is lighted by another point
-int is_shadowed(t_world *world, t_tuple point)
+int is_shadowed(t_world *world, t_light *light, t_tuple point)
 {
     t_tuple light_pos;
     t_ray   shadow_ray;
@@ -9,7 +9,7 @@ int is_shadowed(t_world *world, t_tuple point)
     t_intersections *hit_intersection = NULL;
     float magnitude;
 
-    light_pos = world->light.position;
+    light_pos = light->position;
     shadow_ray.direction = substract_tuple(light_pos,point);
     shadow_ray.origin = point;
     magnitude = tuple_magnitude(shadow_ray.direction);
