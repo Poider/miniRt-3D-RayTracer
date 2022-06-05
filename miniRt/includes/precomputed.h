@@ -17,6 +17,6 @@ typedef struct	s_precomputed
 }				t_precomputed;
 
 # define VACUUM 1.0
-
+float schlick(t_precomputed *pre_computed);
 t_precomputed	prepare_computations(t_intersections *intersection, t_ray ray, t_intersections *list_intersections);
 t_material		get_material_object(t_object shape);

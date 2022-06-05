@@ -133,10 +133,18 @@ t_tuple shade_hit(t_world world, t_precomputed comps, int max_depth)
 	t_tuple	color_surface;
 	t_tuple	color_reflection;
 	t_tuple	color_refraction;
+	float reflectance;
 
 	is_shadow = is_shadowed(&world,comps.over_point);
 	color_surface = lighting(world, comps, is_shadow);
 	color_reflection = reflected_color(world, comps,max_depth + 1);
 	color_refraction = refracted_color(world, comps , max_depth + 1);
-	return (add_tuple(add_tuple(color_surface, color_reflection), color_refraction));
+	if(comps.object->material.reflective > 0 && comps.object->material.transparency > 0)
+	{
+		reflectance = schlick(&comps);
+		return (add_tuple(add_tuple(color_surface, tuple_scalar_multiplication(color_reflection,reflectance)),\
+		 tuple_scalar_multiplication(color_refraction,1 - reflectance)));
+	}
+	else
+		return (add_tuple(add_tuple(color_surface, color_reflection), color_refraction));
 }

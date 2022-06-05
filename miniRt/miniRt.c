@@ -186,8 +186,8 @@ void create_test_scene(t_world *world)
 	// set_transformation_pattern(left_wall->material.pattern,multiply_matrices(translation(make_tuple(0,0,25,0)), scaling(make_tuple(0.2,0.2,0.2,POINT))));
 	//left_wall->material.pattern = 0;
 	//left_wall->material.color = make_color(1,0.9,0.7);
-	set_material_pattern(&left_wall->material,make_pattern(WHITE, BLACK, CHECKERBORAD_PATTERN, TRUE));
-	set_transformation_pattern(left_wall->material.pattern,scaling(make_tuple(0.2,0.2,0.2,POINT)));
+	set_material_pattern(&left_wall->material,make_pattern(WHITE, BLACK, RING_PATTERN, TRUE));
+	// set_transformation_pattern(left_wall->material.pattern,scaling(make_tuple(0.2,0.2,0.2,POINT)));
 
 	//RIGHT WALL
 	t_plane *right_wall = plane();
@@ -203,9 +203,9 @@ void create_test_scene(t_world *world)
 	middle_sphere->transformation = translation(make_tuple(-0.5, 1, 0.5,POINT));
 	middle_sphere->material.color = make_color(0.9, 0.7, 0.8);
 	middle_sphere->material.diffuse = 0.7;
-	middle_sphere ->material.refractive_index = 1;
-	//middle_sphere ->material.reflective = 0.4;
-	middle_sphere ->material.transparency = 0.2;	
+	middle_sphere ->material.refractive_index = 1.5;
+	middle_sphere ->material.reflective = 0.7;
+	middle_sphere ->material.transparency = 0.5;	
 	middle_sphere->material.specular = 0.5;
 	//middle_sphere->material.reflective = 0.3;
 	// set_material_pattern(&middle_sphere->material,make_pattern(make_color(1,1,0),make_color(0,0,1) ,CHECKERBORAD_PATTERN, FALSE));
@@ -283,7 +283,7 @@ int main(int argc, char **argv)
 	t_camera camera = make_camera(1400, 1000, M_PI / 3);
 	//t_camera camera = make_camera(1500, 1000, M_PI / 2);
 	//camera.transform = view_transformation(make_tuple(0, 1.5, -5,POINT),make_tuple(0, 1, 0,POINT),make_tuple(0, 1, 0,VECTOR));
-	set_camera_transformation(&camera,make_tuple(0, 3,-1,POINT),make_tuple(0, 1, 0,POINT),make_tuple(0, 1, 0,VECTOR));
+	set_camera_transformation(&camera,make_tuple(2, 1,-1,POINT),make_tuple(0, 1, 0,POINT),make_tuple(0, 1, 0,VECTOR));
 	
 	param ->camera = camera;
 	initializemlx(param);
