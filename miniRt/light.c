@@ -1,12 +1,44 @@
 #include "includes/miniRt.h"
 
-t_light make_light(t_tuple position, t_tuple intensity)
+t_light	*make_light(t_tuple position, t_tuple intensity)
 {
-    t_light point_light;
+    t_light *point_light;
 
-    point_light.position = position;
-    point_light.intensity = intensity;
+	point_light = malloc(sizeof(t_light));
+    point_light->position = position;
+    point_light->intensity = intensity;
+	point_light ->next = NULL;
     return (point_light);
+}
+
+
+void		add_light(t_light **lights, t_light *new_light)
+{
+	t_light	*temp;
+
+	if (!lights)
+		return ;
+	if (*lights == NULL)
+		*lights = new_light;
+	else
+	{
+		temp = get_last_light(*lights);
+		temp -> next = new_light;
+	}
+}
+
+t_light	*get_last_light(t_light *objects)
+{
+	t_light	*temp;
+
+	if (!objects)
+		return (NULL);
+	temp = objects;
+	while (temp -> next)
+	{
+		temp = temp -> next;
+	}
+	return (temp);
 }
 
 t_tuple  reflect(t_tuple in, t_tuple normal)
@@ -15,7 +47,7 @@ t_tuple  reflect(t_tuple in, t_tuple normal)
     return tuple_normalize((substract_tuple(in,tuple_scalar_multiplication(normal,2 * in_normal_dot))));
 }
 
-t_tuple  lighting(t_world world, t_precomputed comps, int is_shadow)
+t_tuple  lighting(t_world world, t_light *light,t_precomputed comps, int is_shadow)
 {
     t_tuple diffuse,specular;
 	t_tuple effective_color;
@@ -24,9 +56,9 @@ t_tuple  lighting(t_world world, t_precomputed comps, int is_shadow)
 		color = pattern_at_shape(comps.object->material.pattern , comps.over_point, comps.object);
 	else
 		color = comps.material.color;
-    effective_color = multiply_color(color,world.light.intensity);
+    effective_color = multiply_color(color,light->intensity);
     // find the direction to the light source 
-    t_tuple lightv = tuple_normalize(substract_tuple(world.light.position,comps.over_point));
+    t_tuple lightv = tuple_normalize(substract_tuple(light->position,comps.over_point));
     
     // compute the ambient contribution
 
@@ -61,7 +93,7 @@ t_tuple  lighting(t_world world, t_precomputed comps, int is_shadow)
         {
             // compute the specular contribution
             float factor = pow(reflect_dot_eye, comps.material.shininess);
-            specular = tuple_scalar_multiplication(world.light.intensity, comps.material.specular * factor);
+            specular = tuple_scalar_multiplication(light->intensity, comps.material.specular * factor);
         }
     }
     // Add the three contributions together to get the final shading 
@@ -74,7 +106,7 @@ t_tuple color_at(t_world world, t_ray ray, int max_depth)
 {
 	t_intersections *list_intersections;
 	t_intersections *hit_intersection;
-	t_precomputed comps;
+	t_precomputed	comps;
 
 	list_intersections = intersect_word(world, ray);
 	hit_intersection = hit(list_intersections);
@@ -82,9 +114,9 @@ t_tuple color_at(t_world world, t_ray ray, int max_depth)
 	{
 		comps = prepare_computations(hit_intersection, ray, list_intersections);
 		free_list_intersection(list_intersections);
-		return (shade_hit(world, comps, max_depth));
+		return (shade_hit(world,comps, max_depth));
 	}
-	return BLACK;
+	return (BLACK);
 }
 
 t_tuple	reflected_color(t_world world, t_precomputed comps, int max_depth)
@@ -125,26 +157,29 @@ t_tuple	refracted_color(t_world world, t_precomputed comps, int max_depth)
 	return (res_color);
 }
 
-
-
 t_tuple shade_hit(t_world world, t_precomputed comps, int max_depth)
 {
-	int		is_shadow;
-	t_tuple	color_surface;
-	t_tuple	color_reflection;
-	t_tuple	color_refraction;
-	float reflectance;
 
-	is_shadow = is_shadowed(&world,comps.over_point);
-	color_surface = lighting(world, comps, is_shadow);
-	color_reflection = reflected_color(world, comps,max_depth + 1);
-	color_refraction = refracted_color(world, comps , max_depth + 1);
-	if(comps.object->material.reflective > 0 && comps.object->material.transparency > 0)
+    int			is_shadow;
+    t_tuple		color_surface = BLACK;
+    t_tuple		color_reflection;
+    t_tuple		color_refraction;
+	t_light		*curr_light = world.light;
+    float	   	reflectance;
+
+	while (curr_light)
 	{
-		reflectance = schlick(&comps);
-		return (add_tuple(add_tuple(color_surface, tuple_scalar_multiplication(color_reflection,reflectance)),\
-		 tuple_scalar_multiplication(color_refraction,1 - reflectance)));
+		is_shadow = is_shadowed(&world, curr_light, comps.over_point);
+    	color_surface = add_tuple(color_surface, lighting(world, curr_light, comps, is_shadow));
+		curr_light = curr_light->next;
 	}
-	else
-		return (add_tuple(add_tuple(color_surface, color_reflection), color_refraction));
+    color_reflection = reflected_color(world, comps,max_depth + 1);
+    color_refraction = refracted_color(world, comps , max_depth + 1);
+    if(comps.object->material.reflective > 0 && comps.object->material.transparency > 0)
+    {
+        reflectance = schlick(&comps);
+        return (add_tuple(add_tuple(color_surface, tuple_scalar_multiplication(color_reflection,reflectance)),\
+         tuple_scalar_multiplication(color_refraction,1 - reflectance)));
+    }
+    return (add_tuple(add_tuple(color_surface, color_reflection), color_refraction));
 }

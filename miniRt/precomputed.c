@@ -1,27 +1,6 @@
 #include "./includes/miniRt.h"
 
 
-	float schlick(t_precomputed *pre_computed)
-	{
-		float _cos;
-		float cos_t;
-		float Nr;
-		float sin2_t;
-		float R0;
-		_cos = dot_product(pre_computed->eyev, pre_computed->normalv);
-		if(pre_computed->n1 > pre_computed->n2)
-		{
-			Nr = pre_computed->n1 / pre_computed->n2;
-			sin2_t = Nr * Nr *(1 - _cos * _cos);
-			if(sin2_t > 1)//meaning total internal reflection occured;
-			return(1);
-			cos_t = sqrt(1 - sin2_t);
-			_cos = cos_t;
-		}
-		R0 = pow((pre_computed->n1 - pre_computed->n2)/(pre_computed->n1 + pre_computed->n2),2);
-		return (R0 + (1 - R0) * pow((1 - _cos),5));
-	}
-
 t_material get_material_object(t_object shape)
 {
 	if (shape.type_object ==  SPHERE)
@@ -105,6 +84,27 @@ t_precomputed prepare_computations(t_intersections *intersection, t_ray ray, t_i
 	pre_computed.over_point.w = POINT;
 	set_refractives_idx(&pre_computed, intersection, list_intersections);
 	return (pre_computed);
+}
+
+float schlick(t_precomputed *pre_computed)
+{
+    float _cos;
+    float cos_t;
+    float Nr;
+    float sin2_t;
+    float R0;
+    _cos = dot_product(pre_computed->eyev, pre_computed->normalv);
+    if(pre_computed->n1 > pre_computed->n2)
+    {
+        Nr = pre_computed->n1 / pre_computed->n2;
+        sin2_t = Nr * Nr * (1 - _cos * _cos);
+        if(sin2_t > 1)//meaning total internal reflection occured;
+        return(1);
+        cos_t = sqrt(1 - sin2_t);
+        _cos = cos_t;
+    }
+    R0 = pow((pre_computed->n1 - pre_computed->n2)/(pre_computed->n1 + pre_computed->n2),2);
+    return (R0 + (1 - R0) * pow((1 - _cos),5));
 }
 
 
