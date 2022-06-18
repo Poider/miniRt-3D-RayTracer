@@ -2,6 +2,8 @@
 
 #define SPHERE 1
 #define PLANE  2
+#define CYLINDER 3
+#define CONE 4
 
 
 typedef struct	s_object t_object;

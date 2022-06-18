@@ -88,12 +88,22 @@ t_tuple		ring_at(t_pattern *pattern,t_tuple point)
 
 t_tuple		checkerbord_at(t_pattern *pattern,t_tuple point)
 {
-	float floor_z;
+	float u = point.x;
+	float v = point.y;
+	int floor_z = floor(point.z);
+	if (pattern ->is_3D == FALSE)
+	{
+		floor_z = 0;
+		float theta = atan(point.z / point.x) + M_PI;//v
+		float r = sqrt(pow(point.x, 2) + pow(point.y, 2) + pow(point.z, 2));
+		float phi = acos(point.y / r); //u
+	 	u = theta / (M_PI * 2);
+		v = phi / M_PI;
+		u = (u * 20);
+		v = (v * 10);
+	}
 
-	floor_z = 0;
-	if (pattern->is_3D)
-		floor_z = floor(point.z);
-	if ((int)(floor(point.x) + floor(point.y) + floor_z ) % 2 == 0)
+	if ((int)(floor(u) + floor(v) + floor_z) % 2 == 0)
 		return (pattern->color_a);
 	return (pattern->color_b);
 }

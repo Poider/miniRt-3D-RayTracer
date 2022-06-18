@@ -4,7 +4,7 @@ typedef struct  s_plane
 {
     t_matrices *transformation;
 	t_matrices *inverse_transformation;
-    t_material material;
+    t_material	material;
 }               t_plane;
 
 

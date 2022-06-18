@@ -121,3 +121,19 @@ t_tuple cross_product(t_tuple tuple1,t_tuple tuple2)
     //returns whatever vector thats 90degrees with both
 }
 
+/*
+(0,1,0), (1,0,0)
+
+|b|.(-b.x, 0, b.z);
+|b.x*(-b.x) + b.y * 0 + b.z * b.z|
+|b.x * b.x + b.z * b.z|
+
+*/
+
+
+
+
+
+
+
+

@@ -16,6 +16,12 @@ t_tuple	normal_at_plane(t_object *plane,t_tuple world_point)
 	return (make_tuple(0,1,0,VECTOR));
 }
 
+
+t_tuple	plane_uv_cordinate(t_object *plane,t_tuple world_point)
+{
+	return (world_point);
+}
+
 t_intersections	*intersect_plane(t_object *plane,t_ray ray)
 {
 	float	t;
