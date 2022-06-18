@@ -1,0 +1,16 @@
+{
+	"makefile.extensionOutputFolder": "./.vscode",
+	"files.associations": {
+		"object.h": "c",
+		"intersections.h": "c",
+		"plane.h": "c",
+		"sphere.h": "c",
+		"algorithm": "c",
+		"minirt.h": "c",
+		"pattern.h": "c",
+		"locale": "c",
+		"tuple": "c",
+		"chrono": "c",
+		"memory_resource": "c"
+	}
+}
