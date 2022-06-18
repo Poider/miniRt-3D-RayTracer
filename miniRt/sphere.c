@@ -1,18 +1,5 @@
 #include "./includes/miniRt.h"
 
-// t_sphere *create_sphere(float radius, t_tuple origin, t_parameters *param)
-// {
-//     t_sphere *sphere;
-
-//     sphere = malloc(sizeof(t_sphere));
-//     sphere->origin = origin; //(0,0,0) usually (use make_tuple function to send a tuple in)
-//     sphere->radius = radius;
-//     param->object_id++;
-//     sphere->object_id = param->object_id;
-//     sphere->transformation = identity_matrix(4);
-//     return sphere;
-// }
-
 t_sphere *sphere()
 {
     static int object_id = 0;
@@ -38,14 +25,12 @@ t_sphere 		*glass_sphere()
 	return (s);
 }
 
-
-
 t_intersections *intersect_sphere(t_object *shape,t_ray ray)
 {
     t_equations_vars vars;
     t_intersections *head_entersections = NULL;
-    t_tuple sphere_to_ray;
-	t_sphere *sphere = (t_sphere *)shape ->object;
+    t_tuple			sphere_to_ray;
+	t_sphere		*sphere = (t_sphere *)shape ->object;
 
     sphere_to_ray =  substract_tuple(ray.origin,sphere->origin);
     vars.a = dot_product(ray.direction, ray.direction);
@@ -73,6 +58,19 @@ t_tuple normal_at_sphere(t_object *shape,t_tuple object_point)
     return  (object_normal);
 }
 
+t_tuple			sphere_uv_cordinate(t_object *plane,t_tuple world_point)
+{
+	t_tuple	uv_cordinate;
+
+	uv_cordinate = world_point;
+	uv_cordinate.x = atan(sqrt(pow(world_point.x,2) + pow(world_point.y,2)) / M_PI);
+	uv_cordinate.y = atan(world_point.y / world_point.x);
+	// if (world_point.x < 0)
+	// 	uv_cordinate.y += M_PI;
+	// // uv_cordinate.x /= M_PI;
+	// uv_cordinate.y /= M_PI;
+	return (uv_cordinate);
+}
 
 // void draw_sphere(t_tuple camera, float z_image_plane)
 // {

@@ -36,6 +36,8 @@
 #include "precomputed.h"
 #include "sphere.h"
 #include "plane.h"
+#include "cylinder.h"
+#include "cone.h"
 #include "shading.h"
 #include "camera.h"
 #include "mlx.h"

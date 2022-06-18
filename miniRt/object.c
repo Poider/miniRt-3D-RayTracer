@@ -64,6 +64,22 @@ void init_object_attr(int	type_object,t_object *obj)
 		obj->local_normal_at = normal_at_plane;
 		obj->local_intersect = intersect_plane;
 	}
+	else if (type_object == CYLINDER)
+	{
+		t_cylinder *cyl = (t_cylinder *)object;
+		transform = cyl->transformation;
+		material  = cyl ->material;
+		obj->local_normal_at = normal_at_cylinder;
+		obj->local_intersect = intersect_cylinder;
+	}
+	else if (type_object == CONE)
+	{
+		t_cone *cone = (t_cone *)object;
+		transform = cone->transformation;
+		material  = cone ->material;
+		obj->local_normal_at = normal_at_cone;
+		obj->local_intersect = intersect_cone;
+	}
 	set_tranform(obj, transform);
 	set_material(obj, material);
 }
