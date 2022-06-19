@@ -1,0 +1,72 @@
+ambient
+//ambient light ratio
+//ambient light color
+END
+
+light
+//light coordinates
+//light brightness
+//light color
+END
+
+camera
+//camera coordinates
+//normalized orientation vector
+//field of view
+END
+
+sphere
+//sphere coordinates
+//sphere diameter
+//sphere color
+//reflection
+//transparency
+//refractive index
+//pattern
+//specular
+//diffuse
+
+END
+
+plane
+//plane coordinates
+//plane orientation vector
+//plane color
+//reflection
+//transparency
+//refractive index
+//pattern
+//specular
+//diffuse
+
+END
+
+cylinder
+//cylinder coordinates
+//cylinder orientation vector??
+//cylinder diameter // scale on x with the "diameter"
+//cylinder height//take a min = 0  and add on it the height for the max // max (0,height)
+//cylinder color
+//reflection
+//transparency
+//refractive index
+//pattern
+//specular
+//diffuse
+//closed
+END
+
+cone
+//cone coordinates
+//cone orientation vector??
+//cone diameter
+//cone height
+//cone color
+//reflection
+//transparency
+//refractive index
+//pattern
+//specular
+//diffuse
+//closed
+END

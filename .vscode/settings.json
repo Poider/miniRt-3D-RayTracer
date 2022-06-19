@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "parsed": "cpp",
+        "minirt.h": "c"
+    }
+}
