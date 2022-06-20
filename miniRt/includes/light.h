@@ -9,7 +9,8 @@ typedef struct  s_light
 
 typedef struct  s_world 
 {
-
+	t_tuple		ambient_color;
+	float		ambient_ratio;
 	t_light		*light;
 	t_object	*objects;
 }               t_world;

@@ -52,6 +52,7 @@ t_tuple  lighting(t_world world, t_light *light,t_precomputed comps, int is_shad
     t_tuple diffuse,specular;
 	t_tuple effective_color;
 	t_tuple color;
+	t_tuple ambient;
 	if (comps.material.pattern)
 		color = pattern_at_shape(comps.object->material.pattern , comps.over_point, comps.object);
 	else
@@ -60,10 +61,11 @@ t_tuple  lighting(t_world world, t_light *light,t_precomputed comps, int is_shad
     // find the direction to the light source 
     t_tuple lightv = tuple_normalize(substract_tuple(light->position,comps.over_point));
     
-    // compute the ambient contribution
-
-    t_tuple ambient =  tuple_scalar_multiplication(effective_color, comps.material.ambient);
-    
+    // compute the t ambiencontribution
+ 	if(tuple_isequal(world.ambient_color,make_color(-1,-1,-1)))
+    	ambient =  tuple_scalar_multiplication(effective_color, comps.material.ambient);
+   	else
+		ambient = tuple_scalar_multiplication(world.ambient_color,world.ambient_ratio);
     // light_dot_normal represents the cosine of the angle between the 
     // light vector and the normal vector. A negative number means the 
     // light is on the other side of the surface. 

@@ -98,3 +98,23 @@ size_t	ft_strlcpy(char *dest, const char *src, size_t size)
 	*dest = '\0';
 	return (count);
 }
+
+int	ft_toupper(int a)
+{
+	if (a >= 97 && a <= 122)
+		a -= 32;
+	return (a);
+}
+
+char *to_upper(char *line)
+{
+	int i;
+
+	i = 0;
+	while(line[i])
+	{
+		line[i]= ft_toupper(line[i]);
+		i++;
+	}
+	return line;
+}

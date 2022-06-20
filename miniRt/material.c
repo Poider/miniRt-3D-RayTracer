@@ -16,6 +16,7 @@ t_material make_material()
     return (material);
 }
 
+
 void set_material_pattern(t_material *material,t_pattern *pattern)
 {
 	material ->pattern = pattern;

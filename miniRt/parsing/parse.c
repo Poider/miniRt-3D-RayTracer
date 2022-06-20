@@ -5,6 +5,9 @@
 
 //make it so when parsing done it prints it
 
+//loop for transformations
+
+//make it that if it goes in the while looking for END for around 200 then it says parse error and exits
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
 	size_t	i;
@@ -204,11 +207,17 @@ t_object *cone_make(int fd)
     return (t_object *)shape;
 }
 
-void ambient_make(int fd)
+void ambient_make(t_world *world,int fd)
 {
     char *line;
+    float ambient_ratio;
+    t_tuple ambient_color;
     line = get_next_line(fd);
-
+    //get float and take max 1 min 0 -> light ratio
+    line = get_next_line(fd);
+    //get ambient colors // return -1-1-1 if NULL
+    world->ambient_color = ambient_color;
+    world->ambient_ratio = ambient_ratio;
     while (!ft_strncmp(line, "END", 3))
     {
         if (line)
@@ -220,12 +229,19 @@ void ambient_make(int fd)
     }
 }
 
-void light_make(int fd)
+t_light *light_make(int fd)
 {// gotta send in light and keep adding more lights to it
     char *line;
+    t_light *light;
 
     line = get_next_line(fd);
-    coordinates =
+    t_tuple coordinates =;  
+    line = get_next_line(fd);
+    float  brightness = ; //get float and take max 1 min 0
+    line = get_next_line(fd);
+    t_tuple color =;
+    color = tuple_scalar_multiplication(color,brightness);
+    light = make_light(coordinates, color);
     while (!ft_strncmp(line, "END", 3))
     {
         if (line)
@@ -235,6 +251,7 @@ void light_make(int fd)
         }
         line = get_next_line(fd);
     }
+    return light;
 }
 
 void camera_make(t_camera *camera,int fd)
@@ -266,10 +283,12 @@ void camera_make(t_camera *camera,int fd)
 
 void parse_file(t_world *world,t_camera *camera,int fd)
 {//should I free "shape each time? after creating the obj"
-    char *line;
-    t_object *objects;
-    t_object *shape;
-
+    char        *line;
+    t_object    *objects;
+    t_object    *shape;
+    t_light     *lights;
+    t_light     *light;
+    lights = NULL;
     line = NULL;
 	objects = NULL;
     while(1)
@@ -279,11 +298,12 @@ void parse_file(t_world *world,t_camera *camera,int fd)
             break;
         if(ft_strncmp(line,"ambient", 6))
         {
-
+            ambient_make(world,fd);
         }
         if(ft_strncmp(line,"light", 5))
         {
-
+            light = light_make(fd);
+            add_light(&lights,light);
         }
         if(ft_strncmp(line,"camera", 6))
         {
@@ -311,4 +331,7 @@ void parse_file(t_world *world,t_camera *camera,int fd)
         }
     }
     world->objects = objects;
+    world->light = lights;
 }
+
+//functions X_make are parsing ones, make_X are actual code one

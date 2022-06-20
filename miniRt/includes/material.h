@@ -5,6 +5,7 @@ typedef struct s_pattern t_pattern;
 typedef struct s_material
 {
   t_tuple	color;
+  t_tuple ambient_color;
   float		ambient;
   float		diffuse;
   float		specular;

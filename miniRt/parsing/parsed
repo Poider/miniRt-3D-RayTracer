@@ -1,5 +1,5 @@
 ambient
-//ambient light ratio
+//ambient light ratio 0-1
 //ambient light color
 END
 
@@ -70,3 +70,5 @@ cone
 //diffuse
 //closed
 END
+
+max depth parse?
