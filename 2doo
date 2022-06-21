@@ -7,3 +7,11 @@ init object transformation sphere->transformation (where is it initialized)
 is transparency/refractive_index done by default?
 
 matrices leaking when u multiply and such?
+
+how to deal with light brightness
+
+where to store ambient light ratio and color
+
+split is space free, will ignore it if theres many spaces
+
+difference between diffuse and diffuse tuple

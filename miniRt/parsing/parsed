@@ -22,7 +22,8 @@ sphere
 //reflection
 //transparency
 //refractive index
-//pattern
+//pattern // pattern_type patern_color1 pattern_color2 is_3D (patter is two line parameter)
+    //if pattern then pattern transformations here / NULL, if not skip it
 //specular
 //diffuse
 
@@ -35,7 +36,8 @@ plane
 //reflection
 //transparency
 //refractive index
-//pattern
+//pattern // pattern_type patern_color1 pattern_color2 is_3D (patter is two line parameter)
+    //if pattern then pattern transformations here / NULL, if not skip it
 //specular
 //diffuse
 
@@ -45,15 +47,16 @@ cylinder
 //cylinder coordinates
 //cylinder orientation vector??
 //cylinder diameter // scale on x with the "diameter"
-//cylinder height//take a min = 0  and add on it the height for the max // max (0,height)
+//cylinder height// min height
 //cylinder color
 //reflection
 //transparency
 //refractive index
-//pattern
+//pattern // pattern_type patern_color1 pattern_color2 is_3D (patter is two line parameter)
+    //if pattern then pattern transformations here / NULL, if not skip it
 //specular
 //diffuse
-//closed
+//closed    TRUE/FALSE
 END
 
 cone
@@ -65,10 +68,11 @@ cone
 //reflection
 //transparency
 //refractive index
-//pattern
+//pattern // pattern_type patern_color1 pattern_color2 is_3D (patter is two line parameter)
+    //if pattern then pattern transformations here / NULL, if not skip it
 //specular
 //diffuse
-//closed
+//closed    TRUE/FALSE
 END
 
 max depth parse?

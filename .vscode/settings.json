@@ -1,6 +1,15 @@
 {
     "files.associations": {
         "parsed": "cpp",
-        "minirt.h": "c"
+        "minirt.h": "c",
+        "__cxx_version": "c",
+        "__tuple": "c",
+        "memory_resource": "c",
+        "tuple": "c",
+        "functional": "c",
+        "memory": "c",
+        "mutex": "c",
+        "optional": "c",
+        "utility": "c"
     }
 }
