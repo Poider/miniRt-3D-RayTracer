@@ -58,19 +58,6 @@
 // }
 
 
-size_t	ft_strlen(const char *str)
-{
-	size_t	i;
-
-	i = 0;
-	while (*str)
-	{
-		str++;
-		i++;
-	}
-	return (i);
-}
-
 int whitespaces(char c)
 {
 		return (c == '\n' || c == '\t' || c == ' ' || c == '\r' || c == '\v' || c == '\f');

@@ -1,37 +1,13 @@
 #include "./../includes/miniRt.h"
 
-//ambient color ratio and ambient color if its not null
-
-//make coordinate last when setting settings so that you get rotation then scale then translating
-//coordiante is translate diameter is scaling // translating is last, and transformations come before that and after scaling for diameter and such
-
-//for transformations we make loop until reach transEND applying each of the transformations
-
-//free the line sent in settings
-
-//color return red as default color
-
-
-//make cone + cylinder close by default?
-
-//when u return a matrice free the ones used to create that one
-
-//for transformations make it split and each one read type of transformation + vector of it
-// !!
-//^^ return default settings!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//NULL case
-//convert ANGLES to radian
 //parse error function
-//fill returns
-// get transformations need to be multiplied by the initial transformation
-//color_set will free and if use it elsewhere in settings itll be a doublefree 
 
-//add transformations into "parse"
+
 int	ft_strncmp(const char *s1, const char *s2, size_t n);
 char *to_upper(char *line);
 float min(float a,float b);
 float max(float a,float b);
-void free_split(float **vector)
+void free_split(char **vector)
 {
     int i;
 
@@ -60,7 +36,7 @@ t_matrices *rotation_make(t_matrices *matrix, char *line, char c)
     t_matrices  *transformed_matrix;
     float angle;
     
-    angle = degree_to_radian(loat_parse(line));
+    angle = degree_to_radian(float_parse(line));
     if(c == 'x')
     {
         transformation = rotation_x(angle);
@@ -113,12 +89,12 @@ t_matrices *shear_make(t_matrices *matrix, char *line)// SHEAR 1,3,4,5,6,7
 
     i = 0;
     shear = ft_split(line,',');
-    sh.Hxy = float_parse(line[0]);
-	sh.Hxz = float_parse(line[1]);
-	sh.Hyx = float_parse(line[2]);
-	sh.Hyz = float_parse(line[3]);
-	sh.Hzx = float_parse(line[4]);
-	sh.Hzy = float_parse(line[5]);
+    sh.Hxy = float_parse(shear[0]);
+	sh.Hxz = float_parse(shear[1]);
+	sh.Hyx = float_parse(shear[2]);
+	sh.Hyz = float_parse(shear[3]);
+	sh.Hzx = float_parse(shear[4]);
+	sh.Hzy = float_parse(shear[5]);
     transformation = shearing(sh);
     transformed_matrix = multiply_matrices(transformation,matrix);
     free_split(shear);
@@ -128,9 +104,8 @@ t_matrices *shear_make(t_matrices *matrix, char *line)// SHEAR 1,3,4,5,6,7
 }
 
 t_matrices  *get_transformations(char *line)
-{//make func thatll get vector and make the right transformation matrix// send it the function it needs
+{
     char **lines;
-    //use this in camera all stuff thatll need transformations either in settings or parse
     int i;
     t_matrices *transformations;
 
@@ -140,17 +115,17 @@ t_matrices  *get_transformations(char *line)
     while(lines[i])
     {
         if(ft_strncmp(to_upper(lines[i]), "ROTX",4))
-           transformations = rotation_make(transformations,line[i + 1],'x');
+           transformations = rotation_make(transformations,lines[i + 1],'x');
         else if(ft_strncmp(to_upper(lines[i]), "ROTY",4))
-           transformations = rotation_make(transformations,line[i + 1],'y');
+           transformations = rotation_make(transformations,lines[i + 1],'y');
         else if(ft_strncmp(to_upper(lines[i]), "ROTZ",4))
-           transformations = rotation_make(transformations,line[i + 1],'z');
+           transformations = rotation_make(transformations,lines[i + 1],'z');
         else if(ft_strncmp(to_upper(lines[i]), "TRANSLATE",4))
-           transformations = translate_scale_make(transformations,line[i + 1],'t');
+           transformations = translate_scale_make(transformations,lines[i + 1],'t');
         else if(ft_strncmp(to_upper(lines[i]), "SCALE",4))
-           transformations = translate_scale_make(transformations,line[i + 1],'s');
+           transformations = translate_scale_make(transformations,lines[i + 1],'s');
         else if(ft_strncmp(to_upper(lines[i]), "SHEAR",4))
-           transformations = shear_make(transformations,line[i + 1]);
+           transformations = shear_make(transformations,lines[i + 1]);
         i += 2;
     }
     free_split(lines);
@@ -158,42 +133,90 @@ t_matrices  *get_transformations(char *line)
     return transformations;
 }
 
-t_matrices  *coordinate_set(t_matrices *matrix, char *line)
+t_matrices  *coordinate_set(t_matrices *matrix, char *line, int fd)
 {
-    t_matrices *transformed_matrix;
-    t_tuple translation_vector;
+    t_matrices  *coordinates_matrix;
+    t_tuple     translation_vector;
+    char        *transformations;
+    t_matrices  *transformations_matrix;
 
     if(ft_strncmp(to_upper(line), "NULL",4))
     {
         free(line);
         return (matrix);
     }
-    //TODO :atoi it in translation vector
-    //tuple_set cus its a vector
+    transformations = get_next_line(fd);
+    if(ft_strncmp(to_upper(transformations), "NULL",4))
+        free(transformations);
+    else
+    {
+        transformations_matrix = get_transformations(transformations);
+        coordinates_matrix = matrix;
+        matrix = multiply_matrices(transformations_matrix,matrix);
+        free(coordinates_matrix);
+        free(transformations_matrix);
+        free(transformations);
+        coordinates_matrix = 0;
+    }
     translation_vector = tuple_set(line);
-    transformed_matrix = multiply_matrices(translation(translation_vector),matrix);
+    transformations_matrix = translation(translation_vector);
+    coordinates_matrix = multiply_matrices(transformations_matrix,matrix);
+    free(matrix);
+    free(transformations_matrix);
+    return(coordinates_matrix);
+    
 }
 
-t_matrices  *orientation_vector_set(t_matrices *matrix, char *line)
+// t_matrices  *orientation_vector_set(t_matrices *matrix, char *line)
+// {
+//     t_matrices *transformed_matrix;
+//     if(ft_strncmp(to_upper(line), "NULL",4))
+//     {
+//         free(line);
+//         // return ();
+//     }
+//     //TODO :parse vector and wait to know what to do with it
+// }
+
+t_tuple color_set_no_free(char *line)
 {
-    t_matrices *transformed_matrix;
-    if(ft_strncmp(to_upper(line), "NULL",4))
-    {
-        free(line);
-        // return ();
-    }
-    //TODO :parse vector and wait to know what to do with it
+    t_tuple color;
+    float R;
+    float G;
+    float B;
+    char   **vector;
+
+    vector = ft_split(line,',');
+    R = min(max(0,float_parse(vector[0])),255) / 255;
+    G = min(max(0,float_parse(vector[1])),255) / 255;
+    B = min(max(0,float_parse(vector[2])),255) / 255;
+    color = make_color(R,G,B);
+    free_split(vector);
+    free(line);
+    return color;
 }
 
 t_tuple color_set(char *line)
 {
+    t_tuple color;
+    float R;
+    float G;
+    float B;
+    char   **vector;
+    
     if(ft_strncmp(to_upper(line), "NULL",4))
     {
         free(line);
         return (make_color(1,0,0));
     }
-    //parse a tuple
-    // divide on 255 and take max 255 and min 0
+    vector = ft_split(line,',');
+    R = min(max(0,float_parse(vector[0])),255) / 255;
+    G = min(max(0,float_parse(vector[1])),255) / 255;
+    B = min(max(0,float_parse(vector[2])),255) / 255;
+    color = make_color(R,G,B);
+    free_split(vector);
+    free(line);
+    return color;
 }
 
 float   reflection_set(char *line)
@@ -205,7 +228,7 @@ float   reflection_set(char *line)
         free(line);
         return (0);
     }
-    reflection = float_parse(line);
+    reflection = max(min(float_parse(line),1),0);
     free(line);
     return reflection;
 }
@@ -219,7 +242,7 @@ float   transparency_set(char *line)
         free(line);
         return (0);
     }
-    transparency = float_parse(line);
+    transparency = max(min(float_parse(line),1),0);
     free(line);
     return transparency;
 }
@@ -248,19 +271,18 @@ t_matrices *pattern_transformation_set(int fd)
     return transformed_matrice;
 }
 
-void    pattern_set(t_material *material, char *line, int fd)//not finished
+void    pattern_set(t_material *material, char *line, int fd, int is_3D)//not finished
 {
-    if(ft_strncmp(to_upper(line), "NULL",4))
-    {
-        free(line);
-        return ;
-    }
     int pattern_type;
     t_pattern *pattern;
     char **parameters;
     t_matrices *pattern_transformation;
     
-    
+      if(ft_strncmp(to_upper(line), "NULL",4))
+    {
+        free(line);
+        return ;
+    }
     if(ft_strncmp(to_upper(parameters[0]), "CHECKERBOARD",12))
         pattern_type = CHECKERBORAD_PATTERN;
     else if(ft_strncmp(to_upper(parameters[0]), "RING",4))
@@ -272,7 +294,8 @@ void    pattern_set(t_material *material, char *line, int fd)//not finished
     else
         pattern_type = CHECKERBORAD_PATTERN; 
     pattern_transformation = pattern_transformation_set(fd); // here
-    pattern = make_pattern(color_set(parameters[1]),color_set(parameters[2]),pattern_type, atoi(parameters[3]));
+    pattern = make_pattern(color_set_no_free(parameters[1]),color_set_no_free(parameters[2]),\
+    pattern_type, is_3D);
     set_material_pattern(material,pattern);
 	set_transformation_pattern(material->pattern,pattern_transformation);
     free(line);
@@ -289,7 +312,7 @@ float   specular_set(float default_specular, char *line)
         free(line);
         return (default_specular);
     }
-    specular = float_parse(line);
+    specular = max(float_parse(line),0);
     free(line);
     return specular;
 }
@@ -303,14 +326,15 @@ float   diffuse_set(float default_diffuse, char *line)
         free(line);
         return (default_diffuse);
     }
-    diffuse = float_parse(line);
+    diffuse = max(min(float_parse(line),1),0);
     free(line);
     return diffuse;
 }
 
-t_matrices   *diameter_set(t_matrices *matrix, char *line)
+t_matrices   *diameter_set(t_matrices *matrix, char *line, char c)
 {
     t_matrices *transformed_matrix;
+    t_matrices *transformation;
     float d;
 
     if(ft_strncmp(to_upper(line), "NULL",4))
@@ -318,8 +342,13 @@ t_matrices   *diameter_set(t_matrices *matrix, char *line)
         free(line);
         return (matrix);
     }
-    float_parse(line);
-    transformed_matrix = multiply_matrices(scaling(make_tuple(d,d,d,VECTOR)),matrix);
+    d = max(1,float_parse(line));
+    if(c == 's')
+    transformation = scaling(make_tuple(d,d,d,VECTOR));
+    else
+    transformation = scaling(make_tuple(d,0,0,VECTOR));
+    transformed_matrix = multiply_matrices(transformation, matrix);
+    free(transformation);
     free(matrix);
     free(line);
     return(transformed_matrix);
@@ -328,14 +357,15 @@ t_matrices   *diameter_set(t_matrices *matrix, char *line)
 void    height_set(float *_min, float *_max, char *line)
 {
     char **numbers;
+
     if(ft_strncmp(to_upper(line), "NULL",4))
     {
         free(line);
         *_min = 0;
         *_max = 2;
         return ;
-    }//use max() min 0 in height
-    numbers = ft_split(line," ");
+    }
+    numbers = ft_split(line,' ');
     *_min = float_parse(numbers[0]);
     *_max = *_min + max(float_parse(numbers[1]),0);
     free_split(numbers);
@@ -359,17 +389,16 @@ int close_set(char *line)
 
 t_tuple tuple_from_line(char *line)
 {
-    float   **vector;
+    char   **vector;
     t_tuple _tuple;
 
     int i = 0;
-    int j = 0;
-    vector = ft_split(line,',');//free the array later
-    //if length of the thing is more than 4 return parse_error
+
+    vector = ft_split(line,',');
     _tuple.x = float_parse(vector[0]);
     _tuple.y = float_parse(vector[1]);
     _tuple.z = float_parse(vector[2]);
-    if(ft_strncmp(ft_toupper(vector[3]),"POINT",5))
+    if(ft_strncmp(to_upper(vector[3]),"POINT",5))
         _tuple.w = POINT;
     else
         _tuple.w = VECTOR;
@@ -379,7 +408,7 @@ t_tuple tuple_from_line(char *line)
 
 t_tuple tuple_set(char *line)
 {
-    float   **vector;
+    char   **vector;
     t_tuple _tuple;
 
     if(ft_strncmp(to_upper(line), "NULL",4))
@@ -388,20 +417,18 @@ t_tuple tuple_set(char *line)
         return (make_tuple(0,0,1,0));
     }
     int i = 0;
-    int j = 0;
-    vector = ft_split(line,',');//free the array later
-    //if length of the thing is more than 4 return parse_error
+
+    vector = ft_split(line,',');
     _tuple.x = float_parse(vector[0]);
     _tuple.y = float_parse(vector[1]);
     _tuple.z = float_parse(vector[2]);
-    if(ft_strncmp(ft_toupper(vector[3]),"POINT",5))
+    if(ft_strncmp(to_upper(vector[3]),"POINT",5))
         _tuple.w = POINT;
     else
         _tuple.w = VECTOR;
     free_split(vector);
     free(line);
     return (_tuple);
-//return a default if NULL
 }
 
 float   FOV_set(char *line)

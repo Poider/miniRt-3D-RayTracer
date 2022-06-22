@@ -1,12 +1,6 @@
 
 #include "./../includes/miniRt.h"
 
-//send in the initial value there in case line is "NULL" so u return it
-
-//make it so when parsing done it prints it
-
-//loop for transformations
-
 //make it that if it goes in the while looking for END for around 200 then it says parse error and exits
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
@@ -24,16 +18,14 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	return ((unsigned char)*s1 - (unsigned char)*s2);
 }
 
-//there should be an order to each and in case its not there it should have "NULL" written
-
 //returns object type + the object address in obj
 
 void plane_settings(int fd,t_plane *shape,char *line)
 {
     line = get_next_line(fd);
-    shape->transformation = coordinate_set(shape->transformation,line);
-    line = get_next_line(fd);
-    orientation_vector_set(shape->transformation, line);
+    shape->transformation = coordinate_set(shape->transformation,line,fd);
+    // line = get_next_line(fd);
+    // orientation_vector_set(shape->transformation, line);
     line = get_next_line(fd);
     shape->material.color = color_set(line);
     line = get_next_line(fd);
@@ -43,7 +35,7 @@ void plane_settings(int fd,t_plane *shape,char *line)
     line = get_next_line(fd);
     shape->material.refractive_index = refractive_set(line);
     line = get_next_line(fd);
-    pattern_set(&shape->material, line);
+    pattern_set(&shape->material, line,fd,TRUE);
     line = get_next_line(fd);
     shape->material.specular = specular_set(shape->material.specular, line);
     line = get_next_line(fd);
@@ -52,11 +44,11 @@ void plane_settings(int fd,t_plane *shape,char *line)
 void cylinder_settings(int fd,t_cylinder *shape,char *line)
 {   
     line = get_next_line(fd);
-    shape->transformation = coordinate_set(shape->transformation,line);
+    shape->transformation = diameter_set(shape->transformation,line,'c');
     line = get_next_line(fd);
-    orientation_vector_set(shape->transformation, line);
-    line = get_next_line(fd);
-    shape->transformation = diameter_set(shape->transformation,line);
+    shape->transformation = coordinate_set(shape->transformation,line,fd);
+    // line = get_next_line(fd);
+    // orientation_vector_set(shape->transformation, line);
     line = get_next_line(fd);
     height_set(&shape->min,&shape->max, line);
     line = get_next_line(fd);
@@ -68,7 +60,7 @@ void cylinder_settings(int fd,t_cylinder *shape,char *line)
     line = get_next_line(fd);
     shape->material.refractive_index = refractive_set(line);
     line = get_next_line(fd);
-    pattern_set(&shape->material, line);
+    pattern_set(&shape->material, line,fd,FALSE);
     line = get_next_line(fd);
     shape->material.specular = specular_set(shape->material.specular, line);
     line = get_next_line(fd);
@@ -79,11 +71,12 @@ void cylinder_settings(int fd,t_cylinder *shape,char *line)
 void cone_settings(int fd,t_cone *shape,char *line)
 {   
     line = get_next_line(fd);
-    shape->transformation = coordinate_set(shape->transformation,line);
+    shape->transformation = diameter_set(shape->transformation,line,'c');
     line = get_next_line(fd);
-    orientation_vector_set(shape->transformation, line);
-    line = get_next_line(fd);
-    shape->transformation = diameter_set(shape->transformation,line);
+    shape->transformation = coordinate_set(shape->transformation,line,fd);
+    // line = get_next_line(fd);
+    // orientation_vector_set(shape->transformation, line);
+
     line = get_next_line(fd);
     height_set(&shape->min,&shape->max, line);
     line = get_next_line(fd);
@@ -95,7 +88,7 @@ void cone_settings(int fd,t_cone *shape,char *line)
     line = get_next_line(fd);
     shape->material.refractive_index = refractive_set(line);
     line = get_next_line(fd);
-    pattern_set(&shape->material,line);
+    pattern_set(&shape->material,line,fd,FALSE);
     line = get_next_line(fd);
     shape->material.specular = specular_set(shape->material.specular, line);
     line = get_next_line(fd);
@@ -106,9 +99,9 @@ void cone_settings(int fd,t_cone *shape,char *line)
 void sphere_settings(int fd,t_sphere *shape,char *line)
 {   
     line = get_next_line(fd);
-    shape->transformation = coordinate_set(shape->transformation,line);
+    shape->transformation = diameter_set(shape->transformation,line,'s');
     line = get_next_line(fd);
-    shape->transformation = diameter_set(shape->transformation,line);
+    shape->transformation = coordinate_set(shape->transformation,line,fd); 
     line = get_next_line(fd);
     shape->material.color = color_set(line);
     line = get_next_line(fd);
@@ -118,7 +111,7 @@ void sphere_settings(int fd,t_sphere *shape,char *line)
     line = get_next_line(fd);
     shape->material.refractive_index = refractive_set(line);
     line = get_next_line(fd);
-    pattern_set(&shape->material, line);
+    pattern_set(&shape->material, line,fd,FALSE);
     line = get_next_line(fd);
     shape->material.specular = specular_set(shape->material.specular, line);
     line = get_next_line(fd);
@@ -182,7 +175,6 @@ t_object *cylinder_make(int fd)
         }
         line = get_next_line(fd);
     }
-
     return (t_object *)shape;
 }
 
@@ -211,12 +203,15 @@ void ambient_make(t_world *world,int fd)
 {
     char *line;
     float ambient_ratio;
-    t_tuple ambient_color;
+
     line = get_next_line(fd);
-    //get float and take max 1 min 0 -> light ratio
+    ambient_ratio = max(min(float_parse(line),1),0);
+    free(line);
     line = get_next_line(fd);
-    //get ambient colors // return -1-1-1 if NULL
-    world->ambient_color = ambient_color;
+    if(ft_strncmp(to_upper(line), "NULL",4))
+        free(line);
+    else
+        world->ambient_color = color_set(line);
     world->ambient_ratio = ambient_ratio;
     while (!ft_strncmp(line, "END", 3))
     {
@@ -230,16 +225,20 @@ void ambient_make(t_world *world,int fd)
 }
 
 t_light *light_make(int fd)
-{// gotta send in light and keep adding more lights to it
-    char *line;
+{
+    char    *line;
     t_light *light;
+    t_tuple coordinates;
+    float   brightness;
+    t_tuple color;
+    line = get_next_line(fd);
+    coordinates = tuple_set(line);  
 
     line = get_next_line(fd);
-    t_tuple coordinates =;  
+    brightness = max(min(float_parse(line),1),0);
+    free(line);
     line = get_next_line(fd);
-    float  brightness = ; //get float and take max 1 min 0
-    line = get_next_line(fd);
-    t_tuple color =;
+    color = color_set(line);
     color = tuple_scalar_multiplication(color,brightness);
     light = make_light(coordinates, color);
     while (!ft_strncmp(line, "END", 3))
@@ -282,15 +281,17 @@ void camera_make(t_camera *camera,int fd)
 
 
 void parse_file(t_world *world,t_camera *camera,int fd)
-{//should I free "shape each time? after creating the obj"
+{//should I free "shape each time? after creating the obj"// check if you need so in add object
     char        *line;
     t_object    *objects;
     t_object    *shape;
     t_light     *lights;
     t_light     *light;
+
     lights = NULL;
     line = NULL;
 	objects = NULL;
+    world->ambient_color = make_color(-1,-1,-1);
     while(1)
     {
         line = get_next_line(fd);
@@ -330,6 +331,7 @@ void parse_file(t_world *world,t_camera *camera,int fd)
             add_object(&objects, create_object(CONE,shape));
         }
     }
+    printf("parsing done");
     world->objects = objects;
     world->light = lights;
 }

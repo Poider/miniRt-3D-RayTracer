@@ -14,7 +14,9 @@
 SRC = miniRt.c helpers.c split.c \
 		camera.c color.c intersections.c light.c material.c math_utils.c matrices.c\
 		object.c precomputed.c ray.c shading.c sphere.c cylinder.c cone.c transformation_matrices.c\
-		tuples.c world.c plane.c pattern.c
+		tuples.c world.c plane.c pattern.c\
+		./parsing/parse.c ./parsing/settings.c\
+		./gnl/get_next_line.c ./gnl/get_next_line_utils.c 
 NAME = miniRt
 LIBRARIES = ../libmlx_Linux.a -lX11 -lXext
 RM = rm -f

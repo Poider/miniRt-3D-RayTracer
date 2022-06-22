@@ -16,13 +16,14 @@ camera
 END
 
 sphere
-//sphere coordinates
 //sphere diameter
+//sphere coordinates
+    //transformations
 //sphere color
 //reflection
 //transparency
 //refractive index
-//pattern // pattern_type patern_color1 pattern_color2 is_3D (patter is two line parameter)
+//pattern // pattern_type patern_color1 pattern_color2   (patter is two line parameter)
     //if pattern then pattern transformations here / NULL, if not skip it
 //specular
 //diffuse
@@ -31,12 +32,13 @@ END
 
 plane
 //plane coordinates
-//plane orientation vector
+    //transformations   //left transformation with be first to excute
+
 //plane color
 //reflection
 //transparency
 //refractive index
-//pattern // pattern_type patern_color1 pattern_color2 is_3D (patter is two line parameter)
+//pattern // pattern_type patern_color1 pattern_color2   (patter is two line parameter)
     //if pattern then pattern transformations here / NULL, if not skip it
 //specular
 //diffuse
@@ -44,15 +46,15 @@ plane
 END
 
 cylinder
-//cylinder coordinates
-//cylinder orientation vector??
 //cylinder diameter // scale on x with the "diameter"
+//cylinder coordinates
+    //transformations       //left transformation with be first to excute
 //cylinder height// min height
 //cylinder color
 //reflection
 //transparency
 //refractive index
-//pattern // pattern_type patern_color1 pattern_color2 is_3D (patter is two line parameter)
+//pattern // pattern_type patern_color1 pattern_color2   (patter is two line parameter)
     //if pattern then pattern transformations here / NULL, if not skip it
 //specular
 //diffuse
@@ -60,15 +62,15 @@ cylinder
 END
 
 cone
-//cone coordinates
-//cone orientation vector??
 //cone diameter
+//cone coordinates
+    //transformations       //left transformation with be first to excute
 //cone height
 //cone color
 //reflection
 //transparency
 //refractive index
-//pattern // pattern_type patern_color1 pattern_color2 is_3D (patter is two line parameter)
+//pattern // pattern_type patern_color1 pattern_color2   (patter is two line parameter)
     //if pattern then pattern transformations here / NULL, if not skip it
 //specular
 //diffuse

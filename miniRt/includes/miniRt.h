@@ -45,7 +45,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
-
+#include "settings.h"
+#include "parse.h"
 #define WINDOW_WIDTH 100
 #define WINDOW_HEIGHT 100
 #define COLOR 111111222
@@ -97,12 +98,12 @@ typedef struct	s_parameters // has map + image infos
 // helpers
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strdup(const char *s1);
-size_t	ft_strlen(const char *str);
 int		whitespaces(char c);
 size_t	ft_strlcpy(char *dest, const char *src, size_t size);
 char	**ft_split(char const *s, char c);
 char	*get_next_line(int fd);
-
+char	*to_upper(char *line);
+int		ft_toupper(int a);
 //drawing functions
 
 void plot(int x,int y,t_tuple color);
