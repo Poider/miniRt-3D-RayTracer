@@ -172,13 +172,13 @@ void create_test_scene(t_world *world)
 	floor->material.color = make_color(1, 0.9, 0.9);
 	floor->material.specular = 0;
 	//floor->material.reflective = 1;
-	set_material_pattern(&floor->material,make_pattern(make_color(0.9,0.9,0.9), BLACK, CHECKERBORAD_PATTERN, TRUE));
-	set_transformation_pattern(floor->material.pattern,scaling(make_tuple(0.5,0.5,0.5,POINT)));
+	// set_material_pattern(&floor->material,make_pattern(make_color(0.9,0.9,0.9), BLACK, CHECKERBORAD_PATTERN, TRUE));
+	// set_transformation_pattern(floor->material.pattern,scaling(make_tuple(0.5,0.5,0.5,POINT)));
 	//set_material_pattern(&floor->material,make_pattern(WHITE, BLACK, STRIPE_PATTERN));
 
 	//LEFT WALL
 	t_plane *left_wall = plane();
-	left_wall->transformation = multiply_matrices(translation(make_tuple(0,0,5, POINT)),rotation_x(M_PI / 2));
+	left_wall->transformation = multiply_matrices(rotation_y(1.22173),(multiply_matrices(translation(make_tuple(0,0,20, POINT)),rotation_x(M_PI / 2))));
 	left_wall->material.color = make_color(1, 0.9, 0.9);
 	left_wall->material.specular = 0;
 	left_wall->material.reflective = 0;
@@ -186,8 +186,8 @@ void create_test_scene(t_world *world)
 	// set_transformation_pattern(left_wall->material.pattern,multiply_matrices(translation(make_tuple(0,0,25,0)), scaling(make_tuple(0.2,0.2,0.2,POINT))));
 	//left_wall->material.pattern = 0;
 	//left_wall->material.color = make_color(1,0.9,0.7);
-	set_material_pattern(&left_wall->material,make_pattern(WHITE, BLACK, CHECKERBORAD_PATTERN, TRUE));
-	set_transformation_pattern(left_wall->material.pattern,scaling(make_tuple(0.2,0.2,0.2,POINT)));
+	// set_material_pattern(&left_wall->material,make_pattern(WHITE, BLACK, CHECKERBORAD_PATTERN, TRUE));
+	// set_transformation_pattern(left_wall->material.pattern,scaling(make_tuple(0.2,0.2,0.2,POINT)));
 
 	//RIGHT WALL
 	t_plane *right_wall = plane();
@@ -219,8 +219,8 @@ void create_test_scene(t_world *world)
 	set_transformation_pattern(middle_cone->material.pattern,scaling(make_tuple(0.2,0.2,0.2,VECTOR)));
 
 	t_sphere *middle_sphere = sphere();
-	// middle_sphere->transformation = multiply_matrices(translation(make_tuple(-1.5,3,1,POINT)), rotation_x(M_PI / 3));
-	middle_sphere->material.color = make_color(1, 0.9, 0.9);
+	middle_sphere->transformation = multiply_matrices(translation(make_tuple(-0.5,1,0.5,POINT)), translation(make_tuple(1,2,0,POINT)));
+	middle_sphere->material.color = make_color(1, 1, 1);
 	middle_sphere->material.diffuse = 0.7;
 	// middle_sphere ->material.refractive_index = 1.5;
 	// middle_sphere ->material.reflective = 0.4;
@@ -232,9 +232,9 @@ void create_test_scene(t_world *world)
 
 
 	t_sphere *right_sphere = sphere();
-	right_sphere->transformation = multiply_matrices(translation(make_tuple(1.5, 0.5, -0.5,POINT)) ,scaling(make_tuple(1.5, 1.5, 0.5,VECTOR)));
+	right_sphere->transformation = translation(make_tuple(1.5, 0.5, -0.5,POINT));
 	right_sphere->material = make_material();
-	right_sphere->material.color = make_color(0.5, 1, 0.1);
+	right_sphere->material.color = make_color(1, 1, 1);
 	right_sphere->material.diffuse = 0.7;
 	right_sphere->material.specular = 0;
 	set_material_pattern(&right_sphere->material,make_pattern(make_color(1,1,0),make_color(0,0,1) ,CHECKERBORAD_PATTERN, TRUE));
@@ -260,15 +260,21 @@ void create_test_scene(t_world *world)
 	t_object *objects;
 
 	objects = NULL;
-	//add_object(&objects,create_object(PLANE,floor));
-	//add_object(&objects,create_object(PLANE,left_wall));
+	add_object(&objects,create_object(PLANE,floor));
+	add_object(&objects,create_object(PLANE,left_wall));
 	//add_object(&objects,create_object(PLANE,right_wall));
 	//add_object(&objects,create_object(CYLINDER,middle_cylinder));
 	//add_object(&objects,create_object(CONE,middle_cone));
-	add_object(&objects,create_object(SPHERE,middle_sphere));
+	//add_object(&objects,create_object(SPHERE,middle_sphere));
 	//add_object(&objects,create_object(SPHERE,left_sphere));
 	//add_object(&objects,create_object(SPHERE,right_sphere));
 	world ->objects = objects;
+
+	//   while(objects != NULL)
+	// {
+	// 	printf("_%s\n",objects);
+	// 	objects = objects->next;
+	// }
 }	
 
 
@@ -283,14 +289,15 @@ int main(int argc, char **argv)
 	// init
 	param = malloc(sizeof(t_parameters));
 	t_world world;
-	create_test_scene(&world);
-	//set_obj_inverse_transformation(world.objects);
+	//  create_test_scene(&world);
+	// set_obj_inverse_transformation(world.objects);
+	int fd = open("./parsing/parse_example",O_RDONLY);
 
-	t_camera camera = make_camera(1400, 1000, M_PI / 2);
-	//t_camera camera = make_camera(1500, 1000, M_PI / 2);
-	//camera.transform = view_transformation(make_tuple(0, 1.5, -5,POINT),make_tuple(0, 1, 0,POINT),make_tuple(0, 1, 0,VECTOR));
-	set_camera_transformation(&camera,make_tuple(0, -4,-3,POINT),make_tuple(0, 1, 0,POINT),make_tuple(0, 1, 0,VECTOR));
-	
+
+	//  t_camera camera = make_camera(WINDOW_WIDTH, WINDOW_HEIGHT,M_PI /2);
+	t_camera camera;
+	//  set_camera_transformation(&camera,make_tuple(-3, 5,-10,POINT),make_tuple(0, 1, 0,POINT),make_tuple(0, 1, 0,VECTOR));
+	parse_file(&world,&camera,fd);
 	param ->camera = camera;
 	initializemlx(param);
 	render(camera,world);

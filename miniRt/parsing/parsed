@@ -77,4 +77,6 @@ cone
 //closed    TRUE/FALSE
 END
 
+//transformations :: ROTX ROTY ROTZ TRANSLATE SCALE SHEAR
+
 max depth parse?

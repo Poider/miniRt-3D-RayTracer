@@ -18,6 +18,8 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	return ((unsigned char)*s1 - (unsigned char)*s2);
 }
 
+
+
 //returns object type + the object address in obj
 
 void plane_settings(int fd,t_plane *shape,char *line)
@@ -126,7 +128,8 @@ t_object *sphere_make(int fd)
     line = NULL;
     shape = sphere();
     sphere_settings(fd, shape, line);
-    while (!ft_strncmp(line, "END", 3))
+    line = get_next_line(fd);
+    while (ft_strncmp(line, "END", 3))
     {
         if (line)
         {
@@ -146,7 +149,8 @@ t_object *plane_make(int fd)
     line = NULL;
     shape = plane();
     plane_settings(fd, shape, line);
-    while (!ft_strncmp(line, "END", 3))
+    line = get_next_line(fd);
+    while (ft_strncmp(line, "END", 3))
     {
         if (line)
         {
@@ -166,7 +170,8 @@ t_object *cylinder_make(int fd)
     line = NULL;
     shape = cylinder();
     cylinder_settings(fd, shape, line);
-    while (!ft_strncmp(line, "END", 3))
+    line = get_next_line(fd);
+    while (ft_strncmp(line, "END", 3))
     {
         if (line)
         {
@@ -186,7 +191,8 @@ t_object *cone_make(int fd)
     line = NULL;
     shape = cone();
     cone_settings(fd, shape, line);
-    while (!ft_strncmp(line, "END", 3))
+    line = get_next_line(fd);
+    while (ft_strncmp(line, "END", 3))
     {
         if (line)
         {
@@ -208,12 +214,12 @@ void ambient_make(t_world *world,int fd)
     ambient_ratio = max(min(float_parse(line),1),0);
     free(line);
     line = get_next_line(fd);
-    if(ft_strncmp(to_upper(line), "NULL",4))
+    if(!ft_strncmp(to_upper(line), "NULL",4))
         free(line);
     else
         world->ambient_color = color_set(line);
     world->ambient_ratio = ambient_ratio;
-    while (!ft_strncmp(line, "END", 3))
+    while (ft_strncmp(line, "END", 3))
     {
         if (line)
         {
@@ -241,7 +247,8 @@ t_light *light_make(int fd)
     color = color_set(line);
     color = tuple_scalar_multiplication(color,brightness);
     light = make_light(coordinates, color);
-    while (!ft_strncmp(line, "END", 3))
+    line = get_next_line(fd);
+    while (ft_strncmp(line, "END", 3))
     {
         if (line)
         {
@@ -263,12 +270,16 @@ void camera_make(t_camera *camera,int fd)
     line = get_next_line(fd);
     camera_origin = tuple_set(line);
     line = get_next_line(fd);
+    up = make_tuple(0,1,0,VECTOR);
+    if(ft_strncmp(to_upper(line), "NULL",4))
     up = tuple_set(line);//up is a vector
     line = get_next_line(fd);
     FOV = FOV_set(line);
+
+    *camera = make_camera(WINDOW_WIDTH, WINDOW_HEIGHT,FOV);
     set_camera_transformation(camera,camera_origin,make_tuple(0, 1, 0,POINT),up);
-    camera->FOV = FOV;
-    while(!ft_strncmp(line,"END", 3))
+    line = get_next_line(fd);
+    while(ft_strncmp(line,"END", 3))
     {
         if(line)
         {
@@ -295,45 +306,52 @@ void parse_file(t_world *world,t_camera *camera,int fd)
     while(1)
     {
         line = get_next_line(fd);
+        // printf("%s",line);
         if(line == NULL)
             break;
-        if(ft_strncmp(line,"ambient", 6))
+        if(!ft_strncmp(line,"ambient", 6))
         {
             ambient_make(world,fd);
         }
-        if(ft_strncmp(line,"light", 5))
+        else if(!ft_strncmp(line,"light", 5))
         {
             light = light_make(fd);
             add_light(&lights,light);
         }
-        if(ft_strncmp(line,"camera", 6))
+        else if(!ft_strncmp(line,"camera", 6))
         {
             camera_make(camera,fd);
         }
-        if(ft_strncmp(line,"sphere", 6))
+        else if(!ft_strncmp(line,"sphere", 6))
         {
             shape = sphere_make(fd);
             add_object(&objects, create_object(SPHERE,shape));
         }
-        if(ft_strncmp(line,"plane", 5))
+        else if(!ft_strncmp(line,"plane", 5))
         {
             shape = plane_make(fd);
             add_object(&objects, create_object(PLANE,shape));
         }
-        if(ft_strncmp(line,"cylinder", 8))
+        else if(!ft_strncmp(line,"cylinder", 8))
         {
             shape = cylinder_make(fd);
             add_object(&objects, create_object(CYLINDER,shape));
         }
-        if(ft_strncmp(line,"cone", 4))
+        if(!ft_strncmp(line,"cone", 4))
         {
             shape = cone_make(fd);
             add_object(&objects, create_object(CONE,shape));
         }
     }
-    printf("parsing done");
+    printf("parsing done\n");
     world->objects = objects;
     world->light = lights;
+    
+    //  while(objects != NULL);
+    //     {
+    //         printf("_%s\n",objects);
+    //         objects = objects->next;
+    //     }
 }
 
 //functions X_make are parsing ones, make_X are actual code one

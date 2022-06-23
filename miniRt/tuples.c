@@ -82,8 +82,8 @@ int tuple_isequal(t_tuple tuple1, t_tuple tuple2)
       return FALSE;
     if(!is_equal(tuple1.z,tuple2.z))
       return FALSE;
-    if(!is_equal(tuple1.w,tuple2.w))
-      return FALSE;
+    // if(!is_equal(tuple1.w,tuple2.w))
+    //   return FALSE;
     return TRUE;
 }
 

@@ -47,8 +47,8 @@
 #include <math.h>
 #include "settings.h"
 #include "parse.h"
-#define WINDOW_WIDTH 100
-#define WINDOW_HEIGHT 100
+#define WINDOW_WIDTH 1400
+#define WINDOW_HEIGHT 1200
 #define COLOR 111111222
 #define EPSILON 0.001
 #define MARGIN 1

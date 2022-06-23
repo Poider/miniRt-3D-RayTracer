@@ -62,15 +62,16 @@ t_tuple  lighting(t_world world, t_light *light,t_precomputed comps, int is_shad
     t_tuple lightv = tuple_normalize(substract_tuple(light->position,comps.over_point));
     
     // compute the t ambiencontribution
+	// printf("%f %f %f %f\n",world.ambient_color.x,world.ambient_color.y,world.ambient_color.z);
  	if(tuple_isequal(world.ambient_color,make_color(-1,-1,-1)))
-    	ambient =  tuple_scalar_multiplication(effective_color, comps.material.ambient);
+    	 ambient =  tuple_scalar_multiplication(effective_color, comps.material.ambient);
    	else
 		ambient = tuple_scalar_multiplication(world.ambient_color,world.ambient_ratio);
     // light_dot_normal represents the cosine of the angle between the 
     // light vector and the normal vector. A negative number means the 
     // light is on the other side of the surface. 
     float light_dot_normal = dot_product(lightv, comps.normalv);
-	//is_shadow = FALSE;
+	is_shadow = FALSE;
     if (light_dot_normal < 0 || is_shadow == TRUE)
     {
         diffuse = BLACK;

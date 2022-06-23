@@ -23,3 +23,5 @@ int close_set(char *line);
 t_tuple tuple_from_line(char *line);
 t_tuple tuple_set(char *line);
 float   FOV_set(char *line);
+void parse_error();
+int len(char **line);
