@@ -370,7 +370,7 @@ t_matrices   *diameter_set(t_matrices *matrix, char *line, char c)
     if(c == 's')
     transformation = scaling(make_tuple(d,d,d,VECTOR));
     else
-    transformation = scaling(make_tuple(d,0,0,VECTOR));
+    transformation = scaling(make_tuple(d,1,1,VECTOR));
     transformed_matrix = multiply_matrices(transformation, matrix);
     free(transformation);
     free(matrix);
