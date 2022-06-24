@@ -78,5 +78,6 @@ cone
 END
 
 //transformations :: ROTX ROTY ROTZ TRANSLATE SCALE SHEAR
+//patterns :: CHECKERBPARD RING STRIPE GRADIENT
 
 max depth parse?
