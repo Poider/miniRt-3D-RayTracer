@@ -219,9 +219,9 @@ void create_test_scene(t_world *world)
 	set_transformation_pattern(middle_cone->material.pattern,scaling(make_tuple(0.2,0.2,0.2,VECTOR)));
 
 	t_sphere *middle_sphere = sphere();
-	middle_sphere->transformation = multiply_matrices(translation(make_tuple(-0.5,1,0.5,POINT)), translation(make_tuple(1,2,0,POINT)));
+	// middle_sphere->transformation = multiply_matrices(translation(make_tuple(-0.5,1,0.5,POINT)), translation(make_tuple(1,2,0,POINT)));
 	middle_sphere->material.color = make_color(1, 1, 1);
-	middle_sphere->material.diffuse = 0.7;
+	// middle_sphere->material.diffuse = 0.7;
 	// middle_sphere ->material.refractive_index = 1.5;
 	// middle_sphere ->material.reflective = 0.4;
 	// middle_sphere ->material.transparency = 0.6;	
@@ -260,12 +260,12 @@ void create_test_scene(t_world *world)
 	t_object *objects;
 
 	objects = NULL;
-	add_object(&objects,create_object(PLANE,floor));
-	add_object(&objects,create_object(PLANE,left_wall));
+	// add_object(&objects,create_object(PLANE,floor));
+	// add_object(&objects,create_object(PLANE,left_wall));
 	//add_object(&objects,create_object(PLANE,right_wall));
 	//add_object(&objects,create_object(CYLINDER,middle_cylinder));
 	//add_object(&objects,create_object(CONE,middle_cone));
-	//add_object(&objects,create_object(SPHERE,middle_sphere));
+	add_object(&objects,create_object(SPHERE,middle_sphere));
 	//add_object(&objects,create_object(SPHERE,left_sphere));
 	//add_object(&objects,create_object(SPHERE,right_sphere));
 	world ->objects = objects;
@@ -289,11 +289,10 @@ int main(int argc, char **argv)
 	// init
 	param = malloc(sizeof(t_parameters));
 	t_world world;
-	//  create_test_scene(&world);
-	// set_obj_inverse_transformation(world.objects);
+	 
 	int fd = open("./parsing/parse_example",O_RDONLY);
 
-
+	// create_test_scene(&world);
 	//  t_camera camera = make_camera(WINDOW_WIDTH, WINDOW_HEIGHT,M_PI /2);
 	t_camera camera;
 	//  set_camera_transformation(&camera,make_tuple(-3, 5,-10,POINT),make_tuple(0, 1, 0,POINT),make_tuple(0, 1, 0,VECTOR));

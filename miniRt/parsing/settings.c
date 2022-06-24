@@ -361,7 +361,7 @@ t_matrices   *diameter_set(t_matrices *matrix, char *line, char c)
         free(line);
         return (matrix);
     }
-    d = max(1,float_parse(line));
+    d = max(0,float_parse(line));
     if(c == 's')
     transformation = scaling(make_tuple(d,d,d,VECTOR));
     else
@@ -436,7 +436,7 @@ t_tuple tuple_set(char *line)
     if(!ft_strncmp(to_upper(line), "NULL",4))
     {
         free(line);
-        return (make_tuple(0, 0, 1, 0));
+        return (make_tuple(0, 0, -1, POINT));
     }
     int i = 0;
 

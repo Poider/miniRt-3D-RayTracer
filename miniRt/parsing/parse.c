@@ -275,7 +275,6 @@ void camera_make(t_camera *camera,int fd)
     up = tuple_set(line);//up is a vector
     line = get_next_line(fd);
     FOV = FOV_set(line);
-
     *camera = make_camera(WINDOW_WIDTH, WINDOW_HEIGHT,FOV);
     set_camera_transformation(camera,camera_origin,make_tuple(0, 1, 0,POINT),up);
     line = get_next_line(fd);

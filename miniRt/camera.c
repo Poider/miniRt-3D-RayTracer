@@ -18,10 +18,10 @@ t_matrices *view_transformation(t_tuple from,t_tuple to, t_tuple up)
 	orientation ->matrix[1][0] = true_up.x;
 	orientation ->matrix[1][1] = true_up.y;
 	orientation ->matrix[1][2] = true_up.z;
-	orientation ->matrix[2][0] = -forward.x;
-	orientation ->matrix[2][1] = -forward.y;
-	orientation ->matrix[2][2] = -forward.z;
-	transformation = multiply_matrices(orientation,translation(make_tuple(-forward.x,-forward.y,-forward.z,POINT)));
+	orientation ->matrix[2][0] = negate_val(forward.x);
+	orientation ->matrix[2][1] = negate_val(forward.y);
+	orientation ->matrix[2][2] = negate_val(forward.z);
+	transformation = multiply_matrices(orientation,translation(negate_tuple(from)));
 	free_matrix(orientation);
 	return (transformation);
 }
