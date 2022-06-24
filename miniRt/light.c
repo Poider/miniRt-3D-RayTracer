@@ -71,7 +71,7 @@ t_tuple  lighting(t_world world, t_light *light,t_precomputed comps, int is_shad
     // light vector and the normal vector. A negative number means the 
     // light is on the other side of the surface. 
     float light_dot_normal = dot_product(lightv, comps.normalv);
-	is_shadow = FALSE;
+	// is_shadow = FALSE;
     if (light_dot_normal < 0 || is_shadow == TRUE)
     {
         diffuse = BLACK;
