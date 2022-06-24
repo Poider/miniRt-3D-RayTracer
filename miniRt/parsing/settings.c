@@ -210,7 +210,6 @@ t_tuple color_set_no_free(char *line)
     B = min(max(0,float_parse(vector[2])),255) / 255;
     color = make_color(R,G,B);
     free_split(vector);
-    free(line);
     return color;
 }
 
@@ -285,8 +284,12 @@ t_matrices *pattern_transformation_set(int fd)
     t_matrices *transformed_matrice;
     char *line;
 
+    transformed_matrice = NULL;
     line = get_next_line(fd);
-    transformed_matrice = get_transformations(line);
+    if(!ft_strncmp(to_upper(line), "NULL",4))
+        free(line);
+    else
+        transformed_matrice = get_transformations(line);
     return transformed_matrice;
 }
 
@@ -302,6 +305,7 @@ void    pattern_set(t_material *material, char *line, int fd, int is_3D)//not fi
         free(line);
         return ;
     }
+    parameters = ft_split(line,' ');
     if(!ft_strncmp(to_upper(parameters[0]), "CHECKERBOARD",12))
         pattern_type = CHECKERBORAD_PATTERN;
     else if(!ft_strncmp(to_upper(parameters[0]), "RING",4))
@@ -316,6 +320,7 @@ void    pattern_set(t_material *material, char *line, int fd, int is_3D)//not fi
     pattern = make_pattern(color_set_no_free(parameters[1]),color_set_no_free(parameters[2]),\
     pattern_type, is_3D);
     set_material_pattern(material,pattern);
+    if(pattern_transformation)
 	set_transformation_pattern(material->pattern,pattern_transformation);
     free(line);
     free_split(parameters);
