@@ -6,7 +6,7 @@
 /*   By: klaarous <klaarous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 11:22:36 by klaarous          #+#    #+#             */
-/*   Updated: 2022/06/25 11:22:59 by klaarous         ###   ########.fr       */
+/*   Updated: 2022/06/25 16:28:55 by klaarous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ void	cone_intersect_caps(t_object *cone_object, \
 	t_cone	*cone;
 
 	cone = cone_object->object;
-	if (!*l_intersections || cone->closed == 0 \
-		|| is_equal(ray.direction.y, EPSILON))
+	if (cone->closed == 0 || \
+			is_equal(ray.direction.y, EPSILON))
 		return ;
 	t = (cone->min - ray.origin.y) / ray.direction.y;
 	if (cone_check_cap(ray, t, cone->min))
@@ -47,9 +47,9 @@ t_tuple	normal_at_cone(t_object *shape, t_tuple world_point)
 
 	cone = (t_cone *)shape->object;
 	dist = pow(world_point.x, 2) + pow(world_point.z, 2);
-	if (dist < 1 && world_point.y >= cone->max - EPSILON)
+	if (dist < pow(cone->max,2) && world_point.y >= cone->max - EPSILON)
 		object_normal = make_tuple(0, 1, 0, VECTOR);
-	else if (dist < 1 && world_point.y <= cone->min + EPSILON)
+	else if (dist < pow(cone->min,2) && world_point.y <= cone->min + EPSILON)
 		object_normal = make_tuple(0, -1, 0, VECTOR);
 	else
 	{

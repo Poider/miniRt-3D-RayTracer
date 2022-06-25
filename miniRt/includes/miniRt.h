@@ -6,7 +6,7 @@
 /*   By: klaarous <klaarous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 15:35:15 by klaarous          #+#    #+#             */
-/*   Updated: 2022/06/25 15:36:02 by klaarous         ###   ########.fr       */
+/*   Updated: 2022/06/25 16:06:59 by klaarous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@
 # define WINDOW_HEIGHT 1200
 # define COLOR 111111222
 # define EPSILON 0.001
+# define EPSILON1 0.00001818181
 # define MARGIN 1
 
 typedef struct s_point

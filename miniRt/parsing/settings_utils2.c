@@ -6,7 +6,7 @@
 /*   By: klaarous <klaarous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 18:39:35 by klaarous          #+#    #+#             */
-/*   Updated: 2022/06/25 18:46:23 by klaarous         ###   ########.fr       */
+/*   Updated: 2022/06/25 18:59:34 by klaarous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,13 @@ int	get_pattern_type(char *parameter)
 {
 	int	pattern_type;
 
-	if (!ft_strncmp(to_upper(parameter[0]), "CHECKERBOARD", 12))
+	if (!ft_strncmp(to_upper(parameter), "CHECKERBOARD", 12))
 		pattern_type = CHECKERBORAD_PATTERN;
-	else if (!ft_strncmp(to_upper(parameter[0]), "RING", 4))
+	else if (!ft_strncmp(to_upper(parameter), "RING", 4))
 		pattern_type = RING_PATTERN;
-	else if (!ft_strncmp(to_upper(parameter[0]), "STRIPE", 6))
+	else if (!ft_strncmp(to_upper(parameter), "STRIPE", 6))
 		pattern_type = STRIPE_PATTERN;
-	else if (!ft_strncmp(to_upper(parameter[0]), "GRADIENT", 8))
+	else if (!ft_strncmp(to_upper(parameter), "GRADIENT", 8))
 		pattern_type = GRADIENT_PATTERN;
 	else
 		pattern_type = CHECKERBORAD_PATTERN;

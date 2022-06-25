@@ -6,7 +6,6 @@ END
 
 
 
-
 camera
 10,5,-10,POINT
 0,1,0,VECTOR
@@ -47,7 +46,7 @@ TRANSLATE 2,3,-2
 50,50,50
 NULL
 1
-1.5
+1
 NULL
 NULL
 NULL

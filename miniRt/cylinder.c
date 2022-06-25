@@ -6,7 +6,7 @@
 /*   By: klaarous <klaarous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 11:23:12 by klaarous          #+#    #+#             */
-/*   Updated: 2022/06/25 11:28:53 by klaarous         ###   ########.fr       */
+/*   Updated: 2022/06/25 16:03:52 by klaarous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,13 @@ void	set_intersections_cylinder(t_intersections **cyl_intersections, \
 		vars.sol2 = ((-1.0 * vars.b) + sqrt(vars.determinant)) / (2.0 * vars.a);
 		y_intersection = ray.origin.y + vars.sol1 * ray.direction.y;
 		if (y_intersection >= cylinder->min && y_intersection <= cylinder->max)
-			add_intersection(&cyl_intersections, \
+			add_intersection(cyl_intersections, \
 				intersection(vars.sol1, shape));
 		y_intersection = ray.origin.y + vars.sol2 * ray.direction.y;
 		if (y_intersection >= cylinder->min && y_intersection <= cylinder->max)
-			add_intersection(&cyl_intersections, \
+			add_intersection(cyl_intersections, \
 				intersection(vars.sol2, shape));
-		cylinder_intersect_caps(shape, ray, &cyl_intersections);
+		cylinder_intersect_caps(shape, ray, cyl_intersections);
 	}
 }
 

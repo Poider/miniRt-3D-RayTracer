@@ -6,7 +6,7 @@
 /*   By: klaarous <klaarous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 11:12:08 by klaarous          #+#    #+#             */
-/*   Updated: 2022/06/25 11:22:57 by klaarous         ###   ########.fr       */
+/*   Updated: 2022/06/25 16:07:23 by klaarous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,11 @@ void	set_intersections_cone(t_intersections **cone_intersections, \
 		vars.sol2 = ((-1.0 * vars.b) + sqrt(vars.determinant)) / (2.0 * vars.a);
 		y_intersection = ray.origin.y + vars.sol1 * ray.direction.y;
 		if (y_intersection >= cone->min && y_intersection <= cone->max)
-			add_intersection(&cone_intersections, \
+			add_intersection(cone_intersections, \
 					intersection(vars.sol1, shape));
 		y_intersection = ray.origin.y + vars.sol2 * ray.direction.y;
 		if (y_intersection >= cone->min && y_intersection <= cone->max)
-			add_intersection(&cone_intersections, \
+			add_intersection(cone_intersections, \
 						intersection(vars.sol2, shape));
 	}
 }
@@ -70,7 +70,7 @@ t_intersections	*intersect_cone(t_object *shape, t_ray ray)
 		add_intersection(&head_entersections, \
 			intersection(vars.sol1, shape));
 	}
-	else if (fabs(vars.a) >= EPSILON)
+	else if (fabs(vars.a) >= EPSILON1)
 		set_intersections_cone(&head_entersections, shape, ray, vars);
 	cone_intersect_caps(shape, ray, &head_entersections);
 	return (head_entersections);

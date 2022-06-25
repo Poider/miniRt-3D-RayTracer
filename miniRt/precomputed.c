@@ -6,7 +6,7 @@
 /*   By: klaarous <klaarous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 15:15:58 by klaarous          #+#    #+#             */
-/*   Updated: 2022/06/25 15:33:28 by klaarous         ###   ########.fr       */
+/*   Updated: 2022/06/25 17:09:39 by klaarous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,19 +35,19 @@ void	set_n2(t_precomputed *pre_computed, t_intersections *hit, \
 			containers)->object->material.refractive_index;
 }
 
-int	remove_object(t_intersections *list, t_intersections *containers)
+int	remove_object(t_intersections **list, t_intersections **containers)
 {
 	t_intersections	*prev_object;
 	t_intersections	*tmp;
 
 	prev_object = NULL;
-	prev_object = get_prev_object(containers, list->object);
+	prev_object = get_prev_object(*containers, (*list)->object);
 	if (prev_object)
 	{
-		if (containers->next == NULL)
+		if ((*containers)->next == NULL)
 		{
-			free(containers);
-			containers = NULL;
+			free((*containers));
+			*containers = NULL;
 		}
 		else
 		{
@@ -71,14 +71,14 @@ void	set_refractives_idx(t_precomputed *pre_computed, \
 	while (list)
 	{
 		set_n1(pre_computed, hit, list, containers);
-		if (remove_object == FAIL)
+		if (remove_object(&list, &containers) == FAIL)
 			add_intersection(&containers, intersection(list->t, list->object));
 		if (hit == list)
 		{
-			set_n1(pre_computed, hit, list, containers);
+			set_n2(pre_computed, hit, list, containers);
 			break ;
-		}
-		list = list->next;
+		}		
+		list = list ->next;
 	}
 }
 

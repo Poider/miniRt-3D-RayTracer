@@ -6,7 +6,7 @@
 /*   By: klaarous <klaarous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 10:29:42 by klaarous          #+#    #+#             */
-/*   Updated: 2022/06/25 12:15:33 by klaarous         ###   ########.fr       */
+/*   Updated: 2022/06/25 16:02:59 by klaarous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,5 +68,9 @@ t_tuple	reflected_color(t_world world, t_precomputed comps, int max_depth);
 t_tuple	shade_hit(t_world world, t_precomputed comps, int max_depth);
 t_tuple	lighting(t_world world, t_light *light, \
 				t_precomputed comps, int is_shadow);
+void	set_ambient_light(t_lighting_vars *vars, \
+			t_world world, t_light *light, t_precomputed comps);
+void	set_diffuse_specular_light(t_lighting_vars *vars, \
+				t_world world, t_light *light, t_precomputed comps);
 
 #endif

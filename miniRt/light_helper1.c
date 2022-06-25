@@ -6,26 +6,11 @@
 /*   By: klaarous <klaarous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 11:55:30 by klaarous          #+#    #+#             */
-/*   Updated: 2022/06/25 11:58:43 by klaarous         ###   ########.fr       */
+/*   Updated: 2022/06/25 16:55:36 by klaarous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./includes/miniRt.h"
-
-typedef struct s_lighting_vars
-{
-	t_tuple	diffuse;
-	t_tuple	specular;
-	t_tuple	effective_color;
-	t_tuple	color;
-	t_tuple	ambient;
-	t_tuple	lightv;
-	float	light_dot_normal;
-	t_tuple	negate_lightv;
-	t_tuple	reflectv;
-	float	reflect_dot_eye;
-	float	factor;
-}				t_lighting_vars;
 
 void	set_ambient_light(t_lighting_vars *vars, \
 	t_world world, t_light *light, t_precomputed comps)

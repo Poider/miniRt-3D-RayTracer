@@ -6,7 +6,7 @@
 /*   By: klaarous <klaarous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 11:36:42 by klaarous          #+#    #+#             */
-/*   Updated: 2022/06/25 11:41:02 by klaarous         ###   ########.fr       */
+/*   Updated: 2022/06/25 17:05:29 by klaarous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,8 @@ t_intersections	*get_prev_object(t_intersections *list, t_object *object)
 {
 	t_intersections	*prev;
 
+	if (list == NULL)
+		return (NULL);
 	prev = list;
 	while (list)
 	{

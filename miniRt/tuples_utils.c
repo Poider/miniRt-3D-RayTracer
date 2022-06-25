@@ -6,7 +6,7 @@
 /*   By: klaarous <klaarous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 14:28:49 by klaarous          #+#    #+#             */
-/*   Updated: 2022/06/25 14:29:17 by klaarous         ###   ########.fr       */
+/*   Updated: 2022/06/25 16:04:29 by klaarous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 t_tuple	origin(void)
 {
-	make_tuple(0, 0, 0, POINT);
+	return (make_tuple(0, 0, 0, POINT));
 }
 
 t_tuple	add_tuple(t_tuple tuple1, t_tuple tuple2)

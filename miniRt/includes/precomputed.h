@@ -6,7 +6,7 @@
 /*   By: klaarous <klaarous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 10:52:17 by klaarous          #+#    #+#             */
-/*   Updated: 2022/06/25 10:53:41 by klaarous         ###   ########.fr       */
+/*   Updated: 2022/06/25 16:01:36 by klaarous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,3 +37,5 @@ t_precomputed	prepare_computations(t_intersections *intersection, \
 						t_ray ray, t_intersections *list_intersections);
 t_material		get_material_object(t_object shape);
 float			schlick(t_precomputed *pre_computed);
+
+#endif

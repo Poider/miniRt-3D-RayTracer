@@ -6,7 +6,7 @@
 /*   By: klaarous <klaarous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 16:40:29 by klaarous          #+#    #+#             */
-/*   Updated: 2022/06/25 17:32:00 by klaarous         ###   ########.fr       */
+/*   Updated: 2022/06/25 18:58:41 by klaarous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,12 +95,12 @@ void	camera_make(t_camera *camera, int fd)
 
 void	make_scene(t_camera *camera, t_object **objects, char *line, int fd)
 {
-	else if (!ft_strncmp(line, "camera", 6))
+	if (!ft_strncmp(line, "camera", 6))
 		camera_make(camera, fd);
 	else if (!ft_strncmp(line, "sphere", 6))
 		add_object(objects, create_object(SPHERE, sphere_make(fd)));
 	else if (!ft_strncmp(line, "plane", 5))
-		add_object(&objects, create_object(PLANE, plane_make(fd)));
+		add_object(objects, create_object(PLANE, plane_make(fd)));
 	else if (!ft_strncmp(line, "cylinder", 8))
 		add_object(objects, create_object(CYLINDER, cylinder_make(fd)));
 	if (!ft_strncmp(line, "cone", 4))
@@ -127,7 +127,7 @@ void	parse_file(t_world *world, t_camera *camera, int fd)
 		else if (!ft_strncmp(line, "ambient", 6))
 			ambient_make(world, fd);
 		else
-			make_scene(world, camera, &objects, line, fd);
+			make_scene(camera, &objects, line, fd);
 	}
 	printf("parsing done\n");
 	world->objects = objects;
