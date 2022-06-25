@@ -1,41 +1,53 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   camera.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: klaarous <klaarous@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/25 11:04:13 by klaarous          #+#    #+#             */
+/*   Updated: 2022/06/25 11:06:02 by klaarous         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "./includes/miniRt.h"
 
-t_matrices *view_transformation(t_tuple from,t_tuple to, t_tuple up)
+t_matrices	*view_transformation(t_tuple from, t_tuple to, t_tuple up)
 {
-	t_tuple forward;
-	t_tuple left;
-	t_tuple true_up;
-	t_matrices *orientation;
-	t_matrices *transformation;
+	t_tuple		forward;
+	t_tuple		left;
+	t_tuple		true_up;
+	t_matrices	*orientation;
+	t_matrices	*transformation;
 
-	forward =  tuple_normalize(substract_tuple(to,from));
-	left = cross_product(forward,tuple_normalize(up));
-	true_up = cross_product(left,forward);
-	orientation  = identity_matrix(DEFAULT_DIMENSION);
-	orientation ->matrix[0][0] = left.x;
-	orientation ->matrix[0][1] = left.y;
-	orientation ->matrix[0][2] = left.z;
-	orientation ->matrix[1][0] = true_up.x;
-	orientation ->matrix[1][1] = true_up.y;
-	orientation ->matrix[1][2] = true_up.z;
-	orientation ->matrix[2][0] = negate_val(forward.x);
-	orientation ->matrix[2][1] = negate_val(forward.y);
-	orientation ->matrix[2][2] = negate_val(forward.z);
-	transformation = multiply_matrices(orientation,translation(negate_tuple(from)));
+	forward = tuple_normalize(substract_tuple(to, from));
+	left = cross_product(forward, tuple_normalize(up));
+	true_up = cross_product(left, forward);
+	orientation = identity_matrix(DEFAULT_DIMENSION);
+	orientation->matrix[0][0] = left.x;
+	orientation->matrix[0][1] = left.y;
+	orientation->matrix[0][2] = left.z;
+	orientation->matrix[1][0] = true_up.x;
+	orientation->matrix[1][1] = true_up.y;
+	orientation->matrix[1][2] = true_up.z;
+	orientation->matrix[2][0] = negate_val(forward.x);
+	orientation->matrix[2][1] = negate_val(forward.y);
+	orientation->matrix[2][2] = negate_val(forward.z);
+	transformation = multiply_matrices(orientation, \
+						translation(negate_tuple(from)));
 	free_matrix(orientation);
 	return (transformation);
 }
 
-
-t_camera make_camera(float hsize, float vsize, float field_of_view)
+t_camera	make_camera(float hsize, float vsize, float field_of_view)
 {
-	t_camera camera;
-	float aspect_ratio;
-	float half_view;
+	t_camera	camera;
+	float		aspect_ratio;
+	float		half_view;
 
 	camera.hsize = hsize;
 	camera.vsize = vsize;
-	camera.FOV = field_of_view;
+	camera.fov = field_of_view;
 	camera.transform = identity_matrix(DEFAULT_DIMENSION);
 	camera.inverse_transform = identity_matrix(DEFAULT_DIMENSION);
 	half_view = tan(field_of_view / 2);
@@ -54,44 +66,25 @@ t_camera make_camera(float hsize, float vsize, float field_of_view)
 	return (camera);
 }
 
-t_ray ray_for_pixel(t_camera camera, int x, int y)
+t_ray	ray_for_pixel(t_camera camera, int x, int y)
 {
-	t_ray		ray;
-	float		word_x;
-	float		word_y;
-	t_tuple		pixel;
-
+	t_ray	ray;
+	float	word_x;
+	float	word_y;
+	t_tuple	pixel;
 
 	word_x = camera.half_width - ((x + 0.5) * camera.pixel_size);
 	word_y = camera.half_height - ((y + 0.5) * camera.pixel_size);
-	pixel = multiply_matrix_tuple(*camera.inverse_transform,make_tuple(word_x, word_y, -1,POINT));
-	ray.origin = multiply_matrix_tuple(*camera.inverse_transform , ORIGIN);
-	ray.direction = tuple_normalize(substract_tuple(pixel,ray.origin));
+	pixel = multiply_matrix_tuple(*camera.inverse_transform, \
+						make_tuple(word_x, word_y, -1, POINT));
+	ray.origin = multiply_matrix_tuple(*camera.inverse_transform, origin());
+	ray.direction = tuple_normalize(substract_tuple(pixel, ray.origin));
 	return (ray);
 }
 
-
-
-void	set_camera_transformation(t_camera *camera, t_tuple from,t_tuple to, t_tuple up)
+void	set_camera_transformation(t_camera *camera, \
+					t_tuple from, t_tuple to, t_tuple up)
 {
-	camera ->transform = view_transformation(from, to, up);
-	camera->inverse_transform = invert_matrix(camera ->transform);
+	camera->transform = view_transformation(from, to, up);
+	camera->inverse_transform = invert_matrix(camera->transform);
 }
-
-// int main()
-// {
-// 	// t_tuple from = make_tuple(1,3,2,POINT);
-// 	// t_tuple to = make_tuple(4,-2,8,POINT);
-// 	// t_tuple up = make_tuple(1,1,0,VECTOR);
-// 	// t_matrices *view = view_transformation(from,to,up);
-// 	// print_matrix(*view);
-// 	t_camera camera = make_camera(201,101,M_PI/2);
-// 	camera.transform =  multiply_matrices(rotation_y(M_PI / 4),translation(make_tuple(0, -2, 5,POINT)));
-// 	t_ray ray =  ray_for_pixel(camera,100,50);
-// 	printf("position : %.2f %.2f %.2f %.2f\n",ray.origin.x,ray.origin.y,ray.origin.z,ray.origin.w);
-// 	printf("direction : %.2f %.2f %.2f %.2f\n",ray.direction.x,ray.direction.y,ray.direction.z,ray.direction.w);
-
-// 	return (0);
-// }
-
-

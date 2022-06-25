@@ -1,0 +1,83 @@
+ambient
+//ambient light ratio 0-1
+//ambient light color
+END
+
+light
+//light coordinates
+//light brightness
+//light color
+END
+
+camera
+//camera coordinates
+//normalized orientation vector
+//field of view
+END
+
+sphere
+//sphere diameter
+//sphere coordinates
+    //transformations
+//sphere color
+//reflection
+//transparency
+//refractive index
+//pattern // pattern_type patern_color1 pattern_color2   (patter is two line parameter)
+    //if pattern then pattern transformations here / NULL, if not skip it
+//specular
+//diffuse
+
+END
+
+plane
+//plane coordinates
+    //transformations   //left transformation with be first to excute
+
+//plane color
+//reflection
+//transparency
+//refractive index
+//pattern // pattern_type patern_color1 pattern_color2   (patter is two line parameter)
+    //if pattern then pattern transformations here / NULL, if not skip it
+//specular
+//diffuse
+
+END
+
+cylinder
+//cylinder diameter // scale on x with the "diameter"
+//cylinder coordinates
+    //transformations       //left transformation with be first to excute
+//cylinder height// min height
+//cylinder color
+//reflection
+//transparency
+//refractive index
+//pattern // pattern_type patern_color1 pattern_color2   (patter is two line parameter)
+    //if pattern then pattern transformations here / NULL, if not skip it
+//specular
+//diffuse
+//closed    TRUE/FALSE
+END
+
+cone
+//cone diameter
+//cone coordinates
+    //transformations       //left transformation with be first to excute
+//cone height
+//cone color
+//reflection
+//transparency
+//refractive index
+//pattern // pattern_type patern_color1 pattern_color2   (patter is two line parameter)
+    //if pattern then pattern transformations here / NULL, if not skip it
+//specular
+//diffuse
+//closed    TRUE/FALSE
+END
+
+//transformations :: ROTX ROTY ROTZ TRANSLATE SCALE SHEAR
+//patterns :: CHECKERBPARD RING STRIPE GRADIENT
+
+max depth parse?
