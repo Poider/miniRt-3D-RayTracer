@@ -1,57 +1,60 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ./includes/miniRt.h                                           :+:      :+:    :+:   */
+/*   miniRt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mel-amma <mel-amma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/03 17:34:48 by mel-amma          #+#    #+#             */
-/*   Updated: 2022/04/04 17:00:00 by mel-amma         ###   ########.fr       */
+/*   Created: 2022/06/25 15:35:15 by klaarous          #+#    #+#             */
+/*   Updated: 2022/11/15 17:14:22 by mel-amma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef miniRt_H
-#define miniRt_H
+#ifndef MINIRT_H
+# define MINIRT_H
 
+# define TRUE 1
+# define FALSE 0
+# define VECTOR 0
+# define POINT 1
+# define SUCCESS 1
+# define FAIL 0
 
-#define TRUE 1
-#define FALSE 0
-#define VECTOR 0
-#define POINT 1
+# define MAX_DEPTH 5
 
-#define MAX_DEPTH 5
-
-#include "../gnl/get_next_line.h"
-#include "tuples.h"
-#include "matrices.h"
-#include "math_utils.h"
-#include "color.h"
-#include "material.h"
-#include "ray.h"
-#include "object.h"
-#include "light.h"
-#include "pattern.h"
-#include "world.h"
-#include "intersections.h"
-#include "precomputed.h"
-#include "sphere.h"
-#include "plane.h"
-#include "cylinder.h"
-#include "cone.h"
-#include "shading.h"
-#include "camera.h"
-#include "mlx.h"
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <math.h>
-#include "settings.h"
-#include "parse.h"
-#define WINDOW_WIDTH 1400
-#define WINDOW_HEIGHT 1200
-#define COLOR 111111222
-#define EPSILON 0.001
-#define MARGIN 1
+# include "../gnl/get_next_line.h"
+# include "tuples.h"
+# include "matrices.h"
+# include "math_utils.h"
+# include "color.h"
+# include "material.h"
+# include "ray.h"
+# include "object.h"
+# include "light.h"
+# include "pattern.h"
+# include "world.h"
+# include "intersections.h"
+# include "precomputed.h"
+# include "sphere.h"
+# include "plane.h"
+# include "cylinder.h"
+# include "cone.h"
+# include "shading.h"
+# include "camera.h"
+# include "mlx.h"
+# include <unistd.h>
+# include <stdlib.h>
+# include <stdio.h>
+# include <math.h>
+# include "settings.h"
+# include "parse.h"
+# include "cube.h"
+# define WINDOW_WIDTH 1400
+# define WINDOW_HEIGHT 1200
+# define COLOR 111111222
+# define EPSILON 0.001
+# define EPSILON1 0.00001818181
+# define MARGIN 1
 
 typedef struct s_point
 {
@@ -59,53 +62,52 @@ typedef struct s_point
 	float	y;
 	float	z;
 	float	color;
-}				t_point;
+}			t_point;
 
-// typedef struct	s_object // convert objects to equations and when you need to check if light hits there check if pixels on screen hit any equation
-// {
-// 	char	**object;
-// 	struct	s_object *next;
-// }				t_object;
-
-typedef struct	s_data
+typedef struct s_data
 {
-	char **ambient_light; // ambient light and its args
-	char **camera;		  // camera and its args
-	char **light;		  // light and its args
+	char		**ambient_light;
+	char		**camera;
+	char		**light;
+	t_object	*obj;
+}				t_data;
 
-	// you can split each arg of those with ',' and atoi it to get the stuff you need
-	t_object *obj; // first object address
-} 				t_data;
-
-typedef struct	s_parameters // has map + image infos
+typedef struct s_parameters
 {
-	void *mlx_ptre;
-	void *win_ptre;
-	void *img_ptre;
-
-	int width;
-	int height;
-	char *address;
-	int endian;
-	int bitsperpixel;
-	int linesize;
-	t_camera camera;
-
-	int object_id;//first object will be 1 on id
-	t_data *data;
+	void		*mlx_ptre;
+	void		*win_ptre;
+	void		*img_ptre;
+	int			width;
+	int			height;
+	char		*address;
+	int			endian;
+	int			bitsperpixel;
+	int			linesize;
+	t_camera	camera;
+	int			object_id;
+	t_data		*data;
 }				t_parameters;
 
 // helpers
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strdup(const char *s1);
-int		whitespaces(char c);
+int		white_spaces(char c);
 size_t	ft_strlcpy(char *dest, const char *src, size_t size);
 char	**ft_split(char const *s, char c);
 char	*get_next_line(int fd);
 char	*to_upper(char *line);
 int		ft_toupper(int a);
-//drawing functions
+void	check_extention(char *filename);
+int		exitit(int button, void *unused);
+void	failure_exit(char *message);
+// drawing functions
 
-void plot(int x,int y,t_tuple color);
-void	image_pixel_put(t_parameters *param, t_point point, int color);
+void	plot(int x, int y, t_tuple color, t_parameters *param);
+void	image_pixel_put(t_parameters *param, \
+				t_tuple point, int color);
+void	render(t_camera camera, \
+				t_world world, t_parameters *param);
+
+// free  ressource
+void	free_ressource(t_world *world, t_camera *camera);
 #endif

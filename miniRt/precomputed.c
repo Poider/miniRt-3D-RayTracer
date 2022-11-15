@@ -1,75 +1,100 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   precomputed.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: klaarous <klaarous@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/25 15:15:58 by klaarous          #+#    #+#             */
+/*   Updated: 2022/11/08 15:59:21 by klaarous         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "./includes/miniRt.h"
 
-
-t_material get_material_object(t_object shape)
+void	set_n1(t_precomputed *pre_computed, t_intersections *hit, \
+				t_intersections *list, t_intersections *containers)
 {
-	if (shape.type_object ==  SPHERE)
+	if (hit == list)
 	{
-		t_sphere *sphere = shape.object;
-		return (sphere->material);
+		if (containers == NULL)
+			pre_computed->n1 = VACUUM;
+		else
+			pre_computed->n1 = get_last_intersection(\
+				containers)->object->material.refractive_index;
 	}
-	else
-		return (make_material());//i will update this just for now
-
 }
 
-void	set_refractives_idx(t_precomputed *pre_computed,t_intersections *hit, t_intersections *list)
+void	set_n2(t_precomputed *pre_computed, t_intersections *hit, \
+				t_intersections *list, t_intersections *containers)
 {
-	t_intersections	*containers = NULL;
-	t_intersections	*prev_object = 0;
+	if (containers == NULL)
+		pre_computed->n2 = VACUUM;
+	else
+		pre_computed->n2 = get_last_intersection(\
+			containers)->object->material.refractive_index;
+}
 
-	while (list)
+int	remove_object(t_intersections **list, t_intersections **containers)
+{
+	t_intersections	*prev_object;
+	t_intersections	*tmp;
+
+	prev_object = NULL;
+	prev_object = get_prev_object(*containers, (*list)->object);
+	if (prev_object)
 	{
-		if (hit == list)
+		if ((*containers)->next == NULL)
 		{
-			if (containers == NULL)
-				pre_computed ->n1 =  VACUUM;
-			else
-				pre_computed ->n1 = get_last_intersection(containers)->object->material.refractive_index;
-		}
-		prev_object = get_prev_object(containers, list->object);
-		if (prev_object)
-		{
-			if (containers ->next == NULL)
-			{
-				free(containers);
-				containers = NULL;
-			}
-			else
-			{
-				t_intersections *tmp  = prev_object ->next;
-				prev_object ->next = prev_object ->next->next;
-				free(tmp);
-			}
+			free((*containers));
+			*containers = NULL;
 		}
 		else
 		{
-			t_intersections *new = intersection(list ->t, list ->object);
-			add_intersection(&containers,new);
+			tmp = prev_object->next;
+			prev_object->next = prev_object->next->next;
+			free(tmp);
 		}
+		return (SUCCESS);
+	}
+	return (FAIL);
+}
+
+void	set_refractives_idx(t_precomputed *pre_computed, \
+			t_intersections *hit, t_intersections *list)
+{
+	t_intersections	*containers;
+	t_intersections	*prev_object;
+
+	containers = NULL;
+	prev_object = NULL;
+	while (list)
+	{
+		set_n1(pre_computed, hit, list, containers);
+		if (remove_object(&list, &containers) == FAIL)
+			add_intersection(&containers, intersection(list->t, list->object));
 		if (hit == list)
 		{
-			if (containers == NULL)
-				pre_computed ->n2 =  VACUUM;
-			else
-				pre_computed ->n2 =  get_last_intersection(containers)->object->material.refractive_index;
-			break;
+			set_n2(pre_computed, hit, list, containers);
+			break ;
 		}		
 		list = list ->next;
 	}
+	free_list_intersection(containers);
 }
 
-t_precomputed prepare_computations(t_intersections *intersection, t_ray ray, t_intersections *list_intersections)
+t_precomputed	prepare_computations(t_intersections *intersection, \
+				t_ray ray, t_intersections *list_intersections)
 {
 	t_precomputed	pre_computed;
 	t_tuple			epsilon_normal;
 
-	pre_computed.t = intersection ->t;
-	pre_computed.point = ray_position(ray,pre_computed.t);
-	pre_computed.object = intersection ->object;
+	pre_computed.t = intersection->t;
+	pre_computed.point = ray_position(ray, pre_computed.t);
+	pre_computed.object = intersection->object;
 	pre_computed.eyev = negate_tuple(ray.direction);
 	pre_computed.normalv = normal_at(intersection->object, pre_computed.point);
-	if (dot_product(pre_computed.normalv,pre_computed.eyev) < 0)
+	if (dot_product(pre_computed.normalv, pre_computed.eyev) < 0)
 	{
 		pre_computed.is_inside = TRUE;
 		pre_computed.normalv = negate_tuple(pre_computed.normalv);
@@ -78,72 +103,11 @@ t_precomputed prepare_computations(t_intersections *intersection, t_ray ray, t_i
 		pre_computed.is_inside = FALSE;
 	pre_computed.reflecv = reflect(ray.direction, pre_computed.normalv);
 	pre_computed.material = intersection->object->material;
-	epsilon_normal = tuple_scalar_multiplication(pre_computed.normalv, 0.003);
+	epsilon_normal = tuple_scalar_multiplication(pre_computed.normalv, EPSILON);
 	pre_computed.over_point = add_tuple(pre_computed.point, epsilon_normal);
-	pre_computed.under_point = substract_tuple(pre_computed.point, epsilon_normal);
+	pre_computed.under_point = substract_tuple(pre_computed.point, \
+												epsilon_normal);
 	pre_computed.over_point.w = POINT;
 	set_refractives_idx(&pre_computed, intersection, list_intersections);
 	return (pre_computed);
 }
-
-float schlick(t_precomputed *pre_computed)
-{
-    float _cos;
-    float cos_t;
-    float Nr;
-    float sin2_t;
-    float R0;
-    _cos = dot_product(pre_computed->eyev, pre_computed->normalv);
-    if(pre_computed->n1 > pre_computed->n2)
-    {
-        Nr = pre_computed->n1 / pre_computed->n2;
-        sin2_t = Nr * Nr * (1 - _cos * _cos);
-        if(sin2_t > 1)//meaning total internal reflection occured;
-        return(1);
-        cos_t = sqrt(1 - sin2_t);
-        _cos = cos_t;
-    }
-    R0 = pow((pre_computed->n1 - pre_computed->n2)/(pre_computed->n1 + pre_computed->n2),2);
-    return (R0 + (1 - R0) * pow((1 - _cos),5));
-}
-
-
-
-// int main()
-// {
-// 	t_sphere *A = glass_sphere();
-// 	A->transformation = scaling(make_tuple(2,2,2,VECTOR));
-// 	A ->material.refractive_index = 1.5;
-// 	t_sphere *B = glass_sphere();
-// 	B->transformation = translation(make_tuple(0,0,-0.25,VECTOR));
-// 	B ->material.refractive_index = 2;
-// 	t_sphere *C = glass_sphere();
-// 	C ->transformation = translation(make_tuple(0,0,0.25,VECTOR));
-// 	C ->material.refractive_index = 2.5;
-
-
-// 	t_object *a_obj = create_object(SPHERE, A);
-// 	t_object *b_obj = create_object(SPHERE, B);
-// 	t_object *c_obj = create_object(SPHERE, C);
-// 	a_obj ->next = b_obj;
-// 	b_obj ->next = c_obj;
-// 	t_ray ray = make_ray(make_tuple(0,0,-4,POINT), make_tuple(0,0,1,VECTOR));
-// 	t_intersections *head = NULL;
-// 	t_intersections *iter = NULL;
-// 	add_intersection(&head, get_new_intetsection(2, a_obj));
-// 	add_intersection(&head, get_new_intetsection(2.75, b_obj));
-// 	add_intersection(&head, get_new_intetsection(3.25, c_obj));
-// 	add_intersection(&head, get_new_intetsection(4.75, b_obj));
-// 	add_intersection(&head, get_new_intetsection(5.25, c_obj));
-// 	add_intersection(&head, get_new_intetsection(6, a_obj));
-// 	iter = head;
-// 	int i = 1;
-// 	while (iter)
-// 	{
-// 		t_precomputed pre = prepare_computations(iter, ray,head);
-// 		printf("| %d | = | %f | | %f |\n",i,pre.n1,pre.n2);
-// 		i++;
-// 		iter = iter ->next;
-// 	}
-// 	return (0);
-// }

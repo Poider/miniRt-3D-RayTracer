@@ -49,7 +49,7 @@ cylinder
 //cylinder diameter // scale on x with the "diameter"
 //cylinder coordinates
     //transformations       //left transformation with be first to excute
-//cylinder height// min height
+max height
 //cylinder color
 //reflection
 //transparency
