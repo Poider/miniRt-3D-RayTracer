@@ -6,7 +6,7 @@
 /*   By: mel-amma <mel-amma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 16:40:29 by klaarous          #+#    #+#             */
-/*   Updated: 2022/11/15 17:36:33 by mel-amma         ###   ########.fr       */
+/*   Updated: 2022/11/22 11:47:02 by mel-amma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	ambient_make(t_world *world, int fd)
 	else
 		world->ambient_color = color_set(line);
 	world->ambient_ratio = ambient_ratio;
+	line = get_next_line(fd);
 	while (line && ft_strncmp(line, "END", 3))
 	{
 		if (line)
